@@ -53,9 +53,7 @@ Plug 'airblade/vim-gitgutter'
 Plug 'alvan/vim-closetag'
 Plug '~/.fzf'
 Plug 'junegunn/fzf.vim'
-" Plug 'vim-airline/vim-airline'
 Plug 'itchyny/lightline.vim'
-" Plug 'vim-airline/vim-airline-themes'
 Plug 'tpope/vim-fugitive'
 Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 Plug 'autozimu/LanguageClient-neovim', { 'branch': 'next', 'do': './install.sh' }
@@ -184,21 +182,6 @@ let g:closetag_filenames = '*.html,*.xhtml,*.phtml,*.eex'
 " silent! call airline#parts#define_function('LC_warning_count', 'LC_warning_count')
 " silent! call airline#parts#define_function('LC_error_count', 'LC_error_count')
 
-" function! LC_warning_count()
-"   let current_buf_number = bufnr('%')
-"   let qflist = getqflist()
-"   let current_buf_diagnostics = filter(qflist, {index, dict -> dict['bufnr'] == current_buf_number && dict['type'] == 'W'})
-"   let count = len(current_buf_diagnostics)
-"   return count > 0 && g:LanguageClient_loaded ? 'W: ' . count : ''
-" endfunction
-
-" function! LC_error_count()
-"   let current_buf_number = bufnr('%')
-"   let qflist = getqflist()
-"   let current_buf_diagnostics = filter(qflist, {index, dict -> dict['bufnr'] == current_buf_number && dict['type'] == 'E'})
-"   let count = len(current_buf_diagnostics)
-"   return count > 0 && g:LanguageClient_loaded ? 'E: ' . count : ''
-" endfunction
 
 " autocmd User AirlineAfterInit call AirlineInit()
 
@@ -209,13 +192,34 @@ let g:closetag_filenames = '*.html,*.xhtml,*.phtml,*.eex'
 let g:lightline = {
 \   'colorscheme': 'solarized',
 \   'active': {
-\     'left': [ ['mode', 'paste'], 
-\               ['gitbranch', 'readonly', 'filename', 'modified'] ]
+\     'left': [ [ 'mode', 'paste' ], 
+\               [ 'gitbranch', 'filename', 'modified' ] ],
+\     'right': [ [ 'lineinfo' ],
+\                [ 'percent' ],
+\                [ 'lcnverrors', 'lcnvwarnings', 'filetype' ] ],
 \   },
 \   'component_function': {
-\     'gitbranch': 'fugitive#head'
+\     'gitbranch': 'fugitive#head',
+\     'lcnvwarnings': 'LCNV_warning_count',
+\     'lcnverrors': 'LCNV_error_count',
 \   },
 \ }
+
+function! LCNV_warning_count()
+  let current_buf_number = bufnr('%')
+  let qflist = getqflist()
+  let current_buf_diagnostics = filter(qflist, {index, dict -> dict['bufnr'] == current_buf_number && dict['type'] == 'W'})
+  let count = len(current_buf_diagnostics)
+  return count > 0 && g:LanguageClient_loaded ? 'W: ' . count : ''
+endfunction
+
+function! LCNV_error_count()
+  let current_buf_number = bufnr('%')
+  let qflist = getqflist()
+  let current_buf_diagnostics = filter(qflist, {index, dict -> dict['bufnr'] == current_buf_number && dict['type'] == 'E'})
+  let count = len(current_buf_diagnostics)
+  return count > 0 && g:LanguageClient_loaded ? 'E: ' . count : ''
+endfunction
 
 """"""""""""
 " Deoplete "
