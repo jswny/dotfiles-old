@@ -150,41 +150,6 @@ let NERDSpaceDelims=1
 " Add *.eex to the file types in which tags get auto-closed
 let g:closetag_filenames = '*.html,*.xhtml,*.phtml,*.eex'
 
-" """""""""""
-" " Airline "
-" """""""""""
-
-" " Setup the Airline symbols dictionary if it doesn't already exist 
-" if !exists('g:airline_symbols')
-"   let g:airline_symbols = {}
-" endif
-
-" " Use Powerline symbols for Airline
-" let g:airline_left_sep = ''
-" let g:airline_left_alt_sep = ''
-" let g:airline_right_sep = ''
-" let g:airline_right_alt_sep = ''
-" let g:airline_symbols.branch = ''
-" let g:airline_symbols.readonly = ''
-" let g:airline_symbols.linenr = '☰'
-" let g:airline_symbols.maxlinenr = ''
-
-" " Enable the Solarized dark Airline theme
-" let g:airline_solarized_bg='dark'
-" let g:airline_theme='solarized'
-
-" " Add LanguageClient-Neovim error and warning counts to Airline
-" function! AirlineInit()
-"   let g:airline_section_warning = airline#section#create(['LC_warning_count'])
-"   let g:airline_section_error = airline#section#create(['LC_error_count'])
-" endfunction
-
-" silent! call airline#parts#define_function('LC_warning_count', 'LC_warning_count')
-" silent! call airline#parts#define_function('LC_error_count', 'LC_error_count')
-
-
-" autocmd User AirlineAfterInit call AirlineInit()
-
 """""""""""""
 " Lightline "
 """""""""""""
@@ -205,20 +170,23 @@ let g:lightline = {
 \   },
 \ }
 
-function! LCNV_warning_count()
+" Define a function which returns a string with the count of a specific type of LanguageClient-Neovim diagnostic
+" This function gets its results from quickfix
+" `type` is a string that is either `'W'` (warning) or `'E'` (error)
+function! LCNV_count_type(type)
   let current_buf_number = bufnr('%')
   let qflist = getqflist()
-  let current_buf_diagnostics = filter(qflist, {index, dict -> dict['bufnr'] == current_buf_number && dict['type'] == 'W'})
+  let current_buf_diagnostics = filter(qflist, {index, dict -> dict['bufnr'] == current_buf_number && dict['type'] == a:type})
   let count = len(current_buf_diagnostics)
-  return count > 0 && g:LanguageClient_loaded ? 'W: ' . count : ''
+  return count > 0 && g:LanguageClient_loaded ? a:type . ': ' . count : ''
+endfunction
+
+function! LCNV_warning_count()
+  return LCNV_count_type('W')
 endfunction
 
 function! LCNV_error_count()
-  let current_buf_number = bufnr('%')
-  let qflist = getqflist()
-  let current_buf_diagnostics = filter(qflist, {index, dict -> dict['bufnr'] == current_buf_number && dict['type'] == 'E'})
-  let count = len(current_buf_diagnostics)
-  return count > 0 && g:LanguageClient_loaded ? 'E: ' . count : ''
+  return LCNV_count_type('E')
 endfunction
 
 """"""""""""
@@ -229,7 +197,7 @@ endfunction
 let g:deoplete#enable_at_startup = 1
 
 """""""""""""""""""""""""
-" LanguageClient Neovim "
+" LanguageClient-Neovim "
 """""""""""""""""""""""""
 
 " Enable debugging
