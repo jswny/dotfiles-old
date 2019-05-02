@@ -213,19 +213,9 @@ let g:LanguageClient_serverCommands = {
 \   'elixir': ['elixir-ls.sh'],
 \ }
 
-" Customize diangostic displays
-let g:LanguageClient_diagnosticsDisplay = { 
-\   1: { 
-\     'texthl': 'ErrorMsg',
-\     "signText": "X",
-\     "signTexthl": "ErrorMsg",
-\   },
-\   2: { 
-\     "texthl": "WarningMsg",
-\     "signText": "!",
-\     "signTexthl": "WarningMsg",
-\   },
-\ }
+" Disable diagnostic signs in the signcolumn
+" Do this because Gitgutter is more important in the signcolumn and virtual text means we don't need these signs
+let g:LanguageClient_diagnosticsSignsMax = 0
 
 """"""""""""
 " Vim Test "
