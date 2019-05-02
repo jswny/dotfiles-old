@@ -108,6 +108,10 @@ set foldmethod=syntax
 " Don't fold files by default
 set nofoldenable
 
+" Don't show the current mode on the last line
+" This is not needed as the status line displays the current mode
+set noshowmode
+
 """"""""""""""
 " Automation "
 """"""""""""""
