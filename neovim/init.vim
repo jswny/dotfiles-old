@@ -154,6 +154,7 @@ let g:closetag_filenames = '*.html,*.xhtml,*.phtml,*.eex'
 " Lightline "
 """""""""""""
 
+" Configure Lightline
 let g:lightline = {
 \   'colorscheme': 'solarized',
 \   'active': {
