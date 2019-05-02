@@ -3,15 +3,15 @@
 """"""""""""""""
 
 " For everything:
-" " NeoVim (not Vim)
+" - NeoVim (not Vim)
 " For Plugins
-" " vim-plug installed (https://github.com/junegunn/vim-plug)
+" - vim-plug installed (https://github.com/junegunn/vim-plug)
 " For Deoplete:
-" " Neovim Python3 provider (pip3 install pynvim)
+" - Neovim Python3 provider (pip3 install pynvim)
 " For LanguageClient_Neovim:
-" " ElixirLS built and available in $PATH (https://github.com/JakeBecker/elixir-ls)
+" - ElixirLS built and available in $PATH (https://github.com/JakeBecker/elixir-ls) or (https://github.com/elixir-lsp/elixir-ls)
 " For the FZF plugin:
-" " FZF installed (https://github.com/junegunn/fzf) in the path specified in the plugin definition below
+" - FZF installed (https://github.com/junegunn/fzf) in the path specified in the plugin definition below
 
 """"""""""""""""
 " Key Bindings "
@@ -83,14 +83,14 @@ colorscheme solarized
 " Fix backspace so that it works normally
 set backspace=indent,eol,start
 
-"""Indentation"""
-" show existing tab with 2 spaces width
+" Show existing tab with 2 spaces width
 set tabstop=2
+
 " when indenting with '>', use 2 spaces width
 set shiftwidth=2
+
 " On pressing tab, insert 2 spaces
 set expandtab
-"""End Indentation"""
 
 " Turn case sensitive search off and smartcase search on
 set ignorecase
@@ -102,12 +102,11 @@ set number
 " Allow buffer switching without saving
 set hidden
 
-"""Folding"""
 " Fold based on syntax
 set foldmethod=syntax
+
 " Don't fold files by default
 set nofoldenable
-"""End Folding"""
 
 """"""""""""""
 " Automation "
