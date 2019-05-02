@@ -2,10 +2,16 @@
 " Dependencies "
 """"""""""""""""
 
+" For everything:
+" " NeoVim (not Vim)
+" For Plugins
+" " vim-plug installed (https://github.com/junegunn/vim-plug)
 " For Deoplete:
-" " Neovim Python3 provider (pip3 install neovim)
+" " Neovim Python3 provider (pip3 install pynvim)
 " For LanguageClient_Neovim:
 " " ElixirLS built and available in $PATH (https://github.com/JakeBecker/elixir-ls)
+" For the FZF plugin:
+" " FZF installed (https://github.com/junegunn/fzf) in the path specified in the plugin definition below
 
 """"""""""""""""
 " Key Bindings "
@@ -33,17 +39,10 @@ augroup END
 " Plugins "
 """""""""""
 
-" Install Vim Plug into the Neovim autoload folder if not installed
-if empty(glob('~/.local/share/nvim/site/autoload/plug.vim'))
-  silent !curl -fLo ~/.local/share/nvim/site/autoload/plug.vim --create-dirs
-    \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
-  autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
-endif
-
 " Specify a directory for plugins
 " - For Neovim: ~/.local/share/nvim/plugged
 " - Avoid using standard Vim directory names like 'plugin'
-call plug#begin('~/.vim/plugged')
+call plug#begin('~/.local/share/nvim/plugged')
 
 " Installed plugins
 Plug 'elixir-lang/vim-elixir'
@@ -51,22 +50,18 @@ Plug 'tpope/vim-endwise'
 Plug 'scrooloose/nerdcommenter'
 Plug 'airblade/vim-gitgutter'
 Plug 'alvan/vim-closetag'
+Plug '~/.fzf'
 Plug 'junegunn/fzf.vim'
-Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'vim-airline/vim-airline'
+Plug 'vim-airline/vim-airline-themes'
 Plug 'tpope/vim-fugitive'
-if has('nvim')
-  Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-else
-  Plug 'Shougo/deoplete.nvim'
-  Plug 'roxma/nvim-yarp'
-  Plug 'roxma/vim-hug-neovim-rpc'
-endif
+Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 Plug 'autozimu/LanguageClient-neovim', { 'branch': 'next', 'do': './install.sh' }
 Plug 'tpope/vim-dispatch'
 Plug 'janko-m/vim-test'
 Plug 'Yggdroot/indentLine'
 Plug 'zchee/deoplete-jedi'
+Plug 'altercation/vim-colors-solarized'
 " Plug 'SirVer/ultisnips'
 
 " Initialize plugin system
@@ -81,6 +76,9 @@ syntax enable
 
 " Set the background to dark (required for colors)
 set background=dark
+
+" Enable the Solarized colorscheme
+colorscheme solarized
 
 " Fix backspace so that it works normally
 set backspace=indent,eol,start
@@ -157,14 +155,33 @@ let g:closetag_filenames = '*.html,*.xhtml,*.phtml,*.eex'
 " Airline "
 """""""""""
 
+" Setup the Airline symbols dictionary if it doesn't already exist 
+if !exists('g:airline_symbols')
+  let g:airline_symbols = {}
+endif
+
+" Use Powerline symbols for Airline
+let g:airline_left_sep = ''
+let g:airline_left_alt_sep = ''
+let g:airline_right_sep = ''
+let g:airline_right_alt_sep = ''
+let g:airline_symbols.branch = ''
+let g:airline_symbols.readonly = ''
+let g:airline_symbols.linenr = '☰'
+let g:airline_symbols.maxlinenr = ''
+
+" Enable the Solarized dark Airline theme
+let g:airline_solarized_bg='dark'
+let g:airline_theme='solarized'
+
 " Add LanguageClient-Neovim error and warning counts to Airline
 function! AirlineInit()
   let g:airline_section_warning = airline#section#create(['LC_warning_count'])
   let g:airline_section_error = airline#section#create(['LC_error_count'])
 endfunction
 
-call airline#parts#define_function('LC_warning_count', 'LC_warning_count')
-call airline#parts#define_function('LC_error_count', 'LC_error_count')
+silent! call airline#parts#define_function('LC_warning_count', 'LC_warning_count')
+silent! call airline#parts#define_function('LC_error_count', 'LC_error_count')
 
 function! LC_warning_count()
   let current_buf_number = bufnr('%')
