@@ -8,6 +8,7 @@
 " - vim-plug installed (https://github.com/junegunn/vim-plug)
 " For Deoplete:
 " - Neovim Python3 provider (pip3 install pynvim)
+" - Neovim installed from HEAD
 " For LanguageClient_Neovim:
 " - ElixirLS built and available in $PATH (https://github.com/JakeBecker/elixir-ls) or (https://github.com/elixir-lsp/elixir-ls)
 " For the FZF plugin:
