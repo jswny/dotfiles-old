@@ -18,13 +18,13 @@
 " Key Bindings "
 """"""""""""""""
 
-" Shortcut to FZF :Files with \f
+" Shortcut to FZF :Files with <leader>f
 nnoremap <leader>f :Files<cr>
 
-" Shortcut to FZF :Buffers with \b
+" Shortcut to FZF :Buffers with <leader>b
 nnoremap <leader>b :Buffers<cr>
 
-" Shortcut to FZF :Lines with \l
+" Shortcut to FZF :Lines with <leader>l
 nnoremap <leader>l :Lines<cr>
 
 " Use the LanguageClient Neovim key bindings in Elixir file buffers only to avoid
@@ -53,8 +53,9 @@ Plug 'airblade/vim-gitgutter'
 Plug 'alvan/vim-closetag'
 Plug '~/.fzf'
 Plug 'junegunn/fzf.vim'
-Plug 'vim-airline/vim-airline'
-Plug 'vim-airline/vim-airline-themes'
+" Plug 'vim-airline/vim-airline'
+Plug 'itchyny/lightline.vim'
+" Plug 'vim-airline/vim-airline-themes'
 Plug 'tpope/vim-fugitive'
 Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 Plug 'autozimu/LanguageClient-neovim', { 'branch': 'next', 'do': './install.sh' }
@@ -151,55 +152,70 @@ let NERDSpaceDelims=1
 " Add *.eex to the file types in which tags get auto-closed
 let g:closetag_filenames = '*.html,*.xhtml,*.phtml,*.eex'
 
-"""""""""""
-" Airline "
-"""""""""""
+" """""""""""
+" " Airline "
+" """""""""""
 
-" Setup the Airline symbols dictionary if it doesn't already exist 
-if !exists('g:airline_symbols')
-  let g:airline_symbols = {}
-endif
+" " Setup the Airline symbols dictionary if it doesn't already exist 
+" if !exists('g:airline_symbols')
+"   let g:airline_symbols = {}
+" endif
 
-" Use Powerline symbols for Airline
-let g:airline_left_sep = ''
-let g:airline_left_alt_sep = ''
-let g:airline_right_sep = ''
-let g:airline_right_alt_sep = ''
-let g:airline_symbols.branch = ''
-let g:airline_symbols.readonly = ''
-let g:airline_symbols.linenr = '☰'
-let g:airline_symbols.maxlinenr = ''
+" " Use Powerline symbols for Airline
+" let g:airline_left_sep = ''
+" let g:airline_left_alt_sep = ''
+" let g:airline_right_sep = ''
+" let g:airline_right_alt_sep = ''
+" let g:airline_symbols.branch = ''
+" let g:airline_symbols.readonly = ''
+" let g:airline_symbols.linenr = '☰'
+" let g:airline_symbols.maxlinenr = ''
 
-" Enable the Solarized dark Airline theme
-let g:airline_solarized_bg='dark'
-let g:airline_theme='solarized'
+" " Enable the Solarized dark Airline theme
+" let g:airline_solarized_bg='dark'
+" let g:airline_theme='solarized'
 
-" Add LanguageClient-Neovim error and warning counts to Airline
-function! AirlineInit()
-  let g:airline_section_warning = airline#section#create(['LC_warning_count'])
-  let g:airline_section_error = airline#section#create(['LC_error_count'])
-endfunction
+" " Add LanguageClient-Neovim error and warning counts to Airline
+" function! AirlineInit()
+"   let g:airline_section_warning = airline#section#create(['LC_warning_count'])
+"   let g:airline_section_error = airline#section#create(['LC_error_count'])
+" endfunction
 
-silent! call airline#parts#define_function('LC_warning_count', 'LC_warning_count')
-silent! call airline#parts#define_function('LC_error_count', 'LC_error_count')
+" silent! call airline#parts#define_function('LC_warning_count', 'LC_warning_count')
+" silent! call airline#parts#define_function('LC_error_count', 'LC_error_count')
 
-function! LC_warning_count()
-  let current_buf_number = bufnr('%')
-  let qflist = getqflist()
-  let current_buf_diagnostics = filter(qflist, {index, dict -> dict['bufnr'] == current_buf_number && dict['type'] == 'W'})
-  let count = len(current_buf_diagnostics)
-  return count > 0 && g:LanguageClient_loaded ? 'W: ' . count : ''
-endfunction
+" function! LC_warning_count()
+"   let current_buf_number = bufnr('%')
+"   let qflist = getqflist()
+"   let current_buf_diagnostics = filter(qflist, {index, dict -> dict['bufnr'] == current_buf_number && dict['type'] == 'W'})
+"   let count = len(current_buf_diagnostics)
+"   return count > 0 && g:LanguageClient_loaded ? 'W: ' . count : ''
+" endfunction
 
-function! LC_error_count()
-  let current_buf_number = bufnr('%')
-  let qflist = getqflist()
-  let current_buf_diagnostics = filter(qflist, {index, dict -> dict['bufnr'] == current_buf_number && dict['type'] == 'E'})
-  let count = len(current_buf_diagnostics)
-  return count > 0 && g:LanguageClient_loaded ? 'E: ' . count : ''
-endfunction
+" function! LC_error_count()
+"   let current_buf_number = bufnr('%')
+"   let qflist = getqflist()
+"   let current_buf_diagnostics = filter(qflist, {index, dict -> dict['bufnr'] == current_buf_number && dict['type'] == 'E'})
+"   let count = len(current_buf_diagnostics)
+"   return count > 0 && g:LanguageClient_loaded ? 'E: ' . count : ''
+" endfunction
 
-autocmd User AirlineAfterInit call AirlineInit()
+" autocmd User AirlineAfterInit call AirlineInit()
+
+"""""""""""""
+" Lightline "
+"""""""""""""
+
+let g:lightline = {
+\   'colorscheme': 'solarized',
+\   'active': {
+\     'left': [ ['mode', 'paste'], 
+\               ['gitbranch', 'readonly', 'filename', 'modified'] ]
+\   },
+\   'component_function': {
+\     'gitbranch': 'fugitive#head'
+\   },
+\ }
 
 """"""""""""
 " Deoplete "
@@ -216,27 +232,27 @@ let g:deoplete#enable_at_startup = 1
 let g:LanguageClient_loggingLevel = 'DEBUG'
 
 let g:LanguageClient_rootMarkers = {
-    \ 'elixir': ['mix.exs'],
-    \ }
+\   'elixir': ['mix.exs'],
+\ }
 
 " Use the ElixirLS shell script from $PATH
 let g:LanguageClient_serverCommands = {
-  \ 'elixir': ['elixir-ls.sh'],
-  \ }
+\   'elixir': ['elixir-ls.sh'],
+\ }
 
 " Customize diangostic displays
 let g:LanguageClient_diagnosticsDisplay = { 
-  \ 1: { 
-      \ 'texthl': 'ErrorMsg',
-      \ "signText": "X",
-      \ "signTexthl": "ErrorMsg",
-    \ },
-  \ 2: { 
-      \ "texthl": "WarningMsg",
-      \ "signText": "!",
-      \ "signTexthl": "WarningMsg",
-    \ },
-  \ }
+\   1: { 
+\     'texthl': 'ErrorMsg',
+\     "signText": "X",
+\     "signTexthl": "ErrorMsg",
+\   },
+\   2: { 
+\     "texthl": "WarningMsg",
+\     "signText": "!",
+\     "signTexthl": "WarningMsg",
+\   },
+\ }
 
 """"""""""""
 " Vim Test "
