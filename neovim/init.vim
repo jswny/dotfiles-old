@@ -13,6 +13,8 @@
 " - ElixirLS built and available in $PATH (https://github.com/JakeBecker/elixir-ls) or (https://github.com/elixir-lsp/elixir-ls)
 " For the FZF plugin:
 " - FZF installed (https://github.com/junegunn/fzf) in the path specified in the plugin definition below
+" For deoplete-jedi:
+" - Jedi installed (pip3 install jedi)
 
 """"""""""""""""
 " Key Bindings "
@@ -27,7 +29,7 @@ nnoremap <leader>b :Buffers<cr>
 " Shortcut to FZF :Lines with <leader>l
 nnoremap <leader>l :Lines<cr>
 
-" Use the LanguageClient Neovim key bindings in Elixir file buffers only to avoid
+" Use the LanguageClient-Neovim key bindings in Elixir file buffers only to avoid
 " breaking normal functionality
 augroup ElixirLSBindings
   autocmd!
@@ -60,7 +62,7 @@ Plug 'autozimu/LanguageClient-neovim', { 'branch': 'next', 'do': './install.sh' 
 Plug 'tpope/vim-dispatch'
 Plug 'janko-m/vim-test'
 Plug 'Yggdroot/indentLine'
-Plug 'zchee/deoplete-jedi'
+Plug 'deoplete-plugins/deoplete-jedi'
 Plug 'altercation/vim-colors-solarized'
 " Plug 'SirVer/ultisnips'
 
@@ -136,10 +138,6 @@ augroup ElixirFixFolds
   autocmd FileType elixir autocmd InsertLeave * normal! zXzR
 augroup END
 
-" Automatically close the Deoplete preview window after completion
-" (https://github.com/Shougo/deoplete.nvim/issues/115)
-autocmd InsertLeave,CompleteDone * if pumvisible() == 0 | pclose | endif
-
 """"""""""""""""""
 " NERD Commenter "
 """"""""""""""""""
@@ -211,6 +209,10 @@ endfunction
 " Enable deoplete
 let g:deoplete#enable_at_startup = 1
 
+" Automatically close the Deoplete preview window after completion
+" (https://github.com/Shougo/deoplete.nvim/issues/115)
+autocmd InsertLeave,CompleteDone * if pumvisible() == 0 | pclose | endif
+
 """""""""""""""""""""""""
 " LanguageClient-Neovim "
 """""""""""""""""""""""""
@@ -245,3 +247,4 @@ let test#strategy = "dispatch"
 " let g:dispatch_compilers = {'elixir': 'exunit'}
 
 " let g:LanguageClient_hasSnippetSupport = 0
+
