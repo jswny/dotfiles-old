@@ -64,6 +64,7 @@ Plug 'janko-m/vim-test'
 Plug 'Yggdroot/indentLine'
 Plug 'deoplete-plugins/deoplete-jedi'
 Plug 'altercation/vim-colors-solarized'
+Plug 'davidhalter/jedi-vim'
 " Plug 'SirVer/ultisnips'
 
 " Initialize plugin system
@@ -113,6 +114,9 @@ set nofoldenable
 " Don't show the current mode on the last line
 " This is not needed as the status line displays the current mode
 set noshowmode
+
+" Disable previews for completions
+set completeopt-=preview
 
 """"""""""""""
 " Automation "
@@ -212,6 +216,12 @@ let g:deoplete#enable_at_startup = 1
 " Automatically close the Deoplete preview window after completion
 " (https://github.com/Shougo/deoplete.nvim/issues/115)
 autocmd InsertLeave,CompleteDone * if pumvisible() == 0 | pclose | endif
+
+""""""""""""
+" Jedi Vim "
+""""""""""""
+" Disable completions because Deoplete Jedi takes care of this
+let g:jedi#completions_enabled = 0
 
 """""""""""""""""""""""""
 " LanguageClient-Neovim "
