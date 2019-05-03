@@ -4,7 +4,7 @@
 
 " For everything:
 " - NeoVim (not Vim)
-" For Plugins
+" For Plugins:
 " - vim-plug installed (https://github.com/junegunn/vim-plug)
 " For Deoplete:
 " - Neovim Python3 provider (pip3 install pynvim)
@@ -163,17 +163,25 @@ let g:lightline = {
 \   'colorscheme': 'solarized',
 \   'active': {
 \     'left': [ [ 'mode', 'paste' ], 
-\               [ 'gitbranch', 'filename', 'modified' ] ],
+\               [ 'gitbranch', 'filename' ] ],
 \     'right': [ [ 'lineinfo' ],
 \                [ 'percent' ],
 \                [ 'lcnverrors', 'lcnvwarnings', 'filetype' ] ],
 \   },
 \   'component_function': {
+\     'filename': 'Lightline_filename',
 \     'gitbranch': 'fugitive#head',
 \     'lcnvwarnings': 'LCNV_warning_count',
 \     'lcnverrors': 'LCNV_error_count',
 \   },
 \ }
+
+" Define a function to show the filename and the modified state in a single component
+function! Lightline_filename()
+  let filename = expand('%:t') !=# '' ? expand('%:t') : '[No Name]'
+  let modified = &modified ? ' +' : ''
+  return filename . modified
+endfunction
 
 " Define a function which returns a string with the count of a specific type of LanguageClient-Neovim diagnostic
 " This function gets its results from quickfix
@@ -186,10 +194,12 @@ function! LCNV_count_type(type)
   return count > 0 && g:LanguageClient_loaded ? a:type . ': ' . count : ''
 endfunction
 
+" Define a function for the LanguageClient-Neovim warning count
 function! LCNV_warning_count()
   return LCNV_count_type('W')
 endfunction
 
+" Define a function for the LanguageClient-Neovim error count
 function! LCNV_error_count()
   return LCNV_count_type('E')
 endfunction
