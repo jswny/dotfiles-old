@@ -57,15 +57,12 @@ Plug '~/.fzf'
 Plug 'junegunn/fzf.vim'
 Plug 'itchyny/lightline.vim'
 Plug 'tpope/vim-fugitive'
-Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-Plug 'autozimu/LanguageClient-neovim', { 'branch': 'next', 'do': './install.sh' }
 Plug 'tpope/vim-dispatch'
 Plug 'janko-m/vim-test'
 Plug 'Yggdroot/indentLine'
-Plug 'deoplete-plugins/deoplete-jedi'
 Plug 'altercation/vim-colors-solarized'
-Plug 'davidhalter/jedi-vim'
 " Plug 'SirVer/ultisnips'
+Plug 'neoclide/coc.nvim', {'do': './install.sh nightly'}
 
 " Initialize plugin system
 call plug#end()
@@ -168,13 +165,11 @@ let g:lightline = {
 \               [ 'gitbranch', 'filename' ] ],
 \     'right': [ [ 'lineinfo' ],
 \                [ 'percent' ],
-\                [ 'lcnverrors', 'lcnvwarnings', 'filetype' ] ],
+\                [ 'filetype' ] ],
 \   },
 \   'component_function': {
 \     'filename': 'Lightline_filename',
 \     'gitbranch': 'fugitive#head',
-\     'lcnvwarnings': 'LCNV_warning_count',
-\     'lcnverrors': 'LCNV_error_count',
 \   },
 \ }
 
@@ -205,43 +200,6 @@ endfunction
 function! LCNV_error_count()
   return LCNV_count_type('E')
 endfunction
-
-""""""""""""
-" Deoplete "
-""""""""""""
-
-" Enable deoplete
-let g:deoplete#enable_at_startup = 1
-
-" Automatically close the Deoplete preview window after completion
-" (https://github.com/Shougo/deoplete.nvim/issues/115)
-autocmd InsertLeave,CompleteDone * if pumvisible() == 0 | pclose | endif
-
-""""""""""""
-" Jedi Vim "
-""""""""""""
-" Disable completions because Deoplete Jedi takes care of this
-let g:jedi#completions_enabled = 0
-
-"""""""""""""""""""""""""
-" LanguageClient-Neovim "
-"""""""""""""""""""""""""
-
-" Enable debugging
-let g:LanguageClient_loggingLevel = 'DEBUG'
-
-let g:LanguageClient_rootMarkers = {
-\   'elixir': ['mix.exs'],
-\ }
-
-" Use the ElixirLS shell script from $PATH
-let g:LanguageClient_serverCommands = {
-\   'elixir': ['elixir-ls.sh'],
-\ }
-
-" Disable diagnostic signs in the signcolumn
-" Do this because Gitgutter is more important in the signcolumn and virtual text means we don't need these signs
-let g:LanguageClient_diagnosticsSignsMax = 0
 
 """"""""""""
 " Vim Test "
