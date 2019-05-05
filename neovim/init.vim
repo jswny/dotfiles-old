@@ -13,8 +13,8 @@
 " - ElixirLS built and available in $PATH (https://github.com/JakeBecker/elixir-ls) or (https://github.com/elixir-lsp/elixir-ls)
 " For the FZF plugin:
 " - FZF installed (https://github.com/junegunn/fzf) in the path specified in the plugin definition below
-" For deoplete-jedi:
-" - Jedi installed (pip3 install jedi)
+" For Coc:
+" - Yarn installed (https://yarnpkg.com)
 
 """"""""""""""""
 " Key Bindings "
@@ -29,15 +29,6 @@ nnoremap <leader>b :Buffers<cr>
 " Shortcut to FZF :Lines with <leader>l
 nnoremap <leader>l :Lines<cr>
 
-" Use the LanguageClient-Neovim key bindings in Elixir file buffers only to avoid
-" breaking normal functionality
-augroup ElixirLSBindings
-  autocmd!
-  autocmd FileType elixir nnoremap <buffer> <silent> K :call LanguageClient#textDocument_hover()<CR>
-  autocmd FileType elixir nnoremap <buffer> <silent> gd :call LanguageClient#textDocument_definition()<CR>
-  autocmd FileType elixir nnoremap <buffer> <silent> <F2> :call LanguageClient#textDocument_rename()<CR>
-augroup END
-
 """""""""""
 " Plugins "
 """""""""""
@@ -47,13 +38,15 @@ augroup END
 " - Avoid using standard Vim directory names like 'plugin'
 call plug#begin('~/.local/share/nvim/plugged')
 
+" External plugins
+Plug '~/.fzf'
+
 " Installed plugins
 Plug 'elixir-lang/vim-elixir'
 Plug 'tpope/vim-endwise'
 Plug 'scrooloose/nerdcommenter'
 Plug 'airblade/vim-gitgutter'
 Plug 'alvan/vim-closetag'
-Plug '~/.fzf'
 Plug 'junegunn/fzf.vim'
 Plug 'itchyny/lightline.vim'
 Plug 'tpope/vim-fugitive'
@@ -62,7 +55,11 @@ Plug 'janko-m/vim-test'
 Plug 'Yggdroot/indentLine'
 Plug 'altercation/vim-colors-solarized'
 " Plug 'SirVer/ultisnips'
+Plug 'elzr/vim-json'
 Plug 'neoclide/coc.nvim', {'do': './install.sh nightly'}
+
+" Coc plugins
+Plug 'neoclide/coc-json', {'do': 'yarn install --frozen-lockfile'}
 
 " Initialize plugin system
 call plug#end()
@@ -139,6 +136,9 @@ augroup ElixirFixFolds
   autocmd FileType elixir autocmd InsertLeave * normal! zXzR
 augroup END
 
+" Automatically highlight JSONC comments in JSON files
+autocmd FileType json syntax match Comment +\/\/.\+$+
+
 """"""""""""""""""
 " NERD Commenter "
 """"""""""""""""""
@@ -207,6 +207,13 @@ endfunction
 
 " Tell Vim Test to use Dispatch Vim as the testing strategy
 let test#strategy = "dispatch"
+
+""""""""""""
+" Vim JSON "
+""""""""""""
+" Turn off quote hiding for JSON to fix indentLine weirdness
+" (https://github.com/Yggdroot/indentLine/issues/140#issuecomment-173867054)
+let g:vim_json_syntax_conceal = 0
 
 """"""""""""""""""""
 " # Experimental # "
