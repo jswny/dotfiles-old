@@ -11,7 +11,7 @@
 " - Neovim installed from HEAD
 " For LanguageClient_Neovim:
 " - ElixirLS built and available in $PATH (https://github.com/JakeBecker/elixir-ls) or (https://github.com/elixir-lsp/elixir-ls)
-" For the FZF plugin:
+" For the external FZF plugin:
 " - FZF installed (https://github.com/junegunn/fzf) in the path specified in the plugin definition below
 " For Coc:
 " - Yarn installed (https://yarnpkg.com)
@@ -19,15 +19,6 @@
 """"""""""""""""
 " Key Bindings "
 """"""""""""""""
-
-" Shortcut to FZF :Files with <leader>f
-nnoremap <leader>f :Files<cr>
-
-" Shortcut to FZF :Buffers with <leader>b
-nnoremap <leader>b :Buffers<cr>
-
-" Shortcut to FZF :Lines with <leader>l
-nnoremap <leader>l :Lines<cr>
 
 """""""""""
 " Plugins "
@@ -165,11 +156,12 @@ let g:lightline = {
 \               [ 'gitbranch', 'filename' ] ],
 \     'right': [ [ 'lineinfo' ],
 \                [ 'percent' ],
-\                [ 'filetype' ] ],
+\                [ 'cocstatus', 'filetype' ] ],
 \   },
 \   'component_function': {
 \     'filename': 'Lightline_filename',
 \     'gitbranch': 'fugitive#head',
+\     'cocstatus': 'coc#status',
 \   },
 \ }
 
@@ -214,6 +206,39 @@ let test#strategy = "dispatch"
 " Turn off quote hiding for JSON to fix indentLine weirdness
 " (https://github.com/Yggdroot/indentLine/issues/140#issuecomment-173867054)
 let g:vim_json_syntax_conceal = 0
+
+"""""""""""
+" FZF Vim "
+"""""""""""
+
+" Shortcut to FZF :Files with <leader>f
+nnoremap <leader>f :Files<cr>
+
+" Shortcut to FZF :Buffers with <leader>b
+nnoremap <leader>b :Buffers<cr>
+
+" Shortcut to FZF :Lines with <leader>l
+nnoremap <leader>l :Lines<cr>
+
+""""""""""""
+" Coc NVim "
+""""""""""""
+
+" Use Coc specific features in supported languages
+" Update these to run on each language that Coc is configured for
+" We do this to avoid using these functions in languages that Coc isn't configured for
+augroup CocBindings
+  autocmd!
+
+  " Show documentation in preview window
+  autocmd FileType elixir,eelixir nnoremap <buffer> <silent> K :call CocAction('doHover')<CR>
+
+  " Gotos
+  autocmd FileType elixir,eelixir nmap <silent> gd <Plug>(coc-definition)
+  autocmd FileType elixir,eelixir nmap <silent> gy <Plug>(coc-type-definition)
+  autocmd FileType elixir,eelixir nmap <silent> gi <Plug>(coc-implementation)
+  autocmd FileType elixir,eelixir nmap <silent> gr <Plug>(coc-references)
+augroup END
 
 """"""""""""""""""""
 " # Experimental # "
