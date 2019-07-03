@@ -17,7 +17,6 @@ chsh -s /usr/local/bin/fish
 ```
 - TPM plugins installed
     - <kbd>prefix</kbd> + <kbd>I</kbd> inside Tmux
-
 - Python 2 and 3 providers installed for NeoVim
 ```sh
 pip2 install pynvim
