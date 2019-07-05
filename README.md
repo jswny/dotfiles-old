@@ -7,15 +7,14 @@ The following files are contained in this repository. Each file is listed with i
   - `ln -s fish/config.fish ~/.config/fish/config.fish`
 - `fish/fishfile` -- Fisherman plugin list
   - `ln -s fish/fishfile ~/.config/fish/fishfile`
-- `hyper/hyper.js`
+- `hyper/hyper.js` -- Hyper Terminal configuration
   - `ln -s hyper/hyper.js ~/.config/hyper/hyper.js`
-  - Hyper Terminal configuration
-- `iterm2/com.googlecode.iterm2.plist`
+- `iterm2/com.googlecode.iterm2.plist` -- iTerm2 general configuration
   - Configure iTerm2 to use this file for preferences directly (symlinks don't work)
-  - iTerm2 configuration
-- `nvim/init.vim`
+- `iterm2/profiles.json` -- iTerm2 [Dynamic Profiles](https://www.iterm2.com/documentation-dynamic-profiles.html) configuration
+  - `ln -s iterm2 ~/Library/Application\ Support/iTerm2/DynamicProfiles/profiles.json`
+- `nvim/init.vim` -- NeoVim configuration
   - `ln -s nvim/init.vim ~/.config/nvim/init.vim`
-  - NeoVim configuration
 
 ## Prerequisites
 ### Packages
