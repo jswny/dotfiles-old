@@ -1,6 +1,17 @@
 # Properly set XDG directory variables if they don't already exist
 set -q XDG_DATA_HOME; or set XDG_DATA_HOME ~/.local/share
 
+# Add VSCode to $PATH
+set -l vscode_path
+switch (uname)
+    case Darwin
+        set vscode_path "/Applications/Visual Studio Code.app/Contents/Resources/app/bin"
+end
+set PATH $vscode_path $PATH
+
+# Set VSCode as the default editor
+set -xg EDITOR "code"
+
 # Disable the greeting message
 set fish_greeting
 
