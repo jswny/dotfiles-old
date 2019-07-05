@@ -3,9 +3,10 @@ These are my personal dotfiles.
 
 ## Files
 The following files are contained in this repository. Each file is listed with its description and where to symlink it in your local filesystem.
-- `fish/fish_variables`: 
-  - `ln -s fish/fish_variables ~/.config/fish/fish_variables`
-  - Fish universal variables
+- `fish/config.fish` -- Fish configuration
+  - `ln -s fish/config.fish ~/.config/fish/config.fish`
+- `fish/fishfile` -- Fisherman plugin list
+  - `ln -s fish/fishfile ~/.config/fish/fishfile`
 - `hyper/hyper.js`
   - `ln -s hyper/hyper.js ~/.config/hyper/hyper.js`
   - Hyper Terminal configuration
