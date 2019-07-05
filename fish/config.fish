@@ -1,16 +1,21 @@
 # Properly set XDG directory variables if they don't already exist (only for this file)
 set -q XDG_DATA_HOME; or set -l XDG_DATA_HOME ~/.local/share
 
-# Add VSCode to $PATH
+# Add VSCode to $PATH if it exists
 set -l vscode_path
 switch (uname)
     case Darwin
         set vscode_path "/Applications/Visual Studio Code.app/Contents/Resources/app/bin"
 end
-set PATH $vscode_path $PATH
 
-# Set VSCode as the default editor
-set -xg EDITOR "code"
+if test -e $vscode_path
+    set PATH $vscode_path $PATH
+end
+
+# Set VSCode as the default editor if it exists
+if type -q "code"
+    set -xg EDITOR "code"
+end
 
 # Disable the greeting message
 set fish_greeting
@@ -20,9 +25,14 @@ if command -sq gls
     alias ls="gls --color"
 end
 
-# Use Solarized Dark dircolors
+# Use Solarized Dark dircolors if they exist
+set -l solarized_dark_dircolors_path $XDG_DATA_HOME/dircolors-solarized/dircolors.256dark
+
 set -l dircolors_provider dircolors
 if command -sq gdircolors
     set dircolors_provider gdircolors
 end
-eval ($dircolors_provider -c $XDG_DATA_HOME/dircolors-solarized/dircolors.256dark)
+
+if test -e $solarized_dark_dircolors_path
+    eval ($dircolors_provider -c $solarized_dark_dircolors_path)
+end

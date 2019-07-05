@@ -20,12 +20,12 @@ The following files are contained in this repository. Each file/directory is lis
 ## Prerequisites
 ### Packages
 Install the following:
-- Either [iTerm2](https://www.iterm2.com/) if you are using MacOS, or [Hyper Terminal](https://hyper.is/) if you are using Windows
+- Either [iTerm2](https://www.iterm2.com/) or [Hyper Terminal](https://hyper.is/)
 - [GNU Coreutils](https://formulae.brew.sh/formula/coreutils) if you are using MacOS
 - [Fish Shell](https://fishshell.com/)
 - [Fisher](https://github.com/jorgebucaran/fisher)
 - [FZF](https://github.com/junegunn/fzf)
-- [The Silver Searcher](https://github.com/ggreer/the_silver_searcher)
+- [Ripgrep](https://github.com/BurntSushi/ripgrep)
 - [Tmux](https://github.com/tmux/tmux)
 - [Tmux Plugin Manager (TPM)](https://github.com/tmux-plugins/tpm)
 - [NeoVim](https://neovim.io/) (must install from `HEAD`)
@@ -36,14 +36,8 @@ Install the following:
 echo /usr/local/bin/fish | sudo tee -a /etc/shells
 chsh -s /usr/local/bin/fish
 ```
-- Solarized Dark colors set for Fish
-  - Set from running `fish_config`
 - Get [dircolors-solarized](https://github.com/seebi/dircolors-solarized)
   - Clone with `git clone https://github.com/seebi/dircolors-solarized.git ~/.local/share/dircolors-solarized`
-- Set FZF universal variables
-  - `set -U FZF_LEGACY_KEYBINDINGS 0`
-  - `set -U FZF_TMUX 1`
-  - `set -U FZF_COMPLETE 1`
 - TPM plugins installed
   - <kbd>prefix</kbd> + <kbd>I</kbd> inside Tmux
 - Python 2 and 3 providers installed for NeoVim
