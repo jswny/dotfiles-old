@@ -1,0 +1,4 @@
+# Fish files that are managed by Fisher
+fish/completions/
+fish/conf.d/
+fish/functions/

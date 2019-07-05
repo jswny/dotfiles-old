@@ -1,5 +1,5 @@
-# Properly set XDG directory variables if they don't already exist
-set -q XDG_DATA_HOME; or set XDG_DATA_HOME ~/.local/share
+# Properly set XDG directory variables if they don't already exist (only for this file)
+set -q XDG_DATA_HOME; or set -l XDG_DATA_HOME ~/.local/share
 
 # Add VSCode to $PATH
 set -l vscode_path

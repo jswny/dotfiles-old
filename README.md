@@ -2,11 +2,12 @@
 These are my personal dotfiles.
 
 ## Files
-The following files are contained in this repository. Each file is listed with its description and where to symlink it in your local filesystem.
-- `fish/config.fish` -- Fish configuration
-  - `ln -s fish/config.fish ~/.config/fish/config.fish`
-- `fish/fishfile` -- Fisherman plugin list
-  - `ln -s fish/fishfile ~/.config/fish/fishfile`
+The following files are contained in this repository. Each file/directory is listed with its description and where to symlink it in your local filesystem.
+- `fish/` -- All Configuration
+  - `ln -s fish ~/.config/fish` (note that the `~/.config/fish` directory must not exist yet to symlink properly)
+  - `fish/config.fish` -- General Fish configuration
+  - `fish/fish_variables` -- Fish [universal variables](https://fishshell.com/docs/current/tutorial.html#tut_universal)
+  - `fish/fishfile` -- Fisherman plugin list
 - `hyper/hyper.js` -- Hyper Terminal configuration
   - `ln -s hyper/hyper.js ~/.config/hyper/hyper.js`
 - `iterm2/com.googlecode.iterm2.plist` -- iTerm2 general configuration
