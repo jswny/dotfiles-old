@@ -23,6 +23,7 @@ Install the following:
 - [GNU Coreutils](https://formulae.brew.sh/formula/coreutils) if you are using MacOS
 - [Fish Shell](https://fishshell.com/)
 - [Fisher](https://github.com/jorgebucaran/fisher)
+- [FZF](https://github.com/junegunn/fzf)
 - [Tmux](https://github.com/tmux/tmux)
 - [Tmux Plugin Manager (TPM)](https://github.com/tmux-plugins/tpm)
 - [NeoVim](https://neovim.io/) (must install from `HEAD`)
@@ -37,6 +38,8 @@ chsh -s /usr/local/bin/fish
   - Set from running `fish_config`
 - Get [dircolors-solarized](https://github.com/seebi/dircolors-solarized)
   - Clone with `git clone https://github.com/seebi/dircolors-solarized.git ~/.local/share/dircolors-solarized`
+- Use new FZF Fish keybindings
+  - `set -U FZF_LEGACY_KEYBINDINGS 0`
 - TPM plugins installed
   - <kbd>prefix</kbd> + <kbd>I</kbd> inside Tmux
 - Python 2 and 3 providers installed for NeoVim

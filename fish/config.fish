@@ -1,6 +1,9 @@
 # Properly set XDG directory variables if they don't already exist
 set -q XDG_DATA_HOME; or set XDG_DATA_HOME ~/.local/share
 
+# Disable the greeting message
+set fish_greeting
+
 # Use gls instead of ls if it is available
 if command -sq gls
     alias ls="gls --color"
