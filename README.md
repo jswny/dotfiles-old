@@ -20,17 +20,23 @@ The following files are contained in this repository. Each file is listed with i
 ### Packages
 Install the following:
 - Either [iTerm2](https://www.iterm2.com/) if you are using MacOS, or [Hyper Terminal](https://hyper.is/) if you are using Windows
+- [GNU Coreutils](https://formulae.brew.sh/formula/coreutils) if you are using MacOS
 - [Fish Shell](https://fishshell.com/)
+- [Fisher](https://github.com/jorgebucaran/fisher)
 - [Tmux](https://github.com/tmux/tmux)
 - [Tmux Plugin Manager (TPM)](https://github.com/tmux-plugins/tpm)
 - [NeoVim](https://neovim.io/) (must install from `HEAD`)
 
 ### Setup
-- Fish as your default shell
+- [Fish as your default shell](https://fishshell.com/docs/current/tutorial.html#tut_switching_to_fish)
 ```sh
 echo /usr/local/bin/fish | sudo tee -a /etc/shells
 chsh -s /usr/local/bin/fish
 ```
+- Solarized Dark colors set for Fish
+  - Set from running `fish_config`
+- Get [dircolors-solarized](https://github.com/seebi/dircolors-solarized)
+  - Clone with `git clone https://github.com/seebi/dircolors-solarized.git ~/.local/share/dircolors-solarized`
 - TPM plugins installed
   - <kbd>prefix</kbd> + <kbd>I</kbd> inside Tmux
 - Python 2 and 3 providers installed for NeoVim
