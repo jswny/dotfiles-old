@@ -1,8 +1,9 @@
 # This file contains fish universal variable definitions.
 # VERSION: 3.0
 SETUVAR FZF_COMPLETE:1
-SETUVAR --export FZF_DEFAULT_COMMAND:rg\x20\x2d\x2dhidden\x20\x2d\x2dfiles\x20\x2dg\x20\x21\x2egit
+SETUVAR --export FZF_DEFAULT_COMMAND:rg\x20\x2d\x2dhidden\x20\x2d\x2dfiles\x20\x2dg\x20\x21\x2egit\x202\x3e\x20/dev/null
 SETUVAR FZF_DEFAULT_OPTS:\x2d\x2dheight\x2040\x25
+SETUVAR FZF_FIND_FILE_COMMAND:rg\x20\x2d\x2dhidden\x20\x2d\x2dfiles\x20\x2dg\x20\x21\x2egit\x202\x3e\x20/dev/null
 SETUVAR FZF_LEGACY_KEYBINDINGS:0
 SETUVAR FZF_PREVIEW_DIR_CMD:ls
 SETUVAR FZF_PREVIEW_FILE_CMD:head\x20\x2dn\x2010
@@ -11,6 +12,7 @@ SETUVAR FZF_TMUX_HEIGHT:40\x25
 SETUVAR __fish_init_2_39_8:\x1d
 SETUVAR __fish_init_2_3_0:\x1d
 SETUVAR __fish_init_3_x:\x1d
+SETUVAR _fish_abbr_gc:git\x20commit\x20\x2dS\x20\x2dm
 SETUVAR fish_color_autosuggestion:586e75
 SETUVAR fish_color_cancel:\x2dr
 SETUVAR fish_color_command:93a1a1

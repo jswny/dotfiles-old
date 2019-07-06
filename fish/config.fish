@@ -42,3 +42,8 @@ if test -e $solarized_dark_dircolors_path
 else
     echo 'Could not find Solarized Dark dircolors to use in "~/.local/share/dircolors-solarized/dircolors.256dark"'
 end
+
+# Abbreviations
+# These don't need to be set here since they go into "fish_variables"
+# They are listed here anyway in readable form
+# abbr gc "git commit -S -m"
