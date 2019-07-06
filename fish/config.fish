@@ -10,11 +10,15 @@ end
 
 if test -e $vscode_path
     set PATH $vscode_path $PATH
+else
+    echo 'Could not find a valid path for VSCode to add to $PATH'
 end
 
 # Set VSCode as the default editor if it exists
 if type -q "code"
     set -xg EDITOR "code"
+else
+    echo 'Could not find a valid VSCode executable "code" in $PATH'
 end
 
 # Disable the greeting message
@@ -35,4 +39,6 @@ end
 
 if test -e $solarized_dark_dircolors_path
     eval ($dircolors_provider -c $solarized_dark_dircolors_path)
+else
+    echo 'Could not find Solarized Dark dircolors to use in "~/.local/share/dircolors-solarized/dircolors.256dark"'
 end
