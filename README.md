@@ -34,6 +34,7 @@ Install the following:
 - [Fisher](https://github.com/jorgebucaran/fisher)
 - [FZF](https://github.com/junegunn/fzf)
 - [Ripgrep](https://github.com/BurntSushi/ripgrep)
+- [The Fuck](https://github.com/nvbn/thefuck)
 - [Tmux](https://github.com/tmux/tmux)
 - [Tmux Plugin Manager (TPM)](https://github.com/tmux-plugins/tpm)
 - [NeoVim](https://neovim.io/) (must install from `HEAD`)

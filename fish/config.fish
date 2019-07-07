@@ -27,6 +27,7 @@ set fish_greeting
 # Use gls instead of ls if it is available
 if command -sq gls
     alias ls="gls --color"
+    set -xa 
 end
 
 # Use Solarized Dark dircolors if they exist
@@ -50,3 +51,5 @@ end
 # abbr gc "git commit -S -m"
 # abbr gs "git status"
 # abbr gs "git push"
+
+thefuck --alias | source 
