@@ -27,7 +27,7 @@ set fish_greeting
 # Use gls instead of ls if it is available
 if command -sq gls
     alias ls="gls --color"
-    set -xa 
+    set -xa THEFUCK_OVERRIDDEN_ALIASES
 end
 
 # Use Solarized Dark dircolors if they exist
