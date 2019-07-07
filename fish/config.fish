@@ -49,3 +49,4 @@ end
 
 # abbr gc "git commit -S -m"
 # abbr gs "git status"
+# abbr gs "git push"
