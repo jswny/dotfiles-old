@@ -40,7 +40,7 @@ end
 if test -e $solarized_dark_dircolors_path
     eval ($dircolors_provider -c $solarized_dark_dircolors_path)
 else
-    echo 'Could not find Solarized Dark dircolors to use in "~/.local/share/dircolors-solarized/dircolors.256dark"'
+    echo "Could not find Solarized Dark dircolors to use in \"$solarized_dark_dircolors_path\""
 end
 
 # Abbreviations
