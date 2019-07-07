@@ -4,8 +4,9 @@ These are my personal dotfiles which I use on a daily basis on MacOS!
 ## Philosophy
 - Minimal configuration where possible
 - Use the [XDG Base Directory Spec](https://standards.freedesktop.org/basedir-spec/basedir-spec-latest.html) where possible/reasonable
+  - Accordingly, consume the existing XDG environment variable if possible or use a default set at the point of use, instead of relying on XDG variables being already set before the point of use.
 - Support MacOS and Linux
-  - Support Windows to some extent (when WSL 2 is stable Windows support might be more feasable)
+  - Support Windows to some extent, but only through WSL. When WSL 2 is stable Windows support might be more feasable, but at the moment WSL 1 breaks Fish
 
 ## Files
 The following files are contained in this repository. Each file/directory is listed with its description and where to symlink it in your local filesystem.
