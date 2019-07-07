@@ -1,5 +1,11 @@
 # Dotfiles
-These are my personal dotfiles.
+These are my personal dotfiles which I use on a daily basis on MacOS!
+
+## Philosophy
+- Minimal configuration where possible
+- Use the [XDG Base Directory Spec](https://standards.freedesktop.org/basedir-spec/basedir-spec-latest.html) where possible/reasonable
+- Support MacOS and Linux
+  - Support Windows to some extent (when WSL 2 is stable Windows support might be more feasable)
 
 ## Files
 The following files are contained in this repository. Each file/directory is listed with its description and where to symlink it in your local filesystem.

@@ -46,4 +46,6 @@ end
 # Abbreviations
 # These don't need to be set here since they go into "fish_variables"
 # They are listed here anyway in readable form
+
 # abbr gc "git commit -S -m"
+# abbr gs "git status"
