@@ -27,13 +27,14 @@ The following files are contained in this repository. Each file/directory is lis
 
 ## Prerequisites
 ### Packages
-Install the following:
+Install the following packages (packages delimited by `*` are not directly required for any dotfiles but are tools that I use regardless):
 - Either [iTerm2](https://www.iterm2.com/) or [Hyper Terminal](https://hyper.is/)
 - [GNU Coreutils](https://formulae.brew.sh/formula/coreutils) if you are using MacOS
 - [Fish Shell](https://fishshell.com/)
 - [Fisher](https://github.com/jorgebucaran/fisher)
 - [FZF](https://github.com/junegunn/fzf)
-- [Ripgrep](https://github.com/BurntSushi/ripgrep)
+- [FD](https://github.com/sharkdp/fd)
+- * [Ripgrep](https://github.com/BurntSushi/ripgrep)
 - [The Fuck](https://github.com/nvbn/thefuck)
 - [Tmux](https://github.com/tmux/tmux)
 - [Tmux Plugin Manager (TPM)](https://github.com/tmux-plugins/tpm)

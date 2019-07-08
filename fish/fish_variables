@@ -1,10 +1,14 @@
 # This file contains fish universal variable definitions.
 # VERSION: 3.0
+SETUVAR --export FZF_CD_COMMAND:fd\x20\x2d\x2dtype\x20d\x20\x2d\x2dfollow\x20\x2d\x2dexclude\x20\x2egit\x20\x2e\x20\x24dir\x202\x3e\x20/dev/null
+SETUVAR --export FZF_CD_WITH_HIDDEN_COMMAND:fd\x20\x2d\x2dtype\x20d\x20\x2d\x2dhidden\x20\x2d\x2dfollow\x20\x2d\x2dexclude\x20\x2egit\x20\x2e\x20\x24dir\x202\x3e\x20/dev/null
 SETUVAR FZF_COMPLETE:1
-SETUVAR --export FZF_DEFAULT_COMMAND:rg\x20\x2d\x2dhidden\x20\x2d\x2dfiles\x20\x2dg\x20\x21\x2egit\x202\x3e\x20/dev/null
+SETUVAR --export FZF_DEFAULT_COMMAND:fd\x20\x2d\x2dtype\x20f\x20\x2d\x2dhidden\x20\x2d\x2dfollow\x20\x2d\x2dexclude\x20\x2egit\x202\x3e\x20/dev/null
 SETUVAR FZF_DEFAULT_OPTS:\x2d\x2dheight\x2040\x25
-SETUVAR FZF_FIND_FILE_COMMAND:rg\x20\x2d\x2dhidden\x20\x2d\x2dfiles\x20\x2dg\x20\x21\x2egit\x202\x3e\x20/dev/null
+SETUVAR FZF_ENABLE_OPEN_PREVIEW:1
+SETUVAR FZF_FIND_FILE_COMMAND:fd\x20\x2d\x2dtype\x20f\x20\x2d\x2dhidden\x20\x2d\x2dfollow\x20\x2d\x2dexclude\x20\x2egit\x20\x2e\x20\x24dir\x202\x3e\x20/dev/null
 SETUVAR FZF_LEGACY_KEYBINDINGS:0
+SETUVAR --export FZF_OPEN_COMMAND:fd\x20\x2d\x2dhidden\x20\x2d\x2dfollow\x20\x2d\x2dexclude\x20\x2egit\x20\x2e\x20\x24dir\x202\x3e\x20/dev/null
 SETUVAR FZF_PREVIEW_DIR_CMD:ls
 SETUVAR FZF_PREVIEW_FILE_CMD:head\x20\x2dn\x2010
 SETUVAR FZF_TMUX:1
