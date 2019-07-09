@@ -8,6 +8,7 @@ These are my personal dotfiles which I use on a daily basis on MacOS!
   - See [this Arch Linux guide](https://wiki.archlinux.org/index.php/XDG_Base_Directory) for a good summary of which programs support XDG
 - Support MacOS and Linux
   - Support Windows to some extent, but only through WSL. When WSL 2 is stable Windows support might be more feasable, but at the moment WSL 1 breaks Fish
+- Fail gracefully or use defaults wherever possible, but warn the user when this occurs
 
 ## Files
 The following files are contained in this repository. Each file/directory is listed with its description and where to symlink it in your local filesystem.
