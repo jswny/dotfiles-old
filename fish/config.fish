@@ -14,6 +14,19 @@ else
     echo 'Could not find a valid path for VSCode to add to $PATH'
 end
 
+# Add Rustup to $PATH if it exists
+set -l rustup_path
+switch (uname)
+    case Darwin
+        set rustup_path "$HOME/.cargo/bin"
+end
+
+if test -e $rustup_path
+    set PATH $rustup_path $PATH
+else
+    echo 'Could not find a valid path for Rustup to add to $PATH'
+end
+
 # Set VSCode as the default editor if it exists
 if type -q "code"
     set -xg EDITOR "code"
