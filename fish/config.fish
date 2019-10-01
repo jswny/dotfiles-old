@@ -1,6 +1,9 @@
 # Properly set XDG directory variables if they don't already exist (only for this file)
 set -q XDG_DATA_HOME; or set -l XDG_DATA_HOME ~/.local/share
 
+# Start the ssh-agent
+eval (ssh-agent -c) > /dev/null
+
 # Add VSCode to $PATH if it exists
 set -l vscode_path
 switch (uname)
