@@ -60,6 +60,13 @@ else
     echo "Could not find Solarized Dark dircolors to use in \"$solarized_dark_dircolors_path\""
 end
 
+# Alias The Fuck if it is available
+if type -q "thefuck"
+    thefuck --alias | source 
+else
+    echo 'Could not find a valid The Fuck executable "thefuck" in $PATH'
+end
+
 # Abbreviations and Universal Variables
 # We set these here so that we can leave the fish_variables file out of source control and keep it machine independent
 # These items are also human-readable as listed here
@@ -84,4 +91,3 @@ set -U FZF_PREVIEW_FILE_CMD 'head -n 10'
 set -U FZF_TMUX '1'
 set -U FZF_TMUX_HEIGHT '40%'
 
-thefuck --alias | source 
