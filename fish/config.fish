@@ -60,6 +60,10 @@ else
     echo "Could not find Solarized Dark dircolors to use in \"$solarized_dark_dircolors_path\""
 end
 
+# Remove the right side of the prompt with timestamps etc. (for bobthefish)
+function fish_right_prompt
+end
+
 # Alias The Fuck if it is available
 if type -q "thefuck"
     thefuck --alias | source 
@@ -90,4 +94,3 @@ set -U FZF_PREVIEW_DIR_CMD 'fd --hidden --follow --exclude .git --max-depth 1 --
 set -U FZF_PREVIEW_FILE_CMD 'head -n 10'
 set -U FZF_TMUX '1'
 set -U FZF_TMUX_HEIGHT '40%'
-
