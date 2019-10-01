@@ -10,10 +10,10 @@ These are my personal dotfiles which I use on a daily basis on MacOS!
   - Support Windows to some extent, but only through WSL. When WSL 2 is stable Windows support might be more feasable, but at the moment WSL 1 breaks Fish
 - Fail gracefully or use defaults wherever possible, but warn the user when this occurs
 
-## Files
+## Files and Linking
 The following files are contained in this repository. Each file/directory is listed with its description and where to symlink it in your local filesystem.
 - `fish/` -- All Configuration
-  - `ln -s fish ~/.config/fish` (note that the `~/.config/fish` directory must not exist yet to symlink properly)
+  - `ln -s fish/ ~/.config/fish/` (note that the `~/.config/fish` directory must not exist yet to symlink properly)
   - `fish/config.fish` -- General Fish configuration
   - `fish/fish_variables` -- Fish [universal variables](https://fishshell.com/docs/current/tutorial.html#tut_universal)
   - `fish/fishfile` -- Fisherman plugin list
@@ -25,6 +25,8 @@ The following files are contained in this repository. Each file/directory is lis
   - `ln -s iterm2 ~/Library/Application\ Support/iTerm2/DynamicProfiles/profiles.json`
 - `nvim/init.vim` -- NeoVim configuration
   - `ln -s nvim/init.vim ~/.config/nvim/init.vim`
+- `tmux/.tmux.conf` -- Tmux configuration
+  - `ln -s tmux/.tmux.conf ~/.tmux.conf`
 
 ## Prerequisites
 ### Packages
@@ -35,7 +37,7 @@ Install the following packages (packages delimited by `*` are not directly requi
 - [Fisher](https://github.com/jorgebucaran/fisher)
 - [FZF](https://github.com/junegunn/fzf)
 - [FD](https://github.com/sharkdp/fd)
-- * [Ripgrep](https://github.com/BurntSushi/ripgrep)
+- [Ripgrep](https://github.com/BurntSushi/ripgrep)
 - [The Fuck](https://github.com/nvbn/thefuck)
 - [Tmux](https://github.com/tmux/tmux)
 - [Tmux Plugin Manager (TPM)](https://github.com/tmux-plugins/tpm)
