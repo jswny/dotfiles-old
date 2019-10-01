@@ -60,12 +60,28 @@ else
     echo "Could not find Solarized Dark dircolors to use in \"$solarized_dark_dircolors_path\""
 end
 
-# Abbreviations
-# These don't need to be set here since they go into "fish_variables"
-# They are listed here anyway in readable form
+# Abbreviations and Universal Variables
+# We set these here so that we can leave the fish_variables file out of source control and keep it machine independent
+# These items are also human-readable as listed here
 
+# Abbreviations
 # abbr gc "git commit -S -m"
 # abbr gs "git status"
 # abbr gs "git push"
+
+# Universal Variables
+set -Ux FZF_CD_COMMAND 'fd --type d --follow --exclude .git . $dir 2> /dev/null'
+set -U FZF_CD_WITH_HIDDEN_COMMAND 'fd --type d --hidden --follow --exclude .git . $dir 2> /dev/null'
+set -U FZF_COMPLETE '1'
+set -U FZF_DEFAULT_COMMAND 'fd --type f --hidden --follow --exclude .git 2> /dev/null'
+set -U FZF_DEFAULT_OPTS '-i --height 40%'
+set -U FZF_ENABLE_OPEN_PREVIEW '1'
+set -U FZF_FIND_FILE_COMMAND 'fd --type f --hidden --follow --exclude .git . $dir 2> /dev/null'
+set -U FZF_LEGACY_KEYBINDINGS '0'
+set -Ux FZF_OPEN_COMMAND 'fd --hidden --follow --exclude .git . $dir 2> /dev/null'
+set -U FZF_PREVIEW_DIR_CMD 'fd --hidden --follow --exclude .git --max-depth 1 --color always . 2> /dev/null'
+set -U FZF_PREVIEW_FILE_CMD 'head -n 10'
+set -U FZF_TMUX '1'
+set -U FZF_TMUX_HEIGHT '40%'
 
 thefuck --alias | source 

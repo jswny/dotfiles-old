@@ -2,3 +2,6 @@
 fish/completions/
 fish/conf.d/
 fish/functions/
+
+# Fish universal variables (machine-independent)
+fish/fish_variables
