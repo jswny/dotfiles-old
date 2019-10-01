@@ -58,3 +58,5 @@ chsh -s /usr/local/bin/fish
 pip2 install pynvim
 pip3 install pynvim
 ```
+- Fish colors set to Solarized Dark
+  - Configure with `fish_config` in the shell
