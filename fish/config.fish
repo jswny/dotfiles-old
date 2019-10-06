@@ -1,6 +1,12 @@
 # Properly set XDG directory variables if they don't already exist (only for this file)
 set -q XDG_DATA_HOME; or set -l XDG_DATA_HOME ~/.local/share
 
+# Prevent Tmux from re-sourcing the config
+# if status is-interactive
+# and set -q TMUX
+#     exit
+# end
+
 # Start the ssh-agent
 eval (ssh-agent -c) > /dev/null
 
@@ -43,7 +49,7 @@ set fish_greeting
 # Use gls instead of ls if it is available
 if command -sq gls
     alias ls="gls --color"
-    set -xa THEFUCK_OVERRIDDEN_ALIASES
+    set -xa THEFUCK_OVERRIDDEN_ALIASES 'ls,'
 end
 
 # Use Solarized Dark dircolors if they exist
@@ -58,10 +64,6 @@ if test -e $solarized_dark_dircolors_path
     eval ($dircolors_provider -c $solarized_dark_dircolors_path)
 else
     echo "Could not find Solarized Dark dircolors to use in \"$solarized_dark_dircolors_path\""
-end
-
-# Remove the right side of the prompt with timestamps etc. (for bobthefish)
-function fish_right_prompt
 end
 
 # Alias The Fuck if it is available
@@ -79,6 +81,14 @@ end
 # abbr gc "git commit -S -m"
 # abbr gs "git status"
 # abbr gs "git push"
+
+# Normal Variables
+# Disable the default virtualenv prompt (bobthefish has it built-in)
+set -x VIRTUAL_ENV_DISABLE_PROMPT 1
+# Set bobthefish config options
+set -g theme_color_scheme solarized-dark
+set -g theme_display_date no
+set -g theme_powerline_fonts no
 
 # Universal Variables
 set -Ux FZF_CD_COMMAND 'fd --type d --follow --exclude .git . $dir 2> /dev/null'
