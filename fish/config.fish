@@ -88,7 +88,6 @@ set -x VIRTUAL_ENV_DISABLE_PROMPT 1
 # Set bobthefish config options
 set -g theme_color_scheme solarized-dark
 set -g theme_display_date no
-set -g theme_powerline_fonts no
 
 # Universal Variables
 set -Ux FZF_CD_COMMAND 'fd --type d --follow --exclude .git . $dir 2> /dev/null'
