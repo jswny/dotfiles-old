@@ -9,7 +9,7 @@ set -q XDG_DATA_HOME; or set -l XDG_DATA_HOME ~/.local/share
 
 # Start the ssh-agent and add the default key
 eval (ssh-agent -c) > /dev/null
-ssh-add > /dev/null
+ssh-add 2> /dev/null
 
 # Add VSCode to $PATH if it exists
 set -l vscode_path
