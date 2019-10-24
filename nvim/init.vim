@@ -11,14 +11,32 @@
 " - Neovim installed from HEAD
 " For LanguageClient_Neovim:
 " - ElixirLS built and available in $PATH (https://github.com/JakeBecker/elixir-ls) or (https://github.com/elixir-lsp/elixir-ls)
-" For the external FZF plugin:
+" For the FZF plugin:
 " - FZF installed (https://github.com/junegunn/fzf) in the path specified in the plugin definition below
-" For Coc:
-" - Yarn installed (https://yarnpkg.com)
+" For deoplete-jedi:
+" - Jedi installed (pip3 install jedi)
 
 """"""""""""""""
 " Key Bindings "
 """"""""""""""""
+
+" Shortcut to FZF :Files with <leader>f
+nnoremap <leader>f :Files<cr>
+
+" Shortcut to FZF :Buffers with <leader>b
+nnoremap <leader>b :Buffers<cr>
+
+" Shortcut to FZF :Lines with <leader>l
+nnoremap <leader>l :Lines<cr>
+
+" Use the LanguageClient-Neovim key bindings in Elixir file buffers only to avoid
+" breaking normal functionality
+augroup ElixirLSBindings
+  autocmd!
+  autocmd FileType elixir nnoremap <buffer> <silent> K :call LanguageClient#textDocument_hover()<CR>
+  autocmd FileType elixir nnoremap <buffer> <silent> gd :call LanguageClient#textDocument_definition()<CR>
+  autocmd FileType elixir nnoremap <buffer> <silent> <F2> :call LanguageClient#textDocument_rename()<CR>
+augroup END
 
 """""""""""
 " Plugins "
@@ -29,28 +47,25 @@
 " - Avoid using standard Vim directory names like 'plugin'
 call plug#begin('~/.local/share/nvim/plugged')
 
-" External plugins
-Plug '~/.fzf'
-
 " Installed plugins
 Plug 'elixir-lang/vim-elixir'
 Plug 'tpope/vim-endwise'
 Plug 'scrooloose/nerdcommenter'
 Plug 'airblade/vim-gitgutter'
 Plug 'alvan/vim-closetag'
+Plug '~/.fzf'
 Plug 'junegunn/fzf.vim'
 Plug 'itchyny/lightline.vim'
 Plug 'tpope/vim-fugitive'
+Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+Plug 'autozimu/LanguageClient-neovim', { 'branch': 'next', 'do': './install.sh' }
 Plug 'tpope/vim-dispatch'
 Plug 'janko-m/vim-test'
 Plug 'Yggdroot/indentLine'
+Plug 'deoplete-plugins/deoplete-jedi'
 Plug 'altercation/vim-colors-solarized'
+Plug 'davidhalter/jedi-vim'
 " Plug 'SirVer/ultisnips'
-Plug 'elzr/vim-json'
-Plug 'neoclide/coc.nvim', {'do': './install.sh nightly'}
-
-" Coc plugins
-Plug 'neoclide/coc-json', {'do': 'yarn install --frozen-lockfile'}
 
 " Initialize plugin system
 call plug#end()
@@ -127,9 +142,6 @@ augroup ElixirFixFolds
   autocmd FileType elixir autocmd InsertLeave * normal! zXzR
 augroup END
 
-" Automatically highlight JSONC comments in JSON files
-autocmd FileType json syntax match Comment +\/\/.\+$+
-
 """"""""""""""""""
 " NERD Commenter "
 """"""""""""""""""
@@ -156,12 +168,13 @@ let g:lightline = {
 \               [ 'gitbranch', 'filename' ] ],
 \     'right': [ [ 'lineinfo' ],
 \                [ 'percent' ],
-\                [ 'cocstatus', 'filetype' ] ],
+\                [ 'lcnverrors', 'lcnvwarnings', 'filetype' ] ],
 \   },
 \   'component_function': {
 \     'filename': 'Lightline_filename',
 \     'gitbranch': 'fugitive#head',
-\     'cocstatus': 'coc#status',
+\     'lcnvwarnings': 'LCNV_warning_count',
+\     'lcnverrors': 'LCNV_error_count',
 \   },
 \ }
 
@@ -194,51 +207,48 @@ function! LCNV_error_count()
 endfunction
 
 """"""""""""
+" Deoplete "
+""""""""""""
+
+" Enable deoplete
+let g:deoplete#enable_at_startup = 1
+
+" Automatically close the Deoplete preview window after completion
+" (https://github.com/Shougo/deoplete.nvim/issues/115)
+autocmd InsertLeave,CompleteDone * if pumvisible() == 0 | pclose | endif
+
+""""""""""""
+" Jedi Vim "
+""""""""""""
+" Disable completions because Deoplete Jedi takes care of this
+let g:jedi#completions_enabled = 0
+
+"""""""""""""""""""""""""
+" LanguageClient-Neovim "
+"""""""""""""""""""""""""
+
+" Enable debugging
+let g:LanguageClient_loggingLevel = 'DEBUG'
+
+let g:LanguageClient_rootMarkers = {
+\   'elixir': ['mix.exs'],
+\ }
+
+" Use the ElixirLS shell script from $PATH
+let g:LanguageClient_serverCommands = {
+\   'elixir': ['elixir-ls.sh'],
+\ }
+
+" Disable diagnostic signs in the signcolumn
+" Do this because Gitgutter is more important in the signcolumn and virtual text means we don't need these signs
+let g:LanguageClient_diagnosticsSignsMax = 0
+
+""""""""""""
 " Vim Test "
 """"""""""""
 
 " Tell Vim Test to use Dispatch Vim as the testing strategy
 let test#strategy = "dispatch"
-
-""""""""""""
-" Vim JSON "
-""""""""""""
-" Turn off quote hiding for JSON to fix indentLine weirdness
-" (https://github.com/Yggdroot/indentLine/issues/140#issuecomment-173867054)
-let g:vim_json_syntax_conceal = 0
-
-"""""""""""
-" FZF Vim "
-"""""""""""
-
-" Shortcut to FZF :Files with <leader>f
-nnoremap <leader>f :Files<cr>
-
-" Shortcut to FZF :Buffers with <leader>b
-nnoremap <leader>b :Buffers<cr>
-
-" Shortcut to FZF :Lines with <leader>l
-nnoremap <leader>l :Lines<cr>
-
-""""""""""""
-" Coc NVim "
-""""""""""""
-
-" Use Coc specific features in supported languages
-" Update these to run on each language that Coc is configured for
-" We do this to avoid using these functions in languages that Coc isn't configured for
-augroup CocBindings
-  autocmd!
-
-  " Show documentation in preview window
-  autocmd FileType elixir,eelixir nnoremap <buffer> <silent> K :call CocAction('doHover')<CR>
-
-  " Gotos
-  autocmd FileType elixir,eelixir nmap <silent> gd <Plug>(coc-definition)
-  autocmd FileType elixir,eelixir nmap <silent> gy <Plug>(coc-type-definition)
-  autocmd FileType elixir,eelixir nmap <silent> gi <Plug>(coc-implementation)
-  autocmd FileType elixir,eelixir nmap <silent> gr <Plug>(coc-references)
-augroup END
 
 """"""""""""""""""""
 " # Experimental # "

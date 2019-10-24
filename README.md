@@ -37,6 +37,7 @@ Install the following packages (packages delimited by `*` are not directly requi
 - [Fisher](https://github.com/jorgebucaran/fisher)
 - [FZF](https://github.com/junegunn/fzf)
 - [FD](https://github.com/sharkdp/fd)
+- [Bat](https://github.com/sharkdp/bat)
 - [Ripgrep](https://github.com/BurntSushi/ripgrep)
 - [The Fuck](https://github.com/nvbn/thefuck)
 - [Tmux](https://github.com/tmux/tmux)
