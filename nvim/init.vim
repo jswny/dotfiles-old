@@ -11,7 +11,7 @@
 " - Neovim installed from HEAD
 " For LanguageClient_Neovim:
 " - ElixirLS built and available in $PATH (https://github.com/JakeBecker/elixir-ls) or (https://github.com/elixir-lsp/elixir-ls)
-" - PyLS available in $PATH (https://github.com/palantir/python-language-server)
+" - PyLS (ideally with all add-ons) available in $PATH (https://github.com/palantir/python-language-server)
 " For the FZF plugin:
 " - FZF installed (https://github.com/junegunn/fzf) in the path specified in the plugin definition below
 
@@ -61,10 +61,7 @@ Plug 'autozimu/LanguageClient-neovim', { 'branch': 'next', 'do': './install.sh' 
 Plug 'tpope/vim-dispatch'
 Plug 'janko-m/vim-test'
 Plug 'Yggdroot/indentLine'
-" Plug 'deoplete-plugins/deoplete-jedi'
 Plug 'altercation/vim-colors-solarized'
-" Plug 'davidhalter/jedi-vim'
-" Plug 'SirVer/ultisnips'
 
 " Initialize plugin system
 call plug#end()
@@ -253,8 +250,3 @@ let test#strategy = "dispatch"
 """"""""""""""""""""
 " # Experimental # "
 """"""""""""""""""""
-" let g:gitgutter_enabled = 0
-" let g:dispatch_compilers = {'elixir': 'exunit'}
-
-" let g:LanguageClient_hasSnippetSupport = 0
-
