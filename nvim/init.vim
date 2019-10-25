@@ -11,10 +11,9 @@
 " - Neovim installed from HEAD
 " For LanguageClient_Neovim:
 " - ElixirLS built and available in $PATH (https://github.com/JakeBecker/elixir-ls) or (https://github.com/elixir-lsp/elixir-ls)
+" - PyLS available in $PATH (https://github.com/palantir/python-language-server)
 " For the FZF plugin:
 " - FZF installed (https://github.com/junegunn/fzf) in the path specified in the plugin definition below
-" For deoplete-jedi:
-" - Jedi installed (pip3 install jedi)
 
 """"""""""""""""
 " Key Bindings "
