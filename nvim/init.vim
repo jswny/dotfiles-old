@@ -62,6 +62,7 @@ Plug 'tpope/vim-dispatch'
 Plug 'janko-m/vim-test'
 Plug 'Yggdroot/indentLine'
 Plug 'altercation/vim-colors-solarized'
+Plug 'chrisbra/csv.vim'
 
 " Initialize plugin system
 call plug#end()
