@@ -30,11 +30,11 @@ nnoremap <leader>l :Lines<cr>
 
 " Use the LanguageClient-Neovim key bindings in Elixir file buffers only to avoid
 " breaking normal functionality
-augroup ElixirLSBindings
+augroup LCNVBindings
   autocmd!
-  autocmd FileType elixir nnoremap <buffer> <silent> K :call LanguageClient#textDocument_hover()<CR>
-  autocmd FileType elixir nnoremap <buffer> <silent> gd :call LanguageClient#textDocument_definition()<CR>
-  autocmd FileType elixir nnoremap <buffer> <silent> <F2> :call LanguageClient#textDocument_rename()<CR>
+  autocmd FileType elixir,python nnoremap <buffer> <silent> K :call LanguageClient#textDocument_hover()<CR>
+  autocmd FileType elixir,python nnoremap <buffer> <silent> gd :call LanguageClient#textDocument_definition()<CR>
+  autocmd FileType elixir,python nnoremap <buffer> <silent> <F2> :call LanguageClient#textDocument_rename()<CR>
 augroup END
 
 """""""""""
