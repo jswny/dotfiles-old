@@ -58,5 +58,6 @@ chsh -s /usr/local/bin/fish
 pip2 install pynvim
 pip3 install pynvim
 ```
+- See `init.vim` for the additional setup required for NeoVim
 - Fish colors set to Solarized Dark
   - Configure with `fish_config` in the shell
