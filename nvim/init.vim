@@ -213,12 +213,6 @@ let g:deoplete#enable_at_startup = 1
 " (https://github.com/Shougo/deoplete.nvim/issues/115)
 autocmd InsertLeave,CompleteDone * if pumvisible() == 0 | pclose | endif
 
-" """"""""""""
-" " Jedi Vim "
-" """"""""""""
-" " Disable completions because Deoplete Jedi takes care of this and we only need Jedi Vim for Python documentation support
-" let g:jedi#completions_enabled = 0
-
 """""""""""""""""""""""""
 " LanguageClient-Neovim "
 """""""""""""""""""""""""
@@ -247,6 +241,6 @@ let g:LanguageClient_diagnosticsSignsMax = 0
 " Tell Vim Test to use Dispatch Vim as the testing strategy
 let test#strategy = "dispatch"
 
-""""""""""""""""""""
-" # Experimental # "
-""""""""""""""""""""
+""""""""""""""""
+" Experimental "
+""""""""""""""""
