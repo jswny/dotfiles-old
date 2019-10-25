@@ -12,11 +12,10 @@ These are my personal dotfiles which I use on a daily basis on MacOS!
 
 ## Files and Linking
 The following files are contained in this repository. Each file/directory is listed with its description and where to symlink it in your local filesystem.
-- `fish/` -- All Configuration
-  - `fish/config.fish` -- General Fish configuration
-    - `ln -s fish/config.fish ~/.config/fish/config.fish`
-  - `fish/fishfile` -- Fisherman plugin list
-    - `ln -s fish/fishfile ~/.config/fish/fishfile`
+- `fish/config.fish` -- General Fish configuration
+  - `ln -s fish/config.fish ~/.config/fish/config.fish`
+- `fish/fishfile` -- Fisherman plugin list
+  - `ln -s fish/fishfile ~/.config/fish/fishfile`
 - `hyper/hyper.js` -- Hyper Terminal configuration
   - `ln -s hyper/hyper.js ~/.config/hyper/hyper.js`
 - `iterm2/com.googlecode.iterm2.plist` -- iTerm2 general configuration
@@ -25,6 +24,8 @@ The following files are contained in this repository. Each file/directory is lis
   - `ln -s iterm2 ~/Library/Application\ Support/iTerm2/DynamicProfiles/profiles.json`
 - `nvim/init.vim` -- NeoVim configuration
   - `ln -s nvim/init.vim ~/.config/nvim/init.vim`
+- `nvim/lcnv-settings.json` -- LanguageClient-NeoVim configuration for language servers
+  - `ln -s ~/Github/dotfiles/nvim/lcnv-settings.json ~/.config/nvim/lcnv-settings.json`
 - `tmux/.tmux.conf` -- Tmux configuration
   - `ln -s tmux/.tmux.conf ~/.tmux.conf`
 
@@ -53,11 +54,6 @@ chsh -s /usr/local/bin/fish
   - Clone with `git clone https://github.com/seebi/dircolors-solarized.git ~/.local/share/dircolors-solarized`
 - TPM plugins installed
   - <kbd>prefix</kbd> + <kbd>I</kbd> inside Tmux
-- Python 2 and 3 providers installed for NeoVim
-```sh
-pip2 install pynvim
-pip3 install pynvim
-```
 - See `init.vim` for the additional setup required for NeoVim
 - Fish colors set to Solarized Dark
   - Configure with `fish_config` in the shell

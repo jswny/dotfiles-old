@@ -235,7 +235,7 @@ let g:LanguageClient_rootMarkers = {
 \   'elixir': ['mix.exs'],
 \ }
 
-" Use the ElixirLS shell script from $PATH
+" Setup individual Language Servers from $PATH
 let g:LanguageClient_serverCommands = {
 \   'elixir': ['elixir-ls.sh'],
 \   'python': ['pyls'],
@@ -244,6 +244,9 @@ let g:LanguageClient_serverCommands = {
 " Disable diagnostic signs in the signcolumn
 " Do this because Gitgutter is more important in the signcolumn and virtual text means we don't need these signs
 let g:LanguageClient_diagnosticsSignsMax = 0
+
+" Set the location for LCNV to load 
+let g:LanguageClient_settingsPath = '~/.config/nvim/lcnv-settings.json'
 
 """"""""""""
 " Vim Test "

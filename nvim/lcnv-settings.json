@@ -1,0 +1,12 @@
+{
+  "pyls": {
+    "plugins": {
+      "pyflakes": {
+        "enabled": true
+      },
+      "pycodestyle": {
+        "enabled": false
+      }
+    }
+  }
+}
