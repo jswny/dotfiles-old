@@ -62,9 +62,9 @@ Plug 'autozimu/LanguageClient-neovim', { 'branch': 'next', 'do': './install.sh' 
 Plug 'tpope/vim-dispatch'
 Plug 'janko-m/vim-test'
 Plug 'Yggdroot/indentLine'
-Plug 'deoplete-plugins/deoplete-jedi'
+" Plug 'deoplete-plugins/deoplete-jedi'
 Plug 'altercation/vim-colors-solarized'
-Plug 'davidhalter/jedi-vim'
+" Plug 'davidhalter/jedi-vim'
 " Plug 'SirVer/ultisnips'
 
 " Initialize plugin system
@@ -217,11 +217,11 @@ let g:deoplete#enable_at_startup = 1
 " (https://github.com/Shougo/deoplete.nvim/issues/115)
 autocmd InsertLeave,CompleteDone * if pumvisible() == 0 | pclose | endif
 
-""""""""""""
-" Jedi Vim "
-""""""""""""
-" Disable completions because Deoplete Jedi takes care of this and we only need Jedi Vim for Python documentation support
-let g:jedi#completions_enabled = 0
+" """"""""""""
+" " Jedi Vim "
+" """"""""""""
+" " Disable completions because Deoplete Jedi takes care of this and we only need Jedi Vim for Python documentation support
+" let g:jedi#completions_enabled = 0
 
 """""""""""""""""""""""""
 " LanguageClient-Neovim "
@@ -237,6 +237,7 @@ let g:LanguageClient_rootMarkers = {
 " Use the ElixirLS shell script from $PATH
 let g:LanguageClient_serverCommands = {
 \   'elixir': ['elixir-ls.sh'],
+\   'python': ['pyls'],
 \ }
 
 " Disable diagnostic signs in the signcolumn
