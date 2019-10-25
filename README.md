@@ -13,10 +13,10 @@ These are my personal dotfiles which I use on a daily basis on MacOS!
 ## Files and Linking
 The following files are contained in this repository. Each file/directory is listed with its description and where to symlink it in your local filesystem.
 - `fish/` -- All Configuration
-  - `ln -s fish/ ~/.config/fish/` (note that the `~/.config/fish` directory must not exist yet to symlink properly)
   - `fish/config.fish` -- General Fish configuration
-  - `fish/fish_variables` -- Fish [universal variables](https://fishshell.com/docs/current/tutorial.html#tut_universal)
+    - `ln -s fish/config.fish ~/.config/fish/config.fish`
   - `fish/fishfile` -- Fisherman plugin list
+    - `ln -s fish/fishfile ~/.config/fish/fishfile`
 - `hyper/hyper.js` -- Hyper Terminal configuration
   - `ln -s hyper/hyper.js ~/.config/hyper/hyper.js`
 - `iterm2/com.googlecode.iterm2.plist` -- iTerm2 general configuration
@@ -38,7 +38,6 @@ Install the following packages (packages delimited by `*` are not directly requi
 - [FZF](https://github.com/junegunn/fzf)
 - [FD](https://github.com/sharkdp/fd)
 - [Bat](https://github.com/sharkdp/bat)
-- [Ripgrep](https://github.com/BurntSushi/ripgrep)
 - [The Fuck](https://github.com/nvbn/thefuck)
 - [Tmux](https://github.com/tmux/tmux)
 - [Tmux Plugin Manager (TPM)](https://github.com/tmux-plugins/tpm)
