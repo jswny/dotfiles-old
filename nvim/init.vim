@@ -220,7 +220,7 @@ autocmd InsertLeave,CompleteDone * if pumvisible() == 0 | pclose | endif
 """"""""""""
 " Jedi Vim "
 """"""""""""
-" Disable completions because Deoplete Jedi takes care of this
+" Disable completions because Deoplete Jedi takes care of this and we only need Jedi Vim for Python documentation support
 let g:jedi#completions_enabled = 0
 
 """""""""""""""""""""""""
