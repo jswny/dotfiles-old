@@ -12,6 +12,7 @@
 " For LanguageClient_Neovim:
 " - ElixirLS built and available in $PATH (https://github.com/JakeBecker/elixir-ls) or (https://github.com/elixir-lsp/elixir-ls)
 " - PyLS (ideally with all add-ons) available in $PATH (https://github.com/palantir/python-language-server)
+" - Sourcegraph JavaScript/TypeScript Language Server(https://github.com/sourcegraph/javascript-typescript-langserver)
 " For the FZF plugin:
 " - FZF installed (https://github.com/junegunn/fzf) in the path specified in the plugin definition below
 
@@ -73,6 +74,7 @@ Plug 'janko-m/vim-test'
 Plug 'Yggdroot/indentLine'
 Plug 'altercation/vim-colors-solarized'
 Plug 'chrisbra/csv.vim'
+Plug 'leafgarland/typescript-vim'
 
 " Initialize plugin system
 call plug#end()
@@ -239,6 +241,7 @@ let g:LanguageClient_rootMarkers = {
 let g:LanguageClient_serverCommands = {
 \   'elixir': ['elixir-ls.sh'],
 \   'python': ['pyls'],
+\   'typescript': ['javascript-typescript-stdio'],
 \ }
 
 " Disable diagnostic signs in the signcolumn
