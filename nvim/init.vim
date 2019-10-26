@@ -57,22 +57,26 @@ augroup END
 " - Avoid using standard Vim directory names like 'plugin'
 call plug#begin('~/.local/share/nvim/plugged')
 
-" Installed plugins
-Plug 'elixir-lang/vim-elixir'
+" Utilities
 Plug 'tpope/vim-endwise'
 Plug 'scrooloose/nerdcommenter'
+Plug 'Yggdroot/indentLine'
 Plug 'airblade/vim-gitgutter'
 Plug 'alvan/vim-closetag'
 Plug '~/.fzf'
 Plug 'junegunn/fzf.vim'
-Plug 'itchyny/lightline.vim'
 Plug 'tpope/vim-fugitive'
 Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 Plug 'autozimu/LanguageClient-neovim', { 'branch': 'next', 'do': './install.sh' }
 Plug 'tpope/vim-dispatch'
 Plug 'janko-m/vim-test'
-Plug 'Yggdroot/indentLine'
+
+" Visual customization
+Plug 'itchyny/lightline.vim'
 Plug 'altercation/vim-colors-solarized'
+
+" Language support
+Plug 'elixir-lang/vim-elixir'
 Plug 'chrisbra/csv.vim'
 Plug 'leafgarland/typescript-vim'
 Plug 'peitalin/vim-jsx-typescript'
