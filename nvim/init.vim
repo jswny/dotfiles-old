@@ -75,6 +75,7 @@ Plug 'Yggdroot/indentLine'
 Plug 'altercation/vim-colors-solarized'
 Plug 'chrisbra/csv.vim'
 Plug 'leafgarland/typescript-vim'
+Plug 'peitalin/vim-jsx-typescript'
 
 " Initialize plugin system
 call plug#end()
@@ -242,6 +243,7 @@ let g:LanguageClient_serverCommands = {
 \   'elixir': ['elixir-ls.sh'],
 \   'python': ['pyls'],
 \   'typescript': ['javascript-typescript-stdio'],
+\   'typescript.tsx': ['javascript-typescript-stdio'],
 \ }
 
 " Disable diagnostic signs in the signcolumn
