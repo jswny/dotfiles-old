@@ -53,6 +53,7 @@ Plug 'tpope/vim-dispatch'
 Plug 'janko-m/vim-test'
 Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 Plug 'Shougo/echodoc.vim'
+Plug 'ncm2/float-preview.nvim'
 Plug 'autozimu/LanguageClient-neovim', { 'branch': 'next', 'do': './install.sh' }
 
 " Visual customization
@@ -114,7 +115,10 @@ set nofoldenable
 set noshowmode
 
 " Disable previews for completions
-" set completeopt-=preview
+set completeopt-=preview
+
+" Limit the completion menu to 10 entries
+set pumheight=10
 
 """"""""""""""
 " Automation "
@@ -215,7 +219,6 @@ let g:deoplete#enable_at_startup = 1
 " (https://github.com/Shougo/deoplete.nvim/issues/115)
 autocmd InsertLeave,CompleteDone * if pumvisible() == 0 | pclose | endif
 
-
 """""""""""
 " Echodoc "
 """""""""""
@@ -225,6 +228,13 @@ let g:echodoc#enable_at_startup = 1
 let g:echodoc#type = 'floating'
 " To use a custom highlight for the float window, change Pmenu to your highlight group
 highlight link EchoDocFloat Pmenu
+
+"""""""""""""""""
+" Float Preview "
+"""""""""""""""""
+
+" Don't dock the preview window to the bottom of the window
+let g:float_preview#docked = 1
 
 """""""""""""""""""""""""
 " LanguageClient-Neovim "
