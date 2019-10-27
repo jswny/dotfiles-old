@@ -112,7 +112,7 @@ set nofoldenable
 set noshowmode
 
 " Disable previews for completions
-set completeopt-=preview
+" set completeopt-=preview
 
 """"""""""""""
 " Automation "
