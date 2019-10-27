@@ -38,11 +38,13 @@ nnoremap <leader>l :Lines<cr>
 " - Avoid using standard Vim directory names like 'plugin'
 call plug#begin('~/.local/share/nvim/plugged')
 
-" Utilities
+" Editing
 Plug 'tpope/vim-endwise'
 Plug 'scrooloose/nerdcommenter'
 Plug 'Yggdroot/indentLine'
 Plug 'alvan/vim-closetag'
+
+" Utilities
 Plug 'tpope/vim-fugitive'
 Plug 'airblade/vim-gitgutter'
 Plug '~/.fzf'
