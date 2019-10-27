@@ -42,15 +42,16 @@ call plug#begin('~/.local/share/nvim/plugged')
 Plug 'tpope/vim-endwise'
 Plug 'scrooloose/nerdcommenter'
 Plug 'Yggdroot/indentLine'
-Plug 'airblade/vim-gitgutter'
 Plug 'alvan/vim-closetag'
+Plug 'tpope/vim-fugitive'
+Plug 'airblade/vim-gitgutter'
 Plug '~/.fzf'
 Plug 'junegunn/fzf.vim'
-Plug 'tpope/vim-fugitive'
-Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-Plug 'autozimu/LanguageClient-neovim', { 'branch': 'next', 'do': './install.sh' }
 Plug 'tpope/vim-dispatch'
 Plug 'janko-m/vim-test'
+Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+Plug 'Shougo/echodoc.vim'
+Plug 'autozimu/LanguageClient-neovim', { 'branch': 'next', 'do': './install.sh' }
 
 " Visual customization
 Plug 'itchyny/lightline.vim'
@@ -183,7 +184,7 @@ endfunction
 " Define a function which returns a string with the count of a specific type of LanguageClient-Neovim diagnostic
 " This function gets its results from quickfix
 " `type` is a string that is either `'W'` (warning) or `'E'` (error)
-function! LCNV_count_type(type)
+function! s:LCNV_count_type(type)
   let current_buf_number = bufnr('%')
   let qflist = getqflist()
   let current_buf_diagnostics = filter(qflist, {index, dict -> dict['bufnr'] == current_buf_number && dict['type'] == a:type})
@@ -193,12 +194,12 @@ endfunction
 
 " Define a function for the LanguageClient-Neovim warning count
 function! LCNV_warning_count()
-  return LCNV_count_type('W')
+  return s:LCNV_count_type('W')
 endfunction
 
 " Define a function for the LanguageClient-Neovim error count
 function! LCNV_error_count()
-  return LCNV_count_type('E')
+  return s:LCNV_count_type('E')
 endfunction
 
 """"""""""""
@@ -239,7 +240,7 @@ let g:LanguageClient_diagnosticsSignsMax = 0
 let g:LanguageClient_settingsPath = '~/.config/nvim/lcnv-settings.json'
 
 " Use the LanguageClient-Neovim key bindings in appropriate file buffers only to avoid breaking normal functionality
-function SetLCNVKeyBindings()
+function s:SetLCNVKeyBindings()
   nnoremap <silent> gd :call LanguageClient#textDocument_definition()<CR>
   nnoremap <leader>lr :call LanguageClient#textDocument_rename()<CR>
   nnoremap <leader>lf :call LanguageClient#textDocument_formatting()<CR>
@@ -254,7 +255,7 @@ endfunction()
 
 augroup LSP
   autocmd!
-  autocmd FileType elixir,python,typescript,typescript.tsx call SetLCNVKeyBindings()
+  autocmd FileType elixir,python,typescript,typescript.tsx call s:SetLCNVKeyBindings()
 augroup END
 
 """"""""""""
