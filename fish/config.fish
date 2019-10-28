@@ -39,7 +39,7 @@ end
 
 # Set VSCode as the default editor if it exists
 if type -q "code"
-    set -xg EDITOR "code"
+    set -xg EDITOR "code --wait"
 else
     echo 'Could not find a valid VSCode executable "code" in $PATH'
 end
