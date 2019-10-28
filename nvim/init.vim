@@ -281,6 +281,30 @@ augroup LSP
   autocmd FileType elixir,python,typescript,typescript.tsx call s:SetLCNVKeyBindings()
 augroup END
 
+function! EchoWarning(msg)
+  echohl WarningMsg
+  echo "Warning"
+  echohl None
+  echon ': ' a:msg
+endfunction
+
+function VerifyTypeScriptTSXConfigExists()
+  let currentDirectoryPath = getcwd()
+  if empty(findfile(glob("tsconfig.json"), currentDirectoryPath.';'))
+    call EchoWarning("You have opened a TSX file but no tsconfig.json could be found. TSX language server support requires a tsconfig.json file which specifies that TSX should be enabled.")
+  endif
+endfunction()
+
+autocmd BufRead *.tsx call VerifyTypeScriptTSXConfigExists()
+" autocmd FileType * call VerifyTypeScriptTSXConfigExists()
+
+" augroup LSPVerifyTSXConfig
+"   autocmd!
+"   autocmd BufRead call VerifyTypeScriptTSXConfigExists()
+"   " autocmd FileType * call VerifyTypeScriptTSXConfigExists()
+"   " autocmd FileType typescript.tsx call VerifyTypeScriptTSXConfigExists()
+" augroup END
+
 """"""""""""
 " Vim Test "
 """"""""""""
