@@ -281,13 +281,14 @@ augroup LSP
   autocmd FileType elixir,python,typescript,typescript.tsx call s:SetLCNVKeyBindings()
 augroup END
 
+" Echo an arbitrary warning message
 function! EchoWarning(msg)
   echohl WarningMsg
-  echo "Warning"
+  echo a:msg
   echohl None
-  echon ': ' a:msg
 endfunction
 
+" Check if a tsconfig.json file can be found by recursively searching up parent directories (until the root directory). Print a warning if one is not found
 function VerifyTypeScriptTSXConfigExists()
   let currentDirectoryPath = getcwd()
   if empty(findfile(glob("tsconfig.json"), currentDirectoryPath.';'))
@@ -295,15 +296,13 @@ function VerifyTypeScriptTSXConfigExists()
   endif
 endfunction()
 
-autocmd BufRead *.tsx call VerifyTypeScriptTSXConfigExists()
-" autocmd FileType * call VerifyTypeScriptTSXConfigExists()
+" This is needed in order to echo messages with a FileType autocmd (https://gitter.im/neovim/neovim?at=5db67924fb4dab784a1b296f)
+set shortmess-=F
 
-" augroup LSPVerifyTSXConfig
-"   autocmd!
-"   autocmd BufRead call VerifyTypeScriptTSXConfigExists()
-"   " autocmd FileType * call VerifyTypeScriptTSXConfigExists()
-"   " autocmd FileType typescript.tsx call VerifyTypeScriptTSXConfigExists()
-" augroup END
+augroup LSPVerifyTSXConfig
+  autocmd!
+  autocmd FileType typescript.tsx call VerifyTypeScriptTSXConfigExists()
+augroup END
 
 """"""""""""
 " Vim Test "
