@@ -58,6 +58,7 @@ Plug 'autozimu/LanguageClient-neovim', { 'branch': 'next', 'do': './install.sh' 
 
 " Visual customization
 Plug 'itchyny/lightline.vim'
+Plug 'jmcantrell/vim-virtualenv'
 Plug 'altercation/vim-colors-solarized'
 
 " Language support
@@ -167,16 +168,18 @@ let g:lightline = {
 \   'colorscheme': 'solarized',
 \   'active': {
 \     'left': [ [ 'mode', 'paste' ], 
-\               [ 'gitbranch', 'filename' ] ],
+\               [ 'gitbranch', 'filename' ],
+\               [ 'venv' ] ],
 \     'right': [ [ 'lineinfo' ],
 \                [ 'percent' ],
-\                [ 'lcnverrors', 'lcnvwarnings', 'filetype' ] ],
+\                [ 'lcnverrors', 'lcnvwarnings', 'filetype' ], ],
 \   },
 \   'component_function': {
 \     'filename': 'Lightline_filename',
 \     'gitbranch': 'fugitive#head',
 \     'lcnvwarnings': 'LCNV_warning_count',
 \     'lcnverrors': 'LCNV_error_count',
+\     'venv': 'virtualenv#statusline',
 \   },
 \ }
 
