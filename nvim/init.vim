@@ -295,16 +295,15 @@ endfunction
 function VerifyTypeScriptTSXConfigExists()
   let currentDirectoryPath = getcwd()
   if empty(findfile(glob("tsconfig.json"), currentDirectoryPath.';'))
-    call EchoWarning("You have opened a TSX file but no tsconfig.json could be found. TSX language server support requires a tsconfig.json file which specifies that TSX should be enabled.")
+    call EchoWarning("You are opening a TSX file but no tsconfig.json could be found. TSX language server support requires a tsconfig.json file which specifies that TSX should be enabled.")
   endif
 endfunction()
 
-" This is needed in order to echo messages with a FileType autocmd (https://gitter.im/neovim/neovim?at=5db67924fb4dab784a1b296f)
-set shortmess-=F
 
 augroup LSPVerifyTSXConfig
   autocmd!
-  autocmd FileType typescript.tsx call VerifyTypeScriptTSXConfigExists()
+  " The unsilent part needed in order to echo messages with a FileType autocmd (https://gitter.im/neovim/neovim?at=5db6863be886fb5aa20b6808)
+  autocmd FileType typescript.tsx unsilent call VerifyTypeScriptTSXConfigExists()
 augroup END
 
 """"""""""""
