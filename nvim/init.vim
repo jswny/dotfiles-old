@@ -66,6 +66,7 @@ Plug 'elixir-lang/vim-elixir'
 Plug 'chrisbra/csv.vim'
 Plug 'leafgarland/typescript-vim'
 Plug 'peitalin/vim-jsx-typescript'
+Plug 'elzr/vim-json'
 
 " Initialize plugin system
 call plug#end()
@@ -312,6 +313,20 @@ augroup END
 
 " Tell Vim Test to use Dispatch Vim as the testing strategy
 let test#strategy = "dispatch"
+
+""""""""""""
+" Vim JSON "
+""""""""""""
+
+" Disable concealment of quotes in JSON files. Otherwise, the IndentLine plugin doesn't work, and that's more valuable
+let g:vim_json_syntax_conceal = 0
+
+"""""""""""""""
+" Indent Line "
+"""""""""""""""
+
+" Change the characters recursively 
+let g:indentLine_char_list = ['|', '¦', '┆', '┊']
 
 """"""""""""""""
 " Experimental "
