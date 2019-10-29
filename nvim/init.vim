@@ -334,6 +334,9 @@ let g:vim_json_syntax_conceal = 0
 " Change the characters recursively 
 let g:indentLine_char_list = ['|', '¦', '┆', '┊']
 
+" Use solarized base01 color for indent line characters
+let g:indentLine_color_term = 240
+
 """"""""""""""""
 " Experimental "
 """"""""""""""""
