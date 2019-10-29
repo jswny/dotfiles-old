@@ -9,10 +9,11 @@
 " For Deoplete:
 " - Neovim Python3 provider (pip3 install pynvim)
 " - Neovim installed from HEAD
-" For LanguageClient_Neovim:
-" - ElixirLS built and available in $PATH (https://github.com/JakeBecker/elixir-ls) or (https://github.com/elixir-lsp/elixir-ls)
-" - PyLS (ideally with all add-ons) available in $PATH (https://github.com/palantir/python-language-server)
-" - Sourcegraph JavaScript/TypeScript Language Server(https://github.com/sourcegraph/javascript-typescript-langserver)
+" For LanguageClient_Neovim, the following available in $PATH:
+" - ElixirLS (https://github.com/JakeBecker/elixir-ls) or (https://github.com/elixir-lsp/elixir-ls)
+" - PyLS (ideally with all add-ons) available in (https://github.com/palantir/python-language-server)
+" - Sourcegraph JavaScript/TypeScript Language Server (https://github.com/sourcegraph/javascript-typescript-langserver)
+" - VSCode JSON Language server (https://github.com/vscode-langservers/vscode-json-languageserver)
 " For the FZF plugin:
 " - FZF installed (https://github.com/junegunn/fzf) in the path specified in the plugin definition below
 
@@ -243,6 +244,7 @@ let g:float_preview#docked = 1
 """""""""""""""""""""""""
 " LanguageClient-Neovim "
 """""""""""""""""""""""""
+let g:LanguageClient_loggingFile = expand('~/.cache/nvim/LanguageClient.log')
 
 " Enable debugging
 let g:LanguageClient_loggingLevel = 'DEBUG'
@@ -257,6 +259,7 @@ let g:LanguageClient_serverCommands = {
 \   'python': ['pyls'],
 \   'typescript': ['javascript-typescript-stdio'],
 \   'typescript.tsx': ['javascript-typescript-stdio'],
+\   'json': ['vscode-json-languageserver', '--stdio'],
 \ }
 
 " Disable diagnostic signs in the signcolumn
@@ -282,7 +285,7 @@ endfunction()
 
 augroup LSP
   autocmd!
-  autocmd FileType elixir,python,typescript,typescript.tsx call s:SetLCNVKeyBindings()
+  autocmd FileType elixir,python,typescript,typescript.tsx,json call s:SetLCNVKeyBindings()
 augroup END
 
 " Echo an arbitrary warning message
@@ -317,6 +320,9 @@ let test#strategy = "dispatch"
 """"""""""""
 " Vim JSON "
 """"""""""""
+
+" Disable Vim JSON warnings. We want to delegate these to the language server instead
+let g:vim_json_warnings = 0
 
 " Disable concealment of quotes in JSON files. Otherwise, the IndentLine plugin doesn't work, and that's more valuable
 let g:vim_json_syntax_conceal = 0
