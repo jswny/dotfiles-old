@@ -14,6 +14,7 @@
 " - PyLS (ideally with all add-ons) available in (https://github.com/palantir/python-language-server)
 " - Sourcegraph JavaScript/TypeScript Language Server (https://github.com/sourcegraph/javascript-typescript-langserver)
 " - VSCode JSON Language server (https://github.com/vscode-langservers/vscode-json-languageserver)
+" - RLS (https://github.com/rust-lang/rls)
 " For the FZF plugin:
 " - FZF installed (https://github.com/junegunn/fzf) in the path specified in the plugin definition below
 
@@ -68,6 +69,7 @@ Plug 'chrisbra/csv.vim'
 Plug 'leafgarland/typescript-vim'
 Plug 'peitalin/vim-jsx-typescript'
 Plug 'elzr/vim-json'
+Plug 'rust-lang/rust.vim'
 
 " Initialize plugin system
 call plug#end()
@@ -244,6 +246,7 @@ let g:float_preview#docked = 1
 """""""""""""""""""""""""
 " LanguageClient-Neovim "
 """""""""""""""""""""""""
+
 let g:LanguageClient_loggingFile = expand('~/.cache/nvim/LanguageClient.log')
 
 " Enable debugging
@@ -260,13 +263,14 @@ let g:LanguageClient_serverCommands = {
 \   'typescript': ['javascript-typescript-stdio'],
 \   'typescript.tsx': ['javascript-typescript-stdio'],
 \   'json': ['vscode-json-languageserver', '--stdio'],
+\   'rust': ['rustup', 'run', 'stable', 'rls'],
 \ }
 
 " Disable diagnostic signs in the signcolumn
 " Do this because Gitgutter is more important in the signcolumn and virtual text means we don't need these signs
 let g:LanguageClient_diagnosticsSignsMax = 0
 
-" Set the location for LCNV to load 
+" Set the location for LCNV to load settings from
 let g:LanguageClient_settingsPath = '~/.config/nvim/lcnv-settings.json'
 
 " Use the LanguageClient-Neovim key bindings in appropriate file buffers only to avoid breaking normal functionality
@@ -285,7 +289,7 @@ endfunction()
 
 augroup LSP
   autocmd!
-  autocmd FileType elixir,python,typescript,typescript.tsx,json call s:SetLCNVKeyBindings()
+  autocmd FileType elixir,python,typescript,typescript.tsx,json,rust call s:SetLCNVKeyBindings()
 augroup END
 
 " Echo an arbitrary warning message
