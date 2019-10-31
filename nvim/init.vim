@@ -240,7 +240,7 @@ highlight link EchoDocFloat Pmenu
 " Float Preview "
 """""""""""""""""
 
-" Don't dock the preview window to the bottom of the window
+" Dock the preview window to the bottom of the window
 let g:float_preview#docked = 1
 
 """""""""""""""""""""""""
