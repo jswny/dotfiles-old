@@ -371,7 +371,7 @@
 	<key>NSWindow Frame SharedPreferences</key>
 	<string>334 354 918 514 0 0 1920 1177 </string>
 	<key>NSWindow Frame iTerm Window 0</key>
-	<string>0 76 714 801 0 0 1440 877 </string>
+	<string>0 57 714 820 0 0 1440 877 </string>
 	<key>NSWindow Frame iTerm Window 1</key>
 	<string>1082 416 585 451 0 0 1680 1027 </string>
 	<key>NeverWarnAboutMeta</key>
@@ -2010,7 +2010,7 @@
 			<key>Terminal Type</key>
 			<string>xterm-256color</string>
 			<key>Transparency</key>
-			<real>0.04227071005917158</real>
+			<integer>0</integer>
 			<key>Triggers</key>
 			<array/>
 			<key>Unicode Version</key>
@@ -2067,7 +2067,7 @@
 	<key>NoSyncInstallationId</key>
 	<string>4859CFBD-7569-442E-BE55-C34B7CB89273</string>
 	<key>NoSyncLaunchExperienceControllerRunCount</key>
-	<integer>6</integer>
+	<integer>7</integer>
 	<key>NoSyncNeverRemindPrefsChangesLostForFile</key>
 	<true/>
 	<key>NoSyncNeverRemindPrefsChangesLostForFile_selection</key>
@@ -2802,6 +2802,10 @@
 	</dict>
 	<key>NoSyncSaveDocumentAsPathSet_saveDocumentAs:</key>
 	<true/>
+	<key>NoSyncSearchHistory2</key>
+	<array>
+		<string>message</string>
+	</array>
 	<key>NoSyncTimeOfFirstLaunchOfVersionWithTip</key>
 	<real>486686624.64909399</real>
 	<key>NoSyncTimeOfLastPromo</key>
@@ -2876,7 +2880,7 @@
 	<key>SUHasLaunchedBefore</key>
 	<true/>
 	<key>SULastCheckTime</key>
-	<date>2019-10-24T23:03:29Z</date>
+	<date>2019-11-06T02:06:20Z</date>
 	<key>SUUpdateRelaunchingMarker</key>
 	<false/>
 	<key>SavePasteHistory</key>
