@@ -254,6 +254,7 @@ let g:LanguageClient_loggingLevel = 'DEBUG'
 
 let g:LanguageClient_rootMarkers = {
 \   'elixir': ['mix.exs'],
+\   'rust': ['Cargo.toml'],
 \ }
 
 " Setup individual Language Servers from $PATH
