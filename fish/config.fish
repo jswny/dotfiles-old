@@ -65,7 +65,7 @@ end
 
 # Source machine-dependent configuration
 # Only sources the file if it exists
-set -l machine_configuration_path $XDG_CONFIG_HOME/fish/$hostname.config.fish
+set -l machine_configuration_path $XDG_CONFIG_HOME/fish/local.config.fish
 
 if test -e $machine_configuration_path
     source $machine_configuration_path
