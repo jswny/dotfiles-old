@@ -1,6 +1,31 @@
 # Dotfiles
 These are my personal dotfiles which I use on a daily basis on MacOS!
 
+## Dependencies
+These dotfiles depend on the following dependencies:
+- [GNU Coreutils](https://formulae.brew.sh/formula/coreutils) (MacOS only)
+- [Fish Shell](https://fishshell.com/)
+- [Fisher](https://github.com/jorgebucaran/fisher)
+- [FZF](https://github.com/junegunn/fzf)
+- [FD](https://github.com/sharkdp/fd)
+- [Bat](https://github.com/sharkdp/bat)
+- [The Fuck](https://github.com/nvbn/thefuck)
+- [Tmux](https://github.com/tmux/tmux) (v2.9+)
+- [Tmux Plugin Manager (TPM)](https://github.com/tmux-plugins/tpm)
+- [NeoVim](https://neovim.io/) (install from `HEAD`)
+
+- Either [iTerm2](https://www.iterm2.com/), [Hyper Terminal](https://hyper.is/), or another terminal that can use the Solarized Dark colorscheme for all colors to work fully.
+
+## Setup
+1. Install dependencies
+2. Run the setup script:
+```sh
+https://github.com/jswny/dotfiles.git
+cd dotfiles
+./setup.sh
+```
+3. Set your Fish colors set to Solarized Dark via `fish_config` in the shell
+
 ## Philosophy
 - Minimal configuration where possible
 - Use the [XDG Base Directory Spec](https://standards.freedesktop.org/basedir-spec/basedir-spec-latest.html) where possible/reasonable
@@ -11,49 +36,10 @@ These are my personal dotfiles which I use on a daily basis on MacOS!
 - Fail gracefully or use defaults wherever possible, but warn the user when this occurs
 
 ## Files and Linking
-The following files are contained in this repository. Each file/directory is listed with its description and where to symlink it in your local filesystem.
-- `fish/config.fish` -- General Fish configuration
-  - `ln -s fish/config.fish ~/.config/fish/config.fish`
-- `fish/fishfile` -- Fisherman plugin list
-  - `ln -s fish/fishfile ~/.config/fish/fishfile`
+Most symlinks are automatically setup in the setup script. However, non-cross-platform utilities are not, and can be handled as shown below.
 - `hyper/hyper.js` -- Hyper Terminal configuration
-  - `ln -s hyper/hyper.js ~/.config/hyper/hyper.js`
+  - `ln -s $PWD/hyper/hyper.js ~/.config/hyper/hyper.js`
 - `iterm2/com.googlecode.iterm2.plist` -- iTerm2 general configuration
   - Configure iTerm2 to use this file for preferences directly (symlinks don't work)
 - `iterm2/profiles.json` -- iTerm2 [Dynamic Profiles](https://www.iterm2.com/documentation-dynamic-profiles.html) configuration
-  - `ln -s iterm2 ~/Library/Application\ Support/iTerm2/DynamicProfiles/profiles.json`
-- `nvim/init.vim` -- NeoVim configuration
-  - `ln -s nvim/init.vim ~/.config/nvim/init.vim`
-- `nvim/lcnv-settings.json` -- LanguageClient-NeoVim configuration for language servers
-  - `ln -s ~/Github/dotfiles/nvim/lcnv-settings.json ~/.config/nvim/lcnv-settings.json`
-- `tmux/.tmux.conf` -- Tmux configuration
-  - `ln -s tmux/.tmux.conf ~/.tmux.conf`
-
-## Prerequisites
-### Packages
-Install the following packages (packages delimited by `*` are not directly required for any dotfiles but are tools that I use regardless):
-- Either [iTerm2](https://www.iterm2.com/) or [Hyper Terminal](https://hyper.is/)
-- [GNU Coreutils](https://formulae.brew.sh/formula/coreutils) if you are using MacOS
-- [Fish Shell](https://fishshell.com/)
-- [Fisher](https://github.com/jorgebucaran/fisher)
-- [FZF](https://github.com/junegunn/fzf)
-- [FD](https://github.com/sharkdp/fd)
-- [Bat](https://github.com/sharkdp/bat)
-- [The Fuck](https://github.com/nvbn/thefuck)
-- [Tmux](https://github.com/tmux/tmux)
-- [Tmux Plugin Manager (TPM)](https://github.com/tmux-plugins/tpm)
-- [NeoVim](https://neovim.io/) (must install from `HEAD`)
-
-### Setup
-- [Fish as your default shell](https://fishshell.com/docs/current/tutorial.html#tut_switching_to_fish)
-```sh
-echo /usr/local/bin/fish | sudo tee -a /etc/shells
-chsh -s /usr/local/bin/fish
-```
-- Get [dircolors-solarized](https://github.com/seebi/dircolors-solarized)
-  - Clone with `git clone https://github.com/seebi/dircolors-solarized.git ~/.local/share/dircolors-solarized`
-- TPM plugins installed
-  - <kbd>prefix</kbd> + <kbd>I</kbd> inside Tmux
-- See `init.vim` for the additional setup required for NeoVim
-- Fish colors set to Solarized Dark
-  - Configure with `fish_config` in the shell
+  - `ln -s $PWD/iterm2 ~/Library/Application\ Support/iTerm2/DynamicProfiles/profiles.json`
