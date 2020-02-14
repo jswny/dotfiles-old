@@ -1,4 +1,4 @@
-# Properly set XDG directory variables if they don't already exist (only for this file)
+# Properly set XDG directory variables to defaults if they don't already exist (only for this file)
 set -q XDG_DATA_HOME; or set -l XDG_DATA_HOME ~/.local/share
 
 # Prevent Tmux from re-sourcing the config
@@ -18,17 +18,12 @@ switch (uname)
         set vscode_path "/Applications/Visual Studio Code.app/Contents/Resources/app/bin"
 end
 
+# Set VSCode as the default editor if it exists
 if test -e $vscode_path
     set PATH $vscode_path $PATH
-else
-    echo 'Could not find a valid path for VSCode to add to $PATH'
 end
-
-# Set VSCode as the default editor if it exists
 if type -q "code"
     set -xg EDITOR "code --wait"
-else
-    echo 'Could not find a valid VSCode executable "code" in $PATH'
 end
 
 # Disable the greeting message
@@ -50,15 +45,11 @@ end
 
 if test -e $solarized_dark_dircolors_path
     eval ($dircolors_provider -c $solarized_dark_dircolors_path)
-else
-    echo "Could not find Solarized Dark dircolors to use in \"$solarized_dark_dircolors_path\""
 end
 
 # Alias The Fuck if it is available
 if type -q "thefuck"
     thefuck --alias | source 
-else
-    echo 'Could not find a valid The Fuck executable "thefuck" in $PATH'
 end
 
 # Abbreviations and Universal Variables

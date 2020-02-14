@@ -33,7 +33,7 @@ cd dotfiles
   - See [this Arch Linux guide](https://wiki.archlinux.org/index.php/XDG_Base_Directory) for a good summary of which programs support XDG
 - Support MacOS and Linux
   - Support Windows to some extent, but only through WSL. When WSL 2 is stable Windows support might be more feasable, but at the moment WSL 1 breaks Fish
-- Fail gracefully or use defaults wherever possible, but warn the user when this occurs
+- Fail gracefully
 
 ## Files and Linking
 Most symlinks are automatically setup in the setup script. However, non-cross-platform utilities are not, and can be handled as shown below.
