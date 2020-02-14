@@ -1,4 +1,5 @@
 # Properly set XDG directory variables to defaults if they don't already exist (only for this file)
+set -q XDG_CONFIG_HOME; or set -l XDG_CONFIG_HOME ~/.config
 set -q XDG_DATA_HOME; or set -l XDG_DATA_HOME ~/.local/share
 
 # Prevent Tmux from re-sourcing the config
@@ -22,6 +23,7 @@ end
 if test -e $vscode_path
     set PATH $vscode_path $PATH
 end
+
 if type -q "code"
     set -xg EDITOR "code --wait"
 end
@@ -60,6 +62,14 @@ end
 # abbr gc "git commit -S -m"
 # abbr gs "git status"
 # abbr gs "git push"
+
+# Source machine-dependent configuration
+# Only sources the file if it exists
+set -l machine_configuration_path $XDG_CONFIG_HOME/fish/$hostname.config.fish
+
+if test -e $machine_configuration_path
+    source $machine_configuration_path
+end
 
 # Normal Variables
 # Disable the default virtualenv prompt (bobthefish has it built-in)
