@@ -78,17 +78,17 @@ set -x VIRTUAL_ENV_DISABLE_PROMPT 1
 set -g theme_color_scheme solarized-dark
 set -g theme_display_date no
 
-# Universal Variables
-set -Ux FZF_CD_COMMAND 'fd --type d --follow --exclude .git --exclude venv . $dir 2> /dev/null'
-set -Ux FZF_CD_WITH_HIDDEN_COMMAND 'fd --type d --hidden --follow --exclude .git . $dir 2> /dev/null'
-set -Ux FZF_COMPLETE '1'
-set -Ux FZF_DEFAULT_COMMAND 'fd --type f --hidden --follow --exclude .git --exclude venv 2> /dev/null'
-set -Ux FZF_DEFAULT_OPTS '-i --height 40% --color dark,hl:33,hl+:37,fg+:235,bg+:136,fg+:254 --color info:254,prompt:37,spinner:108,pointer:235,marker:235'
-set -Ux FZF_ENABLE_OPEN_PREVIEW '1'
-set -Ux FZF_FIND_FILE_COMMAND 'fd --type f --hidden --follow --exclude .git --exdlude venv . $dir 2> /dev/null'
-set -Ux FZF_LEGACY_KEYBINDINGS '0'
-set -Ux FZF_OPEN_COMMAND 'fd --hidden --follow --exclude .git --exclude venv . $dir 2> /dev/null'
-set -Ux FZF_PREVIEW_DIR_CMD 'fd --hidden --follow --exclude .git --max-depth 1 --color always . 2> /dev/null'
-set -Ux FZF_PREVIEW_FILE_CMD 'head -n 10'
-set -Ux FZF_TMUX '1'
-set -Ux FZF_TMUX_HEIGHT '40%'
+# Global Variables
+set -gx FZF_CD_COMMAND 'fd --type d --follow --exclude .git --exclude venv . $dir 2> /dev/null'
+set -gx FZF_CD_WITH_HIDDEN_COMMAND 'fd --type d --hidden --follow --exclude .git . $dir 2> /dev/null'
+set -gx FZF_COMPLETE '1'
+set -gx FZF_DEFAULT_COMMAND 'fd --type f --hidden --follow --exclude .git --exclude venv 2> /dev/null'
+set -gx FZF_DEFAULT_OPTS '-i --height 40% --color dark,hl:33,hl+:37,fg+:235,bg+:136,fg+:254 --color info:254,prompt:37,spinner:108,pointer:235,marker:235'
+set -gx FZF_ENABLE_OPEN_PREVIEW '1'
+set -gx FZF_FIND_FILE_COMMAND 'fd --type f --hidden --follow --exclude .git --exdlude venv . $dir 2> /dev/null'
+set -gx FZF_LEGACY_KEYBINDINGS '0'
+set -gx FZF_OPEN_COMMAND 'fd --hidden --follow --exclude .git --exclude venv . $dir 2> /dev/null'
+set -gx FZF_PREVIEW_DIR_CMD 'fd --hidden --follow --exclude .git --max-depth 1 --color always . 2> /dev/null'
+set -gx FZF_PREVIEW_FILE_CMD 'head -n 10'
+set -gx FZF_TMUX '1'
+set -gx FZF_TMUX_HEIGHT '40%'
