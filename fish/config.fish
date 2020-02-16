@@ -71,14 +71,16 @@ if test -e $machine_configuration_path
     source $machine_configuration_path
 end
 
-# Normal Variables
+# Variables
+
 # Disable the default virtualenv prompt (bobthefish has it built-in)
 set -x VIRTUAL_ENV_DISABLE_PROMPT 1
+
 # Set bobthefish config options
 set -g theme_color_scheme solarized-dark
 set -g theme_display_date no
 
-# Global Variables
+# Set FZF Fish options
 set -gx FZF_CD_COMMAND 'fd --type d --follow --exclude .git --exclude venv . $dir 2> /dev/null'
 set -gx FZF_CD_WITH_HIDDEN_COMMAND 'fd --type d --hidden --follow --exclude .git . $dir 2> /dev/null'
 set -gx FZF_COMPLETE '1'
