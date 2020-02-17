@@ -73,6 +73,9 @@ end
 
 # Variables
 
+# Make sure Fish uses 24bit colors
+set -g fish_term24bit 1
+
 # Set Solarized Dark colors
 set -U fish_color_autosuggestion '586e75'
 set -U fish_color_cancel '-r'
