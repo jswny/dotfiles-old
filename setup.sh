@@ -12,6 +12,7 @@ ln -s "$PWD/fish/config.fish" "$XDG_CONFIG_HOME/fish/config.fish"
 ln -s "$PWD/fish/fishfile" "$XDG_CONFIG_HOME/fish/fishfile"
 
 # Install plugins with Fisher
+echo "Installing Fisher plugins..."
 fish -c "fisher"
 
 # Symlink Tmux files
@@ -25,6 +26,7 @@ ln -s "$PWD/tmux/.tmux.conf" "$XDG_CONFIG_HOME/tmux/tmux.conf"
 ln -s "$XDG_CONFIG_HOME/tmux/tmux.conf" "$HOME/.tmux.conf"
 
 # Install TPM plugins
+echo "Installing TPM plugins..."
 $XDG_DATA_HOME/tmux/plugins/tpm/bin/install_plugins
 
 # Symlink NeoVim files
@@ -33,4 +35,5 @@ ln -s "$PWD/nvim/init.vim" "$XDG_CONFIG_HOME/nvim/init.vim"
 ln -s "$PWD/nvim/lcnv-settings.json" "$XDG_CONFIG_HOME/nvim/lcnv-settings.json"
 
 # Install NeoVim plugins and output to log file since this output is not noninteractive
+echo "Installing NeoVim plugins..."
 nvim --headless '+PlugInstall --sync' +qa &> /var/log/nvim_plug_install.log
