@@ -26,6 +26,11 @@ cd dotfiles
 ```
 3. Set your Fish colors set to Solarized Dark via `fish_config` in the shell
 
+## Local Configuration
+### Fish
+- To add local Fish configuration, simply create a file `local.config.fish` and place it in the same directory as `config.fish`. From there, `config.fish` will source that file (after it has already run all of its own commands).
+- You can change your `$PATH` in Fish by either modifying it in `local.config.fish`, or by setting it one time universally: `set -U fish_user_paths /usr/local/bin $fish_user_paths`.
+
 ## Philosophy
 - Minimal configuration where possible
 - Use the [XDG Base Directory Spec](https://standards.freedesktop.org/basedir-spec/basedir-spec-latest.html) where possible/reasonable
