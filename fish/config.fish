@@ -113,6 +113,9 @@ set -g theme_display_date no
 # Set Bat options
 set -gx BAT_THEME ansi-dark
 
+# Use Bat to colorize manpages
+set -gx MANPAGER "sh -c 'col -bx | bat -l man -p'"
+
 # Set FZF Fish options
 set -Ux FZF_CD_COMMAND 'fd --type d --follow --exclude .git --exclude venv . $dir 2> /dev/null'
 set -Ux FZF_CD_WITH_HIDDEN_COMMAND 'fd --type d --hidden --follow --exclude .git . $dir 2> /dev/null'
