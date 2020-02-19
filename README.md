@@ -12,7 +12,7 @@ These dotfiles depend on the following dependencies:
 - [The Fuck](https://github.com/nvbn/thefuck)
 - [Tmux](https://github.com/tmux/tmux) (v2.9+)
 - [Tmux Plugin Manager (TPM)](https://github.com/tmux-plugins/tpm)
-- [NeoVim](https://neovim.io/) (install from `HEAD`)
+- [NeoVim](https://neovim.io/) (latest version)
 
 - Either [iTerm2](https://www.iterm2.com/), [Hyper Terminal](https://hyper.is/), or another terminal that can use the Solarized Dark colorscheme for all colors to work fully.
 
@@ -24,12 +24,11 @@ https://github.com/jswny/dotfiles.git
 cd dotfiles
 ./setup.sh
 ```
-3. Set your Fish colors set to Solarized Dark via `fish_config` in the shell
 
 ## Local Configuration
 ### Fish
-- To add local Fish configuration, simply create a file `local.config.fish` and place it in the same directory as `config.fish`. From there, `config.fish` will source that file (after it has already run all of its own commands).
-- You can change your `$PATH` in Fish by either modifying it in `local.config.fish`, or by setting it one time universally: `set -U fish_user_paths /usr/local/bin $fish_user_paths`.
+- To add local Fish configuration, simply create a file `local.config.fish` and place it in the same directory as `config.fish`. From there, `config.fish` will source that file if it exists (after it has already run all of its own commands).
+- You can change your `$PATH` in Fish by either modifying it in `local.config.fish`, or by setting it one time universally via `fish_user_paths` (recommended): `set -U fish_user_paths /usr/local/bin $fish_user_paths`.
 
 ## Philosophy
 - Minimal configuration where possible
@@ -38,9 +37,9 @@ cd dotfiles
   - See [this Arch Linux guide](https://wiki.archlinux.org/index.php/XDG_Base_Directory) for a good summary of which programs support XDG
 - Support MacOS and Linux
   - Support Windows to some extent, but only through WSL. When WSL 2 is stable Windows support might be more feasable, but at the moment WSL 1 breaks Fish
-- Fail gracefully
+- Fail gracefully but try to warn when something is going wrong
 
-## Files and Linking
+## Additional Files and Linking
 Most symlinks are automatically setup in the setup script. However, non-cross-platform utilities are not, and can be handled as shown below.
 - `hyper/hyper.js` -- Hyper Terminal configuration
   - `ln -s $PWD/hyper/hyper.js ~/.config/hyper/hyper.js`
