@@ -137,7 +137,7 @@ RUN $XDG_DATA_HOME/fzf/install --all --no-bash --no-zsh --xdg
 
 # Install FD
 ARG FD_VERSION=7.4.0
-RUN curl --create-dirs -sLo $XDG_CACHE_HOME/fd_{$FD_VERSION}_amd64.deb https://github.com/sharkdp/fd/releases/download/v{$FD_VERSION}/fd_{$FD_VERSION}_amd64.deb
+RUN curl --create-dirs -sLo $XDG_CACHE_HOME/fd_${FD_VERSION}_amd64.deb https://github.com/sharkdp/fd/releases/download/v${FD_VERSION}/fd_${FD_VERSION}_amd64.deb
 RUN dpkg -i $XDG_CACHE_HOME/fd_${FD_VERSION}_amd64.deb
 RUN rm $XDG_CACHE_HOME/fd_${FD_VERSION}_amd64.deb
 
@@ -145,8 +145,8 @@ RUN rm $XDG_CACHE_HOME/fd_${FD_VERSION}_amd64.deb
 # Force overwrites when installing the .deb package because Bat tries to install its completions into the built-in Fish completions folder (which is managed by the Fish package)
 # See: https://github.com/sharkdp/bat/issues/651
 ARG BAT_VERSION=0.12.1
-RUN curl --create-dirs -sLo $XDG_CACHE_HOME/bat_{$BAT_VERSION}_amd64.deb https://github.com/sharkdp/bat/releases/download/v${BAT_VERSION}/bat_{$BAT_VERSION}_amd64.deb
-RUN dpkg -i --force-overwrite $XDG_CACHE_HOME/bat_{$BAT_VERSION}_amd64.deb
+RUN curl --create-dirs -sLo $XDG_CACHE_HOME/bat_${BAT_VERSION}_amd64.deb https://github.com/sharkdp/bat/releases/download/v${BAT_VERSION}/bat_${BAT_VERSION}_amd64.deb
+RUN dpkg -i --force-overwrite $XDG_CACHE_HOME/bat_${BAT_VERSION}_amd64.deb
 RUN rm $XDG_CACHE_HOME/bat_${BAT_VERSION}_amd64.deb
 
 # Set the root home directory as the working directory
