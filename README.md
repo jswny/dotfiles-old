@@ -22,7 +22,7 @@ These dotfiles depend on the following dependencies:
 ```sh
 https://github.com/jswny/dotfiles.git
 cd dotfiles
-./setup.sh
+./scripts/setup.sh
 ```
 
 ## Local Configuration
