@@ -24,11 +24,12 @@ fish -c "fisher"
 mkdir -p "$XDG_CONFIG_HOME/tmux"
 ln -s "$PWD/tmux/.tmux.conf" "$XDG_CONFIG_HOME/tmux/tmux.conf"
 
-# Symlink to the regular Tmux config file location 
+# If the Tmux version is < v3.1, symlink to the regular Tmux config file location 
 # As of Tmux 3.1 using XDG for the config file is supported: https://github.com/tmux/tmux/commit/15d7e564ddab575dd3ac803989cc99ac13b57198
-# However, TPM doesn't recognize the XDG config file location by itself yet
-# See https://github.com/tmux-plugins/tpm/issues/162
-ln -s "$XDG_CONFIG_HOME/tmux/tmux.conf" "$HOME/.tmux.conf"
+tmux_version=$(tmux -V | sed -nE 's/^tmux ([0-9]+\.[0.9]+).*/\1/p')
+if (( $(echo "$tmux_version < 3.1" | bc -l) )); then
+  ln -s "$XDG_CONFIG_HOME/tmux/tmux.conf" "$HOME/.tmux.conf"
+fi
 
 # Install TPM plugins
 log "Installing TPM plugins..."
