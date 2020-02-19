@@ -152,15 +152,13 @@ RUN rm $XDG_CACHE_HOME/bat_${BAT_VERSION}_amd64.deb
 # Set the root home directory as the working directory
 WORKDIR $HOME
 
-# Override this as needed
-# Run the dotfiles setup script at runtime
-# This ensures the container always gets the latest dotfiles version
-# If this was run at build-time, the dotfiles version would be tied to when the cointainer was built
-# Run a regular Fish shell by default
-
+# Add the dotfiles into the container and set them up
 ADD . $XDG_CONFIG_HOME/dotfiles
+WORKDIR $XDG_CONFIG_HOME/dotfiles
+RUN $XDG_CONFIG_HOME/dotfiles/scripts/setup.sh 
 
-CMD cd $XDG_CONFIG_HOME/dotfiles \
-    && $XDG_CONFIG_HOME/dotfiles/test.sh \
-    && cd $HOME \
-    && /usr/bin/fish
+WORKDIR $HOME
+
+# Run a Fish prompt by default
+# Override this as needed
+CMD /usr/bin/fish
