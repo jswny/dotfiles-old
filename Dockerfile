@@ -53,9 +53,6 @@ RUN apt-get install -y fish
 # Change default shell to Fish
 RUN chsh -s $(which fish)
 
-# Run all of the following Dockerfile commands with Fish instead of Bash
-SHELL ["/usr/bin/fish", "-c"]
-
 # Install Fisher (Fish plugin manager)
 RUN curl --create-dirs -sLo ~/.config/fish/functions/fisher.fish https://git.io/fisher
 
@@ -78,7 +75,7 @@ RUN mix local.hex --force
 
 # Install and build Elixir-LS
 ARG ELIXIR_LS_VERSION=0.3.0
-RUN git clone https://github.com/elixir-lsp/elixir-ls.git --branch v{$ELIXIR_LS_VERSION} --depth 1 /usr/local/share/elixir-ls
+RUN git clone https://github.com/elixir-lsp/elixir-ls.git --branch v${ELIXIR_LS_VERSION} --depth 1 /usr/local/share/elixir-ls
 WORKDIR /usr/local/share/elixir-ls
 RUN mix deps.get
 RUN mix compile
@@ -141,16 +138,16 @@ RUN $XDG_DATA_HOME/fzf/install --all --no-bash --no-zsh --xdg
 # Install FD
 ARG FD_VERSION=7.4.0
 RUN curl --create-dirs -sLo $XDG_CACHE_HOME/fd_{$FD_VERSION}_amd64.deb https://github.com/sharkdp/fd/releases/download/v{$FD_VERSION}/fd_{$FD_VERSION}_amd64.deb
-RUN dpkg -i $XDG_CACHE_HOME/fd_{$FD_VERSION}_amd64.deb
-RUN rm $XDG_CACHE_HOME/fd_{$FD_VERSION}_amd64.deb
+RUN dpkg -i $XDG_CACHE_HOME/fd_${FD_VERSION}_amd64.deb
+RUN rm $XDG_CACHE_HOME/fd_${FD_VERSION}_amd64.deb
 
 # Install Bat
 # Force overwrites when installing the .deb package because Bat tries to install its completions into the built-in Fish completions folder (which is managed by the Fish package)
 # See: https://github.com/sharkdp/bat/issues/651
 ARG BAT_VERSION=0.12.1
-RUN curl --create-dirs -sLo $XDG_CACHE_HOME/bat_{$BAT_VERSION}_amd64.deb https://github.com/sharkdp/bat/releases/download/v{$BAT_VERSION}/bat_{$BAT_VERSION}_amd64.deb
+RUN curl --create-dirs -sLo $XDG_CACHE_HOME/bat_{$BAT_VERSION}_amd64.deb https://github.com/sharkdp/bat/releases/download/v${BAT_VERSION}/bat_{$BAT_VERSION}_amd64.deb
 RUN dpkg -i --force-overwrite $XDG_CACHE_HOME/bat_{$BAT_VERSION}_amd64.deb
-RUN rm $XDG_CACHE_HOME/bat_{$BAT_VERSION}_amd64.deb
+RUN rm $XDG_CACHE_HOME/bat_${BAT_VERSION}_amd64.deb
 
 # Set the root home directory as the working directory
 WORKDIR $HOME
