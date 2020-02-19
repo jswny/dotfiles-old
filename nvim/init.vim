@@ -148,7 +148,6 @@ augroup ElixirFixFolds
   autocmd FileType elixir normal! zXzR
   autocmd FileType elixir autocmd InsertLeave * normal! zXzR
 augroup END
-
 """"""""""""""""""
 " NERD Commenter "
 """"""""""""""""""
@@ -225,6 +224,9 @@ let g:deoplete#enable_at_startup = 1
 " Automatically close the Deoplete preview window after completion
 " (https://github.com/Shougo/deoplete.nvim/issues/115)
 autocmd InsertLeave,CompleteDone * if pumvisible() == 0 | pclose | endif
+
+" Disable Deoplete for markdown files
+autocmd bufread,bufnewfile *.md call deoplete#disable()
 
 """""""""""
 " Echodoc "
