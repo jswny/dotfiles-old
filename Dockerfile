@@ -53,7 +53,7 @@ RUN apt-get update \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 # Change default shell to Fish
-RUN chsh -s $(command -v fish)
+RUN chsh -s "$(command -v fish)"
 
 # Install Fisher (Fish plugin manager)
 RUN curl --create-dirs -sLo ~/.config/fish/functions/fisher.fish https://git.io/fisher
