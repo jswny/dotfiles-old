@@ -1,6 +1,8 @@
 # Dotfiles [![Build Status](https://travis-ci.com/jswny/dotfiles.svg?branch=master)](https://travis-ci.com/jswny/dotfiles)
 These are my personal dotfiles which I use on a daily basis on MacOS!
 
+![Screenshot](images/screenshot.png)
+
 ## Dependencies
 These dotfiles depend on the following dependencies:
 - [GNU Coreutils](https://formulae.brew.sh/formula/coreutils) (MacOS only)
