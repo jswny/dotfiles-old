@@ -32,6 +32,11 @@ cd dotfiles
 - To add local Fish configuration, simply create a file `local.config.fish` and place it in the same directory as `config.fish`. From there, `config.fish` will source that file if it exists (after it has already run all of its own commands).
 - You can change your `$PATH` in Fish by either modifying it in `local.config.fish`, or by setting it one time universally via `fish_user_paths` (recommended): `set -U fish_user_paths /usr/local/bin $fish_user_paths`.
 
+## Docker
+This repository contains a `Dockerfile` which you can use to test out these dotfiles. This will build an Ubuntu-based docker image and run it for you:
+`docker build -t jswny/dotfiles . && docker run -it jswny/dotfiles`
+You can also pull [the latest version from Docker Hub](https://hub.docker.com/r/jswny/devbox) if you don't want to build it yourself.
+
 ## Philosophy
 - Minimal configuration where possible
 - Use the [XDG Base Directory Spec](https://standards.freedesktop.org/basedir-spec/basedir-spec-latest.html) where possible/reasonable
