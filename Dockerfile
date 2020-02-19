@@ -21,11 +21,9 @@ ENV XDG_CACHE_HOME=${XDG_CACHE_HOME}
 # However, this will take a long time and install a lot of extra packages as well
 RUN rm /etc/dpkg/dpkg.cfg.d/excludes
 
-# Update packages
-RUN apt-get update
-
 # Install essentials
-RUN apt-get install -y \
+RUN apt-get update \
+    && apt-get install --no-install-recommends -y \
     man-db \
     locales \
     apt-utils \
@@ -34,7 +32,9 @@ RUN apt-get install -y \
     git \
     curl \
 # Allows usage of apt-add-repository
-    software-properties-common
+    software-properties-common \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
 
 # Generate the correct locale and reconfigure the locales so they are picked up correctly
 RUN locale-gen en_US.UTF-8
@@ -48,10 +48,12 @@ ARG LC_ALL=en_US.UTF-8
 
 # Install Fish
 RUN apt-add-repository ppa:fish-shell/release-3
-RUN apt-get update
-RUN apt-get install -y fish
+RUN apt-get update \
+    && apt-get install --no-install-recommends -y fish \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
 # Change default shell to Fish
-RUN chsh -s $(which fish)
+RUN chsh -s $(command -v fish)
 
 # Install Fisher (Fish plugin manager)
 RUN curl --create-dirs -sLo ~/.config/fish/functions/fisher.fish https://git.io/fisher
@@ -61,11 +63,16 @@ RUN curl --create-dirs -sLo ~/.config/fish/functions/fisher.fish https://git.io/
 RUN curl -sLo $XDG_CACHE_HOME/erlang-solutions_2.0_all.deb --create-dirs https://packages.erlang-solutions.com/erlang-solutions_2.0_all.deb
 RUN dpkg -i $XDG_CACHE_HOME/erlang-solutions_2.0_all.deb
 RUN rm $XDG_CACHE_HOME/erlang-solutions_2.0_all.deb
-RUN apt-get update
-RUN apt-get install -y esl-erlang
+RUN apt-get update \
+    && apt-get install --no-install-recommends -y esl-erlang \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
 
 # Install Elixir
-RUN apt-get install -y elixir
+RUN apt-get update \
+    && apt-get install --no-install-recommends -y elixir \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
 
 # Install Rebar3
 RUN mix local.rebar --force
@@ -84,9 +91,12 @@ RUN ln -s /usr/local/share/elixir-ls/release/language_server.sh /usr/local/bin/e
 
 # Install Pip for Python 2 and 3
 # Ubuntu already comes with Python 2 and 3 installed
-RUN apt-get install -y \
+RUN apt-get update \
+    && apt-get install --no-install-recommends -y \
     python-pip \
-    python3-pip
+    python3-pip \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
 # Upgrade Python 2 and 3 Pip versions
 RUN pip2 install --upgrade pip
 RUN pip3 install --upgrade pip
@@ -100,8 +110,10 @@ RUN pip3 install --upgrade pynvim
 
 # Install NeoVim
 RUN add-apt-repository ppa:neovim-ppa/unstable
-RUN apt-get update
-RUN apt-get install -y neovim
+RUN apt-get update \
+    && apt-get install --no-install-recommends -y neovim \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
 
 # Install vim-plug
 RUN curl --create-dirs -sfLo $XDG_DATA_HOME/nvim/site/autoload/plug.vim https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
@@ -110,13 +122,16 @@ RUN curl --create-dirs -sfLo $XDG_DATA_HOME/nvim/site/autoload/plug.vim https://
 RUN git clone --depth 1 https://github.com/seebi/dircolors-solarized.git $XDG_DATA_HOME/dircolors-solarized
 
 # Install Tmux compilation dependencies
-RUN apt-get install -y \
+RUN apt-get update \
+    && apt-get install --no-install-recommends -y \
     libevent-dev \
     ncurses-dev \
     bison \
     pkg-config \
     autotools-dev \
-    automake
+    automake \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
 
 # Install Tmux from source
 # Older versions than 2.9 do not work with some .tmux.conf syntax
@@ -153,7 +168,7 @@ RUN rm $XDG_CACHE_HOME/bat_${BAT_VERSION}_amd64.deb
 WORKDIR $HOME
 
 # Add the dotfiles into the container and set them up
-ADD . $XDG_CONFIG_HOME/dotfiles
+COPY . $XDG_CONFIG_HOME/dotfiles
 WORKDIR $XDG_CONFIG_HOME/dotfiles
 RUN $XDG_CONFIG_HOME/dotfiles/scripts/setup.sh 
 
@@ -161,4 +176,4 @@ WORKDIR $HOME
 
 # Run a Fish prompt by default
 # Override this as needed
-CMD /usr/bin/fish
+CMD ["/usr/bin/fish"]
