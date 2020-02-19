@@ -1,4 +1,4 @@
-# Dotfiles
+# Dotfiles [![Build Status](https://travis-ci.com/jswny/dotfiles.svg?branch=master)](https://travis-ci.com/jswny/dotfiles)
 These are my personal dotfiles which I use on a daily basis on MacOS!
 
 ## Dependencies
