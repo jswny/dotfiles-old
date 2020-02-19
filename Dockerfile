@@ -164,6 +164,6 @@ WORKDIR $HOME
 ADD . $XDG_CONFIG_HOME/dotfiles
 
 CMD cd $XDG_CONFIG_HOME/dotfiles \
-    && $XDG_CONFIG_HOME/dotfiles/scripts/setup.sh \
+    && $XDG_CONFIG_HOME/dotfiles/test.sh \
     && cd $HOME \
     && /usr/bin/fish

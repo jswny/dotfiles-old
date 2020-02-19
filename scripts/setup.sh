@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
 
+# Exit on any error, undefined variable, or pipe failure 
+set -euo pipefail
+
 # Script for installing the dotfiles
 # This script only covers installation of the dotfiles themselves, and does not handle installing any dependencies
 # All dependencies should be installed before running this script
