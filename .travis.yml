@@ -6,12 +6,17 @@ services:
   - docker
 
 env:
+  HADOLINT_VERSION: "1.17.5"
+  DIVE_VERSION: "0.9.2"
   HADOLINT: "${HOME}/hadolint"
+  DIVE: "${HOME}/dive_${DIVE_VERSION}_linux_amd64/dive"
 
 install:
-  - curl -sL -o ${HADOLINT} "https://github.com/hadolint/hadolint/releases/download/v1.17.5/hadolint-$(uname -s)-$(uname -m)" && chmod 700 ${HADOLINT}
+  - curl -sLo ${HADOLINT} "https://github.com/hadolint/hadolint/releases/download/v${HADOLINT_VERSION}/hadolint-$(uname -s)-$(uname -m)" && chmod 700 ${HADOLINT}
+  - curl -sL "https://github.com/wagoodman/dive/releases/download/v${DIVE_VERSION}/dive_${DIVE_VERSION}_linux_amd64.tar.gz" | tar zx --directory ${HOME} && chmod 700 ${DIVE}
 
 script:
   - shellcheck scripts/*.sh
   - ${HADOLINT} Dockerfile
   - docker build -t jswny/dotfiles .
+  - ${DIVE} jswny/dotfiles
