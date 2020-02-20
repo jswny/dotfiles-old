@@ -14,8 +14,7 @@ env:
 
 install:
   - curl -sLo ${HADOLINT} "https://github.com/hadolint/hadolint/releases/download/v${HADOLINT_VERSION}/hadolint-$(uname -s)-$(uname -m)" && chmod 700 ${HADOLINT}
-  - curl -sL "https://github.com/wagoodman/dive/releases/download/v${DIVE_VERSION}/dive_${DIVE_VERSION}_linux_amd64.tar.gz" | tar zx --directory ${HOME} && chmod 700 ${DIVE}
-
+  - curl -sL "https://github.com/wagoodman/dive/releases/download/v${DIVE_VERSION}/dive_${DIVE_VERSION}_linux_amd64.tar.gz" | tar zx --directory ${HOME} && ls -l ${HOME} && ls -l ${HOME}/dive_${DIVE_VERSION}_linux_amd64 && chmod 700 ${DIVE}
 script:
   - shellcheck scripts/*.sh
   - ${HADOLINT} Dockerfile
