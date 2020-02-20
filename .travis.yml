@@ -6,10 +6,11 @@ services:
   - docker
 
 env:
-  - HADOLINT_VERSION: "1.17.5"
-  - DIVE_VERSION: "0.9.2"
-  - HADOLINT: "${HOME}/hadolint"
-  - DIVE: "${HOME}/dive_${DIVE_VERSION}_linux_amd64/dive"
+  global:
+    - HADOLINT_VERSION: "1.17.5"
+    - DIVE_VERSION: "0.9.2"
+    - HADOLINT: "${HOME}/hadolint"
+    - DIVE: "${HOME}/dive_${DIVE_VERSION}_linux_amd64/dive"
 
 install:
   - curl -sLo ${HADOLINT} "https://github.com/hadolint/hadolint/releases/download/v${HADOLINT_VERSION}/hadolint-$(uname -s)-$(uname -m)" && chmod 700 ${HADOLINT}
