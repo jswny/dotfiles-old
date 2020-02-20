@@ -41,8 +41,8 @@ RUN apt-get update \
     && rm -rf /var/lib/apt/lists/*
 
 # Generate the correct locale and reconfigure the locales so they are picked up correctly
-RUN locale-gen en_US.UTF-8
-RUN dpkg-reconfigure locales
+RUN locale-gen en_US.UTF-8 \
+    && dpkg-reconfigure locales
 
 # Set the correct locale variables for the build as they won't be set correctly until logging into the system
 # This is needed for when the BEAM is run when 
@@ -51,13 +51,13 @@ RUN dpkg-reconfigure locales
 ARG LC_ALL=en_US.UTF-8
 
 # Install Fish
-RUN apt-add-repository ppa:fish-shell/release-3
-RUN apt-get update \
+# Change default shell to Fish
+RUN apt-add-repository ppa:fish-shell/release-3 \
+    && apt-get update \
     && apt-get install --no-install-recommends -y fish \
     && apt-get clean \
-    && rm -rf /var/lib/apt/lists/*
-# Change default shell to Fish
-RUN chsh -s "$(command -v fish)"
+    && rm -rf /var/lib/apt/lists/* \
+    && chsh -s "$(command -v fish)"
 
 # Install Fisher (Fish plugin manager)
 RUN curl --create-dirs -sLo ~/.config/fish/functions/fisher.fish https://git.io/fisher
@@ -80,20 +80,18 @@ RUN apt-get update \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
-# Install Rebar3
-RUN mix local.rebar --force
-
-# Install Hex
-RUN mix local.hex --force
+# Install Rebar3 and Hex
+RUN mix local.rebar --force \
+    && mix local.hex --force
 
 # Install and build Elixir-LS
 ARG ELIXIR_LS_VERSION=0.3.0
-RUN git clone https://github.com/elixir-lsp/elixir-ls.git --branch v${ELIXIR_LS_VERSION} --depth 1 /usr/local/share/elixir-ls
-WORKDIR /usr/local/share/elixir-ls
-RUN mix deps.get
-RUN mix compile
-RUN mix elixir_ls.release
-RUN ln -s /usr/local/share/elixir-ls/release/language_server.sh /usr/local/bin/elixir-ls.sh 
+RUN git clone https://github.com/elixir-lsp/elixir-ls.git --branch v${ELIXIR_LS_VERSION} --depth 1 /opt/elixir-ls \
+    && cd /opt/elixir-ls \
+    && mix deps.get \
+    && mix compile \
+    && mix elixir_ls.release \
+    && ln -s /opt/elixir-ls/release/language_server.sh /usr/local/bin/elixir-ls.sh 
 
 # Install Pip for Python 2 and 3
 # Ubuntu already comes with Python 2 and 3 installed
@@ -102,10 +100,9 @@ RUN apt-get update \
     python-pip \
     python3-pip \
     && apt-get clean \
-    && rm -rf /var/lib/apt/lists/*
-# Upgrade Python 2 and 3 Pip versions
-RUN pip2 install --upgrade pip
-RUN pip3 install --upgrade pip
+    && rm -rf /var/lib/apt/lists/* \
+    && pip2 install --upgrade pip \
+    && pip3 install --upgrade pip
 
 # Install Fuck
 RUN apt-get update \
@@ -127,18 +124,11 @@ RUN apt-get update \
     && pip2 install --upgrade pynvim \
     && pip3 install --upgrade pynvim
 
-# # Install NeoVim
-# RUN add-apt-repository ppa:neovim-ppa/unstable
-# RUN apt-get update \
-#     && apt-get install --no-install-recommends -y neovim \
-#     && apt-get clean \
-#     && rm -rf /var/lib/apt/lists/*
-
 # Install NeoVim
 ARG NEOVIM_VERSION=nightly
-RUN curl --create-dirs -sL https://github.com/neovim/neovim/releases/download/${NEOVIM_VERSION}/nvim-linux64.tar.gz | tar zx --directory /opt
-RUN mv /opt/nvim-linux64 /opt/nvim
-RUN ln -s /opt/nvim/bin/nvim /usr/local/bin/nvim
+RUN curl --create-dirs -sL https://github.com/neovim/neovim/releases/download/${NEOVIM_VERSION}/nvim-linux64.tar.gz | tar zx --directory /opt \
+    && mv /opt/nvim-linux64 /opt/nvim \
+    && ln -s /opt/nvim/bin/nvim /usr/local/bin/nvim
 
 # Install vim-plug
 RUN curl --create-dirs -sfLo $XDG_DATA_HOME/nvim/site/autoload/plug.vim https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
@@ -160,34 +150,34 @@ RUN apt-get update \
 
 # Install Tmux from source
 # Older versions than 2.9 do not work with some .tmux.conf syntax
-RUN mkdir -p $XDG_CACHE_HOME
-RUN git clone --depth 1 --branch 3.1 https://github.com/tmux/tmux.git $XDG_CACHE_HOME/tmux
-WORKDIR $XDG_CACHE_HOME/tmux
-RUN sh autogen.sh
-RUN ./configure && make
-RUN make install
-RUN rm -rf $XDG_CACHE_HOME/tmux
+RUN mkdir -p $XDG_CACHE_HOME \
+    && git clone --depth 1 --branch 3.1 https://github.com/tmux/tmux.git $XDG_CACHE_HOME/tmux \
+    && cd $XDG_CACHE_HOME/tmux \
+    && sh autogen.sh \
+    && ./configure && make \
+    && make install \
+    && rm -rf $XDG_CACHE_HOME/tmux
 
 # Install TPM (Tmux Plugin Manager)
 RUN git clone --depth 1 https://github.com/tmux-plugins/tpm $XDG_DATA_HOME/tmux/plugins/tpm
 
 # Install FZF without Bash or ZSH support
-RUN git clone --depth 1 https://github.com/junegunn/fzf.git $XDG_DATA_HOME/fzf
-RUN $XDG_DATA_HOME/fzf/install --all --no-bash --no-zsh --xdg
+RUN git clone --depth 1 https://github.com/junegunn/fzf.git $XDG_DATA_HOME/fzf \
+    && $XDG_DATA_HOME/fzf/install --all --no-bash --no-zsh --xdg
 
 # Install FD
 ARG FD_VERSION=7.4.0
-RUN curl --create-dirs -sLo $XDG_CACHE_HOME/fd_${FD_VERSION}_amd64.deb https://github.com/sharkdp/fd/releases/download/v${FD_VERSION}/fd_${FD_VERSION}_amd64.deb
-RUN dpkg -i $XDG_CACHE_HOME/fd_${FD_VERSION}_amd64.deb
-RUN rm $XDG_CACHE_HOME/fd_${FD_VERSION}_amd64.deb
+RUN curl --create-dirs -sLo $XDG_CACHE_HOME/fd_${FD_VERSION}_amd64.deb https://github.com/sharkdp/fd/releases/download/v${FD_VERSION}/fd_${FD_VERSION}_amd64.deb \
+    && dpkg -i $XDG_CACHE_HOME/fd_${FD_VERSION}_amd64.deb \
+    && rm $XDG_CACHE_HOME/fd_${FD_VERSION}_amd64.deb
 
 # Install Bat
 # Force overwrites when installing the .deb package because Bat tries to install its completions into the built-in Fish completions folder (which is managed by the Fish package)
 # See: https://github.com/sharkdp/bat/issues/651
 ARG BAT_VERSION=0.12.1
-RUN curl --create-dirs -sLo $XDG_CACHE_HOME/bat_${BAT_VERSION}_amd64.deb https://github.com/sharkdp/bat/releases/download/v${BAT_VERSION}/bat_${BAT_VERSION}_amd64.deb
-RUN dpkg -i --force-overwrite $XDG_CACHE_HOME/bat_${BAT_VERSION}_amd64.deb
-RUN rm $XDG_CACHE_HOME/bat_${BAT_VERSION}_amd64.deb
+RUN curl --create-dirs -sLo $XDG_CACHE_HOME/bat_${BAT_VERSION}_amd64.deb https://github.com/sharkdp/bat/releases/download/v${BAT_VERSION}/bat_${BAT_VERSION}_amd64.deb \
+    && dpkg -i --force-overwrite $XDG_CACHE_HOME/bat_${BAT_VERSION}_amd64.deb \
+    && rm $XDG_CACHE_HOME/bat_${BAT_VERSION}_amd64.deb
 
 # Add the dotfiles into the container and set them up
 COPY . $XDG_CONFIG_HOME/dotfiles

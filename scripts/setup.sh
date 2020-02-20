@@ -30,8 +30,8 @@ ln -s "$script_dir/../tmux/.tmux.conf" "$XDG_CONFIG_HOME/tmux/tmux.conf"
 
 # If the Tmux version is < v3.1, symlink to the regular Tmux config file location 
 # As of Tmux 3.1 using XDG for the config file is supported: https://github.com/tmux/tmux/commit/15d7e564ddab575dd3ac803989cc99ac13b57198
-tmux_version=$(tmux -V | sed -nE 's/^tmux ([0-9]+\.[0.9]+).*/\1/p')
-if (( $(echo "$tmux_version 3.1" | awk '{print ($1 > $2)}') )); then
+tmux_version=$(tmux -V | sed -nE 's/^tmux ([0-9]+\.[0-9]+).*/\1/p')
+if (( $(echo "$tmux_version 3.1" | awk '{print ($1 < $2)}') )); then
   ln -s "$XDG_CONFIG_HOME/tmux/tmux.conf" "$HOME/.tmux.conf"
 fi
 
