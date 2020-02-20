@@ -9,15 +9,6 @@ ARG XDG_CACHE_HOME=/root/.cache
 ARG HOME=/root
 
 # Set versions
-ARG ELIXIR_LS_VERSION=0.3.0
-ARG PIP_VERSION=20.0.2
-ARG THEFUCK_VERSION=3.29
-ARG PYNVIM_VERSION=0.4.1
-ARG NEOVIM_VERSION=nightly
-ARG TMUX_VERSION=3.1
-ARG FD_VERSION=7.4.0
-ARG BAT_VERSION=0.12.1
-
 ARG MAN_DB_VERSION=2.8.7-3
 ARG LOCALES_VERSION=2.30-0ubuntu2
 ARG APT_UTILS_VERSION=1.9.4
@@ -26,6 +17,28 @@ ARG CMAKE_VERSION=3.13.4-1build1
 ARG GIT_VERSION=1:2.20.1-2ubuntu1.19.10.1
 ARG CURL_VERSION=7.65.3-1ubuntu3
 ARG SOFTWARE_PROPERTIES_COMMON_VERSION=0.98.5
+ARG FISH_VERSION=3.1.0-1~eoan
+ARG GNUPG2_VERSION=2.2.12-1ubuntu3
+ARG ERLANG_VERSION=1:22.2.6-1
+ARG ELIXIR_VERSION=1.10.1-1
+ARG ELIXIR_LS_VERSION=0.3.0
+ARG PIP_VERSION=18.1-5
+ARG PIP_SELF_VERSION=20.0.2
+ARG BUILD_ESSENTIAL_VERSION=12.8ubuntu1
+ARG PYTHON_DEV_VERSION=3.7.5-1
+ARG PYTHON_SETUPTOOLS_VERSION=41.1.0-1
+ARG THEFUCK_VERSION=3.29
+ARG PYNVIM_VERSION=0.4.1
+ARG NEOVIM_VERSION=nightly
+ARG TMUX_VERSION=3.1
+ARG LIBEVENT_DEV_VERSION=2.1.8-stable-4build1
+ARG LIBNCURSES_DEV_VERSION=6.1+20190803-1ubuntu1
+ARG BISON_VERSION=2:3.4.1+dfsg-4
+ARG PKG_CONFIG_VERSION=0.29.1-0ubuntu3
+ARG AUTOTOOLS_DEV_VERSION=20180224.1
+ARG AUTOMAKE_VERSION=1:1.16.1-4ubuntu3
+ARG FD_VERSION=7.4.0
+ARG BAT_VERSION=0.12.1
 
 # Set environment variables (these will persist at runtime)
 ENV TERM xterm-256color
@@ -72,7 +85,7 @@ ARG LC_ALL=en_US.UTF-8
 # Change default shell to Fish
 RUN apt-add-repository ppa:fish-shell/release-3 \
     && apt-get update \
-    && apt-get install --no-install-recommends -y fish \
+    && apt-get install --no-install-recommends -y fish=${FISH_VERSION} \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/* \
     && chsh -s "$(command -v fish)"
@@ -83,18 +96,18 @@ RUN curl --create-dirs -sLo ~/.config/fish/functions/fisher.fish https://git.io/
 # Install Erlang
 # This uses the Erlang Solutions repo
 RUN apt-get update \
-    && apt-get install --no-install-recommends -y gnupg2 \
+    && apt-get install --no-install-recommends -y gnupg2=${GNUPG2_VERSION} \
     && curl -sLo $XDG_CACHE_HOME/erlang-solutions_2.0_all.deb --create-dirs https://packages.erlang-solutions.com/erlang-solutions_2.0_all.deb \
     && dpkg -i $XDG_CACHE_HOME/erlang-solutions_2.0_all.deb \
     && rm $XDG_CACHE_HOME/erlang-solutions_2.0_all.deb \
     && apt-get update \
-    && apt-get install --no-install-recommends -y esl-erlang \
+    && apt-get install --no-install-recommends -y esl-erlang=${ERLANG_VERSION} \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
 # Install Elixir
 RUN apt-get update \
-    && apt-get install --no-install-recommends -y elixir \
+    && apt-get install --no-install-recommends -y elixir=${ELIXIR_VERSION} \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
@@ -114,28 +127,28 @@ RUN mix deps.get \
 # Ubuntu already comes with Python 2 and 3 installed
 RUN apt-get update \
     && apt-get install --no-install-recommends -y \
-    python-pip \
-    python3-pip \
+    python-pip=${PIP_VERSION} \
+    python3-pip=${PIP_VERSION} \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/* \
-    && pip2 install --upgrade pip==${PIP_VERSION} \
-    && pip3 install --upgrade pip==${PIP_VERSION}
+    && pip2 install --upgrade pip==${PIP_SELF_VERSION} \
+    && pip3 install --upgrade pip==${PIP_SELF_VERSION}
 
 # Install Fuck
 RUN apt-get update \
     && apt-get --no-install-recommends install -y \
-    build-essential \
-    python3-dev \
-    python3-pip \
-    python3-setuptools \
+    build-essential=${BUILD_ESSENTIAL_VERSION} \
+    python3-dev=${PYTHON_DEV_VERSION} \
+    python3-pip=${PIP_VERSION} \
+    python3-setuptools=${PYTHON_SETUPTOOLS_VERSION} \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/* \
     && pip3 install thefuck==${THEFUCK_VERSION}
 
 # Install Python 2 and 3 providers for NeoVim
 RUN apt-get update \
-    && apt-get install --no-install-recommends -y python-setuptools \
-    python3-setuptools \
+    && apt-get install --no-install-recommends -y python-setuptools=${PYTHON_SETUPTOOLS_VERSION} \
+    python3-setuptools=${PYTHON_SETUPTOOLS_VERSION} \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/* \
     && pip2 install --upgrade pynvim==${PYNVIM_VERSION} \
@@ -156,12 +169,12 @@ RUN git clone --depth 1 https://github.com/seebi/dircolors-solarized.git $XDG_DA
 # Versions older 2.9 do not work with some .tmux.conf syntax
 RUN apt-get update \
     && apt-get install --no-install-recommends -y \
-    libevent-dev \
-    ncurses-dev \
-    bison \
-    pkg-config \
-    autotools-dev \
-    automake \
+    libevent-dev=${LIBEVENT_DEV_VERSION} \
+    libncurses-dev=${LIBNCURSES_DEV_VERSION} \
+    bison=${BISON_VERSION} \
+    pkg-config=${PKG_CONFIG_VERSION} \
+    autotools-dev=${AUTOTOOLS_DEV_VERSION} \
+    automake=${AUTOMAKE_VERSION} \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/* \
     && mkdir -p $XDG_CACHE_HOME \
