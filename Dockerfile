@@ -8,6 +8,16 @@ ARG XDG_DATA_HOME=/root/.local/share
 ARG XDG_CACHE_HOME=/root/.cache
 ARG HOME=/root
 
+# Set versions
+ARG ELIXIR_LS_VERSION=0.3.0
+ARG PIP_VERSION=20.0.2
+ARG THEFUCK_VERSION=3.29
+ARG PYNVIM_VERSION=0.4.1
+ARG NEOVIM_VERSION=nightly
+ARG TMUX_VERSION=3.1
+ARG FD_VERSION=7.4.0
+ARG BAT_VERSION=0.12.1
+
 # Set environment variables (these will persist at runtime)
 ENV TERM xterm-256color
 ENV XDG_CONFIG_HOME=${XDG_CONFIG_HOME}
@@ -85,10 +95,9 @@ RUN mix local.rebar --force \
     && mix local.hex --force
 
 # Install and build Elixir-LS
-ARG ELIXIR_LS_VERSION=0.3.0
-RUN git clone https://github.com/elixir-lsp/elixir-ls.git --branch v${ELIXIR_LS_VERSION} --depth 1 /opt/elixir-ls \
-    && cd /opt/elixir-ls \
-    && mix deps.get \
+RUN git clone https://github.com/elixir-lsp/elixir-ls.git --branch v${ELIXIR_LS_VERSION} --depth 1 /opt/elixir-ls
+WORKDIR /opt/elixir-ls
+RUN mix deps.get \
     && mix compile \
     && mix elixir_ls.release \
     && ln -s /opt/elixir-ls/release/language_server.sh /usr/local/bin/elixir-ls.sh 
@@ -101,8 +110,8 @@ RUN apt-get update \
     python3-pip \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/* \
-    && pip2 install --upgrade pip \
-    && pip3 install --upgrade pip
+    && pip2 install --upgrade pip==${PIP_VERSION} \
+    && pip3 install --upgrade pip==${PIP_VERSION}
 
 # Install Fuck
 RUN apt-get update \
@@ -113,7 +122,7 @@ RUN apt-get update \
     python3-setuptools \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/* \
-    && pip3 install thefuck
+    && pip3 install thefuck==${THEFUCK_VERSION}
 
 # Install Python 2 and 3 providers for NeoVim
 RUN apt-get update \
@@ -121,11 +130,10 @@ RUN apt-get update \
     python3-setuptools \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/* \
-    && pip2 install --upgrade pynvim \
-    && pip3 install --upgrade pynvim
+    && pip2 install --upgrade pynvim==${PYNVIM_VERSION} \
+    && pip3 install --upgrade pynvim==${PYNVIM_VERSION}
 
 # Install NeoVim
-ARG NEOVIM_VERSION=nightly
 RUN curl --create-dirs -sL https://github.com/neovim/neovim/releases/download/${NEOVIM_VERSION}/nvim-linux64.tar.gz | tar zx --directory /opt \
     && mv /opt/nvim-linux64 /opt/nvim \
     && ln -s /opt/nvim/bin/nvim /usr/local/bin/nvim
@@ -136,7 +144,8 @@ RUN curl --create-dirs -sfLo $XDG_DATA_HOME/nvim/site/autoload/plug.vim https://
 # Enable Solarized dircolors
 RUN git clone --depth 1 https://github.com/seebi/dircolors-solarized.git $XDG_DATA_HOME/dircolors-solarized
 
-# Install Tmux compilation dependencies
+# Install Tmux
+# Versions older 2.9 do not work with some .tmux.conf syntax
 RUN apt-get update \
     && apt-get install --no-install-recommends -y \
     libevent-dev \
@@ -146,14 +155,11 @@ RUN apt-get update \
     autotools-dev \
     automake \
     && apt-get clean \
-    && rm -rf /var/lib/apt/lists/*
-
-# Install Tmux from source
-# Older versions than 2.9 do not work with some .tmux.conf syntax
-RUN mkdir -p $XDG_CACHE_HOME \
-    && git clone --depth 1 --branch 3.1 https://github.com/tmux/tmux.git $XDG_CACHE_HOME/tmux \
-    && cd $XDG_CACHE_HOME/tmux \
-    && sh autogen.sh \
+    && rm -rf /var/lib/apt/lists/* \
+    && mkdir -p $XDG_CACHE_HOME \
+    && git clone --depth 1 --branch ${TMUX_VERSION} https://github.com/tmux/tmux.git $XDG_CACHE_HOME/tmux
+WORKDIR $XDG_CACHE_HOME/tmux
+RUN sh autogen.sh \
     && ./configure && make \
     && make install \
     && rm -rf $XDG_CACHE_HOME/tmux
@@ -166,7 +172,6 @@ RUN git clone --depth 1 https://github.com/junegunn/fzf.git $XDG_DATA_HOME/fzf \
     && $XDG_DATA_HOME/fzf/install --all --no-bash --no-zsh --xdg
 
 # Install FD
-ARG FD_VERSION=7.4.0
 RUN curl --create-dirs -sLo $XDG_CACHE_HOME/fd_${FD_VERSION}_amd64.deb https://github.com/sharkdp/fd/releases/download/v${FD_VERSION}/fd_${FD_VERSION}_amd64.deb \
     && dpkg -i $XDG_CACHE_HOME/fd_${FD_VERSION}_amd64.deb \
     && rm $XDG_CACHE_HOME/fd_${FD_VERSION}_amd64.deb
@@ -174,7 +179,6 @@ RUN curl --create-dirs -sLo $XDG_CACHE_HOME/fd_${FD_VERSION}_amd64.deb https://g
 # Install Bat
 # Force overwrites when installing the .deb package because Bat tries to install its completions into the built-in Fish completions folder (which is managed by the Fish package)
 # See: https://github.com/sharkdp/bat/issues/651
-ARG BAT_VERSION=0.12.1
 RUN curl --create-dirs -sLo $XDG_CACHE_HOME/bat_${BAT_VERSION}_amd64.deb https://github.com/sharkdp/bat/releases/download/v${BAT_VERSION}/bat_${BAT_VERSION}_amd64.deb \
     && dpkg -i --force-overwrite $XDG_CACHE_HOME/bat_${BAT_VERSION}_amd64.deb \
     && rm $XDG_CACHE_HOME/bat_${BAT_VERSION}_amd64.deb
