@@ -182,8 +182,9 @@ RUN apt-get update \
 WORKDIR $XDG_CACHE_HOME/tmux
 RUN sh autogen.sh \
     && ./configure && make \
-    && make install \
-    && rm -rf $XDG_CACHE_HOME/tmux
+    && make install
+WORKDIR $HOME
+RUN rm -rf $XDG_CACHE_HOME/tmux
 
 # Install TPM (Tmux Plugin Manager)
 RUN git clone --depth 1 https://github.com/tmux-plugins/tpm $XDG_DATA_HOME/tmux/plugins/tpm
