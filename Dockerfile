@@ -18,6 +18,15 @@ ARG TMUX_VERSION=3.1
 ARG FD_VERSION=7.4.0
 ARG BAT_VERSION=0.12.1
 
+ARG MAN_DB_VERSION=2.8.7-3
+ARG LOCALES_VERSION=2.30-0ubuntu2
+ARG APT_UTILS_VERSION=1.9.4
+ARG MAKE_VERSION=4.2.1-1.2
+ARG CMAKE_VERSION=3.13.4-1build1
+ARG GIT_VERSION=1:2.20.1-2ubuntu1.19.10.1
+ARG CURL_VERSION=7.65.3-1ubuntu3
+ARG SOFTWARE_PROPERTIES_COMMON_VERSION=0.98.5
+
 # Set environment variables (these will persist at runtime)
 ENV TERM xterm-256color
 ENV XDG_CONFIG_HOME=${XDG_CONFIG_HOME}
@@ -38,15 +47,14 @@ RUN rm /etc/dpkg/dpkg.cfg.d/excludes
 # Install essentials
 RUN apt-get update \
     && apt-get install --no-install-recommends -y \
-    man-db \
-    locales \
-    apt-utils \
-    make \
-    cmake \
-    git \
-    curl \
-# Allows usage of apt-add-repository
-    software-properties-common \
+    man-db=${MAN_DB_VERSION} \
+    locales=${LOCALES_VERSION} \
+    apt-utils=${APT_UTILS_VERSION} \
+    make=${MAKE_VERSION} \
+    cmake=${CMAKE_VERSION} \
+    git=${GIT_VERSION} \
+    curl=${CURL_VERSION} \
+    software-properties-common=${SOFTWARE_PROPERTIES_COMMON_VERSION} \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
