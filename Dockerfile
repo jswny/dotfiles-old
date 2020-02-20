@@ -39,6 +39,7 @@ ARG AUTOTOOLS_DEV_VERSION=20180224.1
 ARG AUTOMAKE_VERSION=1:1.16.1-4ubuntu3
 ARG FD_VERSION=7.4.0
 ARG BAT_VERSION=0.12.1
+ARG DELTA_VERSION=0.0.16
 
 # Set environment variables (these will persist at runtime)
 ENV TERM xterm-256color
@@ -204,6 +205,11 @@ RUN curl --create-dirs -sLo $XDG_CACHE_HOME/fd_${FD_VERSION}_amd64.deb https://g
 RUN curl --create-dirs -sLo $XDG_CACHE_HOME/bat_${BAT_VERSION}_amd64.deb https://github.com/sharkdp/bat/releases/download/v${BAT_VERSION}/bat_${BAT_VERSION}_amd64.deb \
     && dpkg -i --force-overwrite $XDG_CACHE_HOME/bat_${BAT_VERSION}_amd64.deb \
     && rm $XDG_CACHE_HOME/bat_${BAT_VERSION}_amd64.deb
+
+# Install Delta
+RUN curl --create-dirs -sLo $XDG_CACHE_HOME/git-delta_${DELTA_VERSION}_amd64.deb https://github.com/dandavison/delta/releases/download/${DELTA_VERSION}/git-delta_${DELTA_VERSION}_amd64.deb \
+    && dpkg -i $XDG_CACHE_HOME/git-delta_${DELTA_VERSION}_amd64.deb \
+    && rm $XDG_CACHE_HOME/git-delta_${DELTA_VERSION}_amd64.deb
 
 # Add the dotfiles into the container and set them up
 COPY . $XDG_CONFIG_HOME/dotfiles

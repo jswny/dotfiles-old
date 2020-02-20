@@ -5,16 +5,17 @@ These are my personal dotfiles which I use on a daily basis on MacOS!
 
 ## Dependencies
 These dotfiles depend on the following dependencies:
-- [GNU Coreutils](https://formulae.brew.sh/formula/coreutils) (MacOS only)
 - [Fish Shell](https://fishshell.com/)
 - [Fisher](https://github.com/jorgebucaran/fisher)
+- [NeoVim](https://neovim.io/) (latest version)
+- [Tmux](https://github.com/tmux/tmux) (v2.9+)
+- [Tmux Plugin Manager (TPM)](https://github.com/tmux-plugins/tpm)
 - [FZF](https://github.com/junegunn/fzf)
 - [FD](https://github.com/sharkdp/fd)
 - [Bat](https://github.com/sharkdp/bat)
+- [Delta](https://github.com/dandavison/delta)
 - [The Fuck](https://github.com/nvbn/thefuck)
-- [Tmux](https://github.com/tmux/tmux) (v2.9+)
-- [Tmux Plugin Manager (TPM)](https://github.com/tmux-plugins/tpm)
-- [NeoVim](https://neovim.io/) (latest version)
+- [GNU Coreutils](https://formulae.brew.sh/formula/coreutils) (MacOS only)
 
 - Either [iTerm2](https://www.iterm2.com/), [Hyper Terminal](https://hyper.is/), or another terminal that can use the Solarized Dark colorscheme for all colors to work fully.
 

@@ -65,13 +65,8 @@ end
 # abbr gs "git status"
 # abbr gs "git push"
 
-# Source machine-dependent configuration
-# Only sources the file if it exists
-set -l machine_configuration_path $XDG_CONFIG_HOME/fish/local.config.fish
-
-if test -e $machine_configuration_path
-    source $machine_configuration_path
-end
+# Configure Git to use Delta
+git config --global core.pager "delta --dark"
 
 # Variables
 
@@ -113,6 +108,7 @@ set -g theme_color_scheme solarized-dark
 set -g theme_display_date no
 
 # Set Bat options
+# The theme will also apply to Delta
 set -gx BAT_THEME ansi-dark
 
 # Use Bat to colorize manpages
@@ -132,3 +128,12 @@ set -Ux FZF_PREVIEW_DIR_CMD 'fd --hidden --follow --exclude .git --max-depth 1 -
 set -Ux FZF_PREVIEW_FILE_CMD 'bat --color=always --style=plain'
 set -Ux FZF_TMUX '1'
 set -Ux FZF_TMUX_HEIGHT '40%'
+
+# Source machine-dependent configuration
+# Only sources the file if it exists
+# This should be the last thing in this file so the local configuration can override things as needed
+set -l machine_configuration_path $XDG_CONFIG_HOME/fish/local.config.fish
+
+if test -e $machine_configuration_path
+    source $machine_configuration_path
+end
