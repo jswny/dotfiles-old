@@ -60,10 +60,12 @@ RUN curl --create-dirs -sLo ~/.config/fish/functions/fisher.fish https://git.io/
 
 # Install Erlang
 # This uses the Erlang Solutions repo
-RUN curl -sLo $XDG_CACHE_HOME/erlang-solutions_2.0_all.deb --create-dirs https://packages.erlang-solutions.com/erlang-solutions_2.0_all.deb
-RUN dpkg -i $XDG_CACHE_HOME/erlang-solutions_2.0_all.deb
-RUN rm $XDG_CACHE_HOME/erlang-solutions_2.0_all.deb
 RUN apt-get update \
+    && apt-get install -y gnupg2 \
+    && curl -sLo $XDG_CACHE_HOME/erlang-solutions_2.0_all.deb --create-dirs https://packages.erlang-solutions.com/erlang-solutions_2.0_all.deb \
+    && dpkg -i $XDG_CACHE_HOME/erlang-solutions_2.0_all.deb \
+    && rm $XDG_CACHE_HOME/erlang-solutions_2.0_all.deb \
+    && apt-get update \
     && apt-get install --no-install-recommends -y esl-erlang \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
@@ -102,18 +104,37 @@ RUN pip2 install --upgrade pip
 RUN pip3 install --upgrade pip
 
 # Install Fuck
-RUN pip3 install thefuck
+RUN apt-get update \
+    && apt-get install -y \
+    build-essential \
+    python3-dev \
+    python3-pip \
+    python3-setuptools \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/* \
+    && pip3 install thefuck
 
 # Install Python 2 and 3 providers for NeoVim
-RUN pip2 install --upgrade pynvim
-RUN pip3 install --upgrade pynvim
+RUN apt-get update \
+    && apt-get install --no-install-recommends -y python-setuptools \
+    python3-setuptools \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/* \
+    && pip2 install --upgrade pynvim \
+    && pip3 install --upgrade pynvim
+
+# # Install NeoVim
+# RUN add-apt-repository ppa:neovim-ppa/unstable
+# RUN apt-get update \
+#     && apt-get install --no-install-recommends -y neovim \
+#     && apt-get clean \
+#     && rm -rf /var/lib/apt/lists/*
 
 # Install NeoVim
-RUN add-apt-repository ppa:neovim-ppa/unstable
-RUN apt-get update \
-    && apt-get install --no-install-recommends -y neovim \
-    && apt-get clean \
-    && rm -rf /var/lib/apt/lists/*
+ARG NEOVIM_VERSION=nightly
+RUN curl --create-dirs -sL https://github.com/neovim/neovim/releases/download/${NEOVIM_VERSION}/nvim-linux64.tar.gz | tar zx --directory /opt
+RUN mv /opt/nvim-linux64 /opt/nvim
+RUN ln -s /opt/nvim/bin/nvim /usr/local/bin/nvim
 
 # Install vim-plug
 RUN curl --create-dirs -sfLo $XDG_DATA_HOME/nvim/site/autoload/plug.vim https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
@@ -164,14 +185,12 @@ RUN curl --create-dirs -sLo $XDG_CACHE_HOME/bat_${BAT_VERSION}_amd64.deb https:/
 RUN dpkg -i --force-overwrite $XDG_CACHE_HOME/bat_${BAT_VERSION}_amd64.deb
 RUN rm $XDG_CACHE_HOME/bat_${BAT_VERSION}_amd64.deb
 
-# Set the root home directory as the working directory
-WORKDIR $HOME
-
 # Add the dotfiles into the container and set them up
 COPY . $XDG_CONFIG_HOME/dotfiles
-WORKDIR $XDG_CONFIG_HOME/dotfiles
+# WORKDIR $XDG_CONFIG_HOME/dotfiles
 RUN $XDG_CONFIG_HOME/dotfiles/scripts/setup.sh 
 
+# Set the root home directory as the working directory
 WORKDIR $HOME
 
 # Run a Fish prompt by default

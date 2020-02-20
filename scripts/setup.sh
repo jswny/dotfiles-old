@@ -8,6 +8,7 @@ set -euo pipefail
 # All dependencies should be installed before running this script
 
 script_name=$(basename "$0")
+script_dir=$(dirname "$0")
 log() {
   echo "[$script_name] $1"
 }
@@ -16,8 +17,8 @@ log() {
 XDG_CONFIG_HOME=${XDG_CONFIG_HOME:-"/root/.config"}
 
 # Symlink Fish files
-ln -s "$PWD/fish/config.fish" "$XDG_CONFIG_HOME/fish/config.fish"
-ln -s "$PWD/fish/fishfile" "$XDG_CONFIG_HOME/fish/fishfile"
+ln -s "$script_dir/../fish/config.fish" "$XDG_CONFIG_HOME/fish/config.fish"
+ln -s "$script_dir/../fish/fishfile" "$XDG_CONFIG_HOME/fish/fishfile"
 
 # Install plugins with Fisher
 log "Installing Fisher plugins..."
@@ -25,7 +26,7 @@ fish -c "fisher"
 
 # Symlink Tmux files
 mkdir -p "$XDG_CONFIG_HOME/tmux"
-ln -s "$PWD/tmux/.tmux.conf" "$XDG_CONFIG_HOME/tmux/tmux.conf"
+ln -s "$script_dir/../tmux/.tmux.conf" "$XDG_CONFIG_HOME/tmux/tmux.conf"
 
 # If the Tmux version is < v3.1, symlink to the regular Tmux config file location 
 # As of Tmux 3.1 using XDG for the config file is supported: https://github.com/tmux/tmux/commit/15d7e564ddab575dd3ac803989cc99ac13b57198
@@ -40,8 +41,8 @@ log "Installing TPM plugins..."
 
 # Symlink NeoVim files
 mkdir -p "$XDG_CONFIG_HOME/nvim"
-ln -s "$PWD/nvim/init.vim" "$XDG_CONFIG_HOME/nvim/init.vim"
-ln -s "$PWD/nvim/lcnv-settings.json" "$XDG_CONFIG_HOME/nvim/lcnv-settings.json"
+ln -s "$script_dir/../nvim/init.vim" "$XDG_CONFIG_HOME/nvim/init.vim"
+ln -s "$script_dir/../nvim/lcnv-settings.json" "$XDG_CONFIG_HOME/nvim/lcnv-settings.json"
 
 # Install NeoVim plugins and output to log file since this output is not noninteractive
 log "Installing NeoVim plugins..."
