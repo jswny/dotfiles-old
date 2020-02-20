@@ -14,6 +14,10 @@ ENV XDG_CONFIG_HOME=${XDG_CONFIG_HOME}
 ENV XDG_DATA_HOME=${XDG_DATA_HOME}
 ENV XDG_CACHE_HOME=${XDG_CACHE_HOME}
 
+# Enable failure on pipefail
+# This ensures that if any call in a pipe fails, the whole pipe fails
+SHELL ["/bin/bash", "-o", "pipefail", "-c"]
+
 # Remove the exlusions for man pages and such so they get installed
 # This will only install man pages for packages that aren't built in
 # For example, "man ls" still won't work, but "man fish" will
@@ -61,7 +65,7 @@ RUN curl --create-dirs -sLo ~/.config/fish/functions/fisher.fish https://git.io/
 # Install Erlang
 # This uses the Erlang Solutions repo
 RUN apt-get update \
-    && apt-get install -y gnupg2 \
+    && apt-get install --no-install-recommends -y gnupg2 \
     && curl -sLo $XDG_CACHE_HOME/erlang-solutions_2.0_all.deb --create-dirs https://packages.erlang-solutions.com/erlang-solutions_2.0_all.deb \
     && dpkg -i $XDG_CACHE_HOME/erlang-solutions_2.0_all.deb \
     && rm $XDG_CACHE_HOME/erlang-solutions_2.0_all.deb \
@@ -105,7 +109,7 @@ RUN pip3 install --upgrade pip
 
 # Install Fuck
 RUN apt-get update \
-    && apt-get install -y \
+    && apt-get --no-install-recommends install -y \
     build-essential \
     python3-dev \
     python3-pip \
@@ -187,7 +191,6 @@ RUN rm $XDG_CACHE_HOME/bat_${BAT_VERSION}_amd64.deb
 
 # Add the dotfiles into the container and set them up
 COPY . $XDG_CONFIG_HOME/dotfiles
-# WORKDIR $XDG_CONFIG_HOME/dotfiles
 RUN $XDG_CONFIG_HOME/dotfiles/scripts/setup.sh 
 
 # Set the root home directory as the working directory
