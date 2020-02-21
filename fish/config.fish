@@ -104,7 +104,7 @@ set -U fish_pager_color_progress 'brwhite' '--background=cyan'
 set -x VIRTUAL_ENV_DISABLE_PROMPT 1
 
 # Set bobthefish config options
-set -g theme_color_scheme terminal
+set -g theme_color_scheme solarized-dark
 set -g theme_display_date no
 
 # Set Bat options

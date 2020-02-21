@@ -1,4 +1,4 @@
-# Dotfiles [![Build Status](https://travis-ci.com/jswny/dotfiles.svg?branch=master)](https://travis-ci.com/jswny/dotfiles)
+# Dotfiles [![Build Status](https://travis-ci.com/jswny/dotfiles.svg?branch=master)](https://travis-ci.com/jswny/dotfiles) [![Development on Trello](https://img.shields.io/badge/Development-Trello-blue)](https://trello.com/b/Zgx9HvLn)
 These are my personal dotfiles which I use on a daily basis on MacOS!
 
 ![Screenshot](images/screenshot.png)
