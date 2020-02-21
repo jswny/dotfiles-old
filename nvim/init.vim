@@ -35,10 +35,17 @@ nnoremap <leader>l :Lines<cr>
 " Plugins "
 """""""""""
 
+if !empty($XDG_DATA_HOME)
+  let g:xdg_data_home = $XDG_DATA_HOME
+else
+  let g:xdg_data_home = '~/.local/share'
+endif
+
+
 " Specify a directory for plugins
 " - For Neovim: ~/.local/share/nvim/plugged
 " - Avoid using standard Vim directory names like 'plugin'
-call plug#begin('~/.local/share/nvim/plugged')
+call plug#begin(xdg_data_home.'/nvim/plugged')
 
 " Editing
 Plug 'tpope/vim-endwise'
@@ -49,7 +56,7 @@ Plug 'alvan/vim-closetag'
 " Utilities
 Plug 'tpope/vim-fugitive'
 Plug 'airblade/vim-gitgutter'
-Plug '~/.fzf'
+Plug xdg_data_home.'/fzf'
 Plug 'junegunn/fzf.vim'
 Plug 'tpope/vim-dispatch'
 Plug 'janko-m/vim-test'

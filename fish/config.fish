@@ -1,6 +1,6 @@
 # Properly set XDG directory variables to defaults if they don't already exist (only for this file)
-set -q XDG_CONFIG_HOME; or set -l XDG_CONFIG_HOME ~/.config
-set -q XDG_DATA_HOME; or set -l XDG_DATA_HOME ~/.local/share
+set -q XDG_CONFIG_HOME; or set -g XDG_CONFIG_HOME ~/.config
+set -q XDG_DATA_HOME; or set -g XDG_DATA_HOME ~/.local/share
 
 # Prevent Tmux from re-sourcing the config
 # if status is-interactive
