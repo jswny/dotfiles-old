@@ -167,7 +167,7 @@ RUN curl --create-dirs -sfLo $XDG_DATA_HOME/nvim/site/autoload/plug.vim https://
 RUN git clone --depth 1 https://github.com/seebi/dircolors-solarized.git $XDG_DATA_HOME/dircolors-solarized
 
 # Install Tmux
-# Versions older 2.9 do not work with some .tmux.conf syntax
+# Versions older 2.9 do not work with some tmux.conf syntax
 RUN apt-get update \
     && apt-get install --no-install-recommends -y \
     libevent-dev=${LIBEVENT_DEV_VERSION} \

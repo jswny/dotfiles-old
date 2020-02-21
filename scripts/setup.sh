@@ -26,7 +26,7 @@ fish -c "fisher"
 
 # Symlink Tmux files
 mkdir -p "$XDG_CONFIG_HOME/tmux"
-ln -s "$script_dir/../tmux/.tmux.conf" "$XDG_CONFIG_HOME/tmux/tmux.conf"
+ln -s "$script_dir/../tmux/tmux.conf" "$XDG_CONFIG_HOME/tmux/tmux.conf"
 
 # If the Tmux version is < v3.1, symlink to the regular Tmux config file location 
 # As of Tmux 3.1 using XDG for the config file is supported: https://github.com/tmux/tmux/commit/15d7e564ddab575dd3ac803989cc99ac13b57198
