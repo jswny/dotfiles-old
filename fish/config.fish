@@ -1,12 +1,10 @@
+#########
+# Setup #
+#########
+
 # Properly set XDG directory variables to defaults if they don't already exist (only for this file)
 set -q XDG_CONFIG_HOME; or set -g XDG_CONFIG_HOME ~/.config
 set -q XDG_DATA_HOME; or set -g XDG_DATA_HOME ~/.local/share
-
-# Prevent Tmux from re-sourcing the config
-# if status is-interactive
-# and set -q TMUX
-#     exit
-# end
 
 # Start the ssh-agent and add the default key if ssh-agent exists
 if type -q ssh-agent
@@ -56,19 +54,21 @@ if type -q "thefuck"
     thefuck --alias | source 
 end
 
-# Abbreviations and Universal Variables
-# We set these here so that we can leave the fish_variables file out of source control and keep it machine independent
-# These items are also human-readable as listed here
-
-# Abbreviations
-# abbr gc "git commit -S -m"
-# abbr gs "git status"
-# abbr gs "git push"
-
 # Configure Git to use Delta
 git config --global core.pager "delta --dark"
 
-# Variables
+#################
+# Abbreviations #
+#################
+
+abbr ga "git add ."
+abbr gc "git commit -S -m"
+abbr gp "git push"
+abbr gs "git status"
+
+#############
+# Variables #
+#############
 
 # Make sure Fish uses 24bit colors
 set -g fish_term24bit 1
@@ -128,6 +128,10 @@ set -Ux FZF_PREVIEW_DIR_CMD 'fd --hidden --follow --exclude .git --max-depth 1 -
 set -Ux FZF_PREVIEW_FILE_CMD 'bat --color=always --style=plain'
 set -Ux FZF_TMUX '1'
 set -Ux FZF_TMUX_HEIGHT '40%'
+
+################
+# Local Config #
+################
 
 # Source machine-dependent configuration
 # Only sources the file if it exists
