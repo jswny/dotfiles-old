@@ -19,5 +19,4 @@ install:
 script:
   - shellcheck scripts/*.sh
   - ${HADOLINT} Dockerfile
-  - docker build -t jswny/dotfiles .
-  - ${DIVE} jswny/dotfiles
+  - docker build -t jswny/dotfiles . && ${DIVE} jswny/dotfiles
