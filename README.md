@@ -1,4 +1,4 @@
-# Dotfiles [![Build Status](https://travis-ci.com/jswny/dotfiles.svg?branch=master)](https://travis-ci.com/jswny/dotfiles) ![Docker Pulls](https://img.shields.io/docker/pulls/jswny/dotfiles) [![Development on Trello](https://img.shields.io/badge/Development-Trello-blue)](https://trello.com/b/Zgx9HvLn)
+# Dotfiles [![Build Status](https://travis-ci.com/jswny/dotfiles.svg?branch=master)](https://travis-ci.com/jswny/dotfiles) [![Docker Pulls](https://img.shields.io/docker/pulls/jswny/dotfiles)](https://hub.docker.com/r/jswny/dotfiles) [![Development on Trello](https://img.shields.io/badge/Development-Trello-blue)](https://trello.com/b/Zgx9HvLn)
 These are my personal dotfiles which I use on a daily basis on MacOS!
 
 ![Screenshot](images/screenshot.png)
