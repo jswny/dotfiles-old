@@ -46,6 +46,7 @@ You can also pull [the latest version from Docker Hub](https://hub.docker.com/r/
 - Support MacOS and Linux
   - Support Windows to some extent, but only through WSL. When WSL 2 is stable Windows support might be more feasable, but at the moment WSL 1 breaks Fish
 - Fail gracefully but try to warn when something is going wrong
+- Use truecolor (hex colors) when possible, fallback to 256 colors, and only then fallback to ANSI colors.
 
 ## Additional Files and Linking
 Most symlinks are automatically setup in the setup script. However, non-cross-platform utilities are not, and can be handled as shown below.
