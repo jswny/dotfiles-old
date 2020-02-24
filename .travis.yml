@@ -7,6 +7,7 @@ services:
 
 env:
   global:
+    - DOCKER_IMAGE_NAME: "jswny/dotfiles"
     - HADOLINT_VERSION: "1.17.5"
     - DIVE_VERSION: "0.9.2"
     - HADOLINT: "${HOME}/hadolint"
@@ -20,3 +21,7 @@ script:
   - shellcheck scripts/*.sh
   - ${HADOLINT} Dockerfile
   - docker build -t jswny/dotfiles . && ${DIVE} jswny/dotfiles
+
+deploy:
+  - provider: script
+    script: echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin && docker push "$DOCKER_IMAGE_NAME"
