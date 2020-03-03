@@ -16,6 +16,7 @@ These dotfiles depend on the following dependencies:
 - [Delta](https://github.com/dandavison/delta)
 - [The Fuck](https://github.com/nvbn/thefuck)
 - [GNU Coreutils](https://formulae.brew.sh/formula/coreutils) (MacOS only)
+- [Dircolors Solarized](https://github.com/seebi/dircolors-solarized) installed into `~/.local/share/dircolors-solarized`
 
 - Either [iTerm2](https://www.iterm2.com/), [Hyper Terminal](https://hyper.is/), or another terminal that can use the Solarized Dark colorscheme for all colors to work fully.
 
