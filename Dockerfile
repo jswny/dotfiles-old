@@ -3,10 +3,10 @@ FROM ubuntu:19.10
 # Set environment variables for the build only (these won't persist when you run the container)
 ARG DEBIAN_FRONTEND=noninteractive
 # Set XDG variables
-ARG XDG_CONFIG_HOME=/root/.config
-ARG XDG_DATA_HOME=/root/.local/share
-ARG XDG_CACHE_HOME=/root/.cache
-ARG HOME=/root
+ARG XDG_CONFIG_HOME=/home/user1/.config
+ARG XDG_DATA_HOME=/home/user1/.local/share
+ARG XDG_CACHE_HOME=/home/user1/.cache
+ARG HOME=/home/user1
 
 # Set versions
 ARG MAN_DB_VERSION=2.8.7-3
@@ -47,6 +47,23 @@ ENV XDG_CONFIG_HOME=${XDG_CONFIG_HOME}
 ENV XDG_DATA_HOME=${XDG_DATA_HOME}
 ENV XDG_CACHE_HOME=${XDG_CACHE_HOME}
 
+# Add a new user and add them to sudoers
+# Also allow the use of sudo with no password
+# This is required to use sudo in the commands below
+# From here, we need to use --preserve-env for sudo so that DEBIAN_FRONTEND=noninteractive is passed correctly to commands
+# We also need to allow CHSH to change the shell without asking for a password
+RUN apt-get update \
+    && apt-get install --no-install-recommends -y \
+    sudo \
+    && useradd --create-home user1 \
+    && usermod -aG sudo user1 \
+    && echo 'user1 ALL=(ALL) NOPASSWD: ALL' >> /etc/sudoers \
+    && sudo sed s/required/sufficient/g -i /etc/pam.d/chsh
+
+# Use the new user and the new working directory
+USER user1
+WORKDIR /home/user1
+
 # Enable failure on pipefail
 # This ensures that if any call in a pipe fails, the whole pipe fails
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
@@ -56,11 +73,11 @@ SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 # For example, "man ls" still won't work, but "man fish" will
 # To restore ALL man pages, run "yes | unminimize"
 # However, this will take a long time and install a lot of extra packages as well
-RUN rm /etc/dpkg/dpkg.cfg.d/excludes
+RUN sudo --preserve-env rm /etc/dpkg/dpkg.cfg.d/excludes
 
 # Install essentials
-RUN apt-get update \
-    && apt-get install --no-install-recommends -y \
+RUN sudo --preserve-env apt-get update \
+    && sudo --preserve-env apt-get install --no-install-recommends -y \
     man-db=${MAN_DB_VERSION} \
     locales=${LOCALES_VERSION} \
     apt-utils=${APT_UTILS_VERSION} \
@@ -69,12 +86,12 @@ RUN apt-get update \
     git=${GIT_VERSION} \
     curl=${CURL_VERSION} \
     software-properties-common=${SOFTWARE_PROPERTIES_COMMON_VERSION} \
-    && apt-get clean \
-    && rm -rf /var/lib/apt/lists/*
+    && sudo --preserve-env apt-get clean \
+    && sudo --preserve-env rm -rf /var/lib/apt/lists/*
 
 # Generate the correct locale and reconfigure the locales so they are picked up correctly
-RUN locale-gen en_US.UTF-8 \
-    && dpkg-reconfigure locales
+RUN sudo --preserve-env locale-gen --purge en_US.UTF-8 \
+    && sudo --preserve-env dpkg-reconfigure locales
 
 # Set the correct locale variables for the build as they won't be set correctly until logging into the system
 # This is needed for when the BEAM is run when 
@@ -84,81 +101,84 @@ ARG LC_ALL=en_US.UTF-8
 
 # Install Fish
 # Change default shell to Fish
-RUN apt-add-repository ppa:fish-shell/release-3 \
-    && apt-get update \
-    && apt-get install --no-install-recommends -y fish=${FISH_VERSION} \
-    && apt-get clean \
-    && rm -rf /var/lib/apt/lists/* \
+RUN sudo --preserve-env apt-add-repository ppa:fish-shell/release-3 \
+    && sudo --preserve-env apt-get update \
+    && sudo --preserve-env apt-get install --no-install-recommends -y fish=${FISH_VERSION} \
+    && sudo --preserve-env apt-get clean \
+    && sudo --preserve-env rm -rf /var/lib/apt/lists/* \
     && chsh -s "$(command -v fish)"
 
 # Install Fisher (Fish plugin manager)
-RUN curl --create-dirs -sLo ~/.config/fish/functions/fisher.fish https://git.io/fisher
+RUN curl --create-dirs -sLo $XDG_CONFIG_HOME/fish/functions/fisher.fish https://git.io/fisher
 
 # Install Erlang
 # This uses the Erlang Solutions repo
-RUN apt-get update \
-    && apt-get install --no-install-recommends -y gnupg2=${GNUPG2_VERSION} \
+RUN sudo --preserve-env apt-get update \
+    && sudo --preserve-env apt-get install --no-install-recommends -y gnupg2=${GNUPG2_VERSION} \
     && curl -sLo $XDG_CACHE_HOME/erlang-solutions_2.0_all.deb --create-dirs https://packages.erlang-solutions.com/erlang-solutions_2.0_all.deb \
-    && dpkg -i $XDG_CACHE_HOME/erlang-solutions_2.0_all.deb \
+    && sudo dpkg -i $XDG_CACHE_HOME/erlang-solutions_2.0_all.deb \
     && rm $XDG_CACHE_HOME/erlang-solutions_2.0_all.deb \
-    && apt-get update \
-    && apt-get install --no-install-recommends -y esl-erlang=${ERLANG_VERSION} \
-    && apt-get clean \
-    && rm -rf /var/lib/apt/lists/*
+    && sudo --preserve-env apt-get update \
+    && sudo --preserve-env apt-get install --no-install-recommends -y esl-erlang=${ERLANG_VERSION} \
+    && sudo --preserve-env apt-get clean \
+    && sudo --preserve-env rm -rf /var/lib/apt/lists/*
 
 # Install Elixir
-RUN apt-get update \
-    && apt-get install --no-install-recommends -y elixir=${ELIXIR_VERSION} \
-    && apt-get clean \
-    && rm -rf /var/lib/apt/lists/*
+RUN sudo --preserve-env apt-get update \
+    && sudo --preserve-env apt-get install --no-install-recommends -y elixir=${ELIXIR_VERSION} \
+    && sudo --preserve-env apt-get clean \
+    && sudo --preserve-env rm -rf /var/lib/apt/lists/*
 
 # Install Rebar3 and Hex
 RUN mix local.rebar --force \
     && mix local.hex --force
 
 # Install and build Elixir-LS
-RUN git clone https://github.com/elixir-lsp/elixir-ls.git --branch v${ELIXIR_LS_VERSION} --depth 1 /opt/elixir-ls
+RUN sudo mkdir -p /opt/elixir-ls \
+    && sudo chown -R user1 /opt/elixir-ls \
+    && git clone https://github.com/elixir-lsp/elixir-ls.git --branch v${ELIXIR_LS_VERSION} --depth 1 /opt/elixir-ls
 WORKDIR /opt/elixir-ls
 RUN mix deps.get \
     && mix compile \
     && mix elixir_ls.release \
-    && ln -s /opt/elixir-ls/release/language_server.sh /usr/local/bin/elixir-ls.sh 
+    && sudo ln -s /opt/elixir-ls/release/language_server.sh /usr/local/bin/elixir-ls.sh 
 
 # Install Pip for Python 2 and 3
 # Ubuntu already comes with Python 2 and 3 installed
-RUN apt-get update \
-    && apt-get install --no-install-recommends -y \
+RUN sudo --preserve-env apt-get update \
+    && sudo --preserve-env apt-get install --no-install-recommends -y \
     python-pip=${PIP_VERSION} \
     python3-pip=${PIP_VERSION} \
-    && apt-get clean \
-    && rm -rf /var/lib/apt/lists/* \
+    && sudo --preserve-env apt-get clean \
+    && sudo --preserve-env rm -rf /var/lib/apt/lists/* \
     && pip2 install --upgrade pip==${PIP_SELF_VERSION} \
     && pip3 install --upgrade pip==${PIP_SELF_VERSION}
 
 # Install Fuck
-RUN apt-get update \
-    && apt-get --no-install-recommends install -y \
+RUN sudo --preserve-env apt-get update \
+    && sudo --preserve-env apt-get --no-install-recommends install -y \
     build-essential=${BUILD_ESSENTIAL_VERSION} \
     python3-dev=${PYTHON_DEV_VERSION} \
     python3-pip=${PIP_VERSION} \
     python3-setuptools=${PYTHON_SETUPTOOLS_VERSION} \
-    && apt-get clean \
-    && rm -rf /var/lib/apt/lists/* \
+    && sudo --preserve-env apt-get clean \
+    && sudo --preserve-env rm -rf /var/lib/apt/lists/* \
     && pip3 install thefuck==${THEFUCK_VERSION}
 
 # Install Python 2 and 3 providers for NeoVim
-RUN apt-get update \
-    && apt-get install --no-install-recommends -y python-setuptools=${PYTHON_SETUPTOOLS_VERSION} \
+RUN sudo --preserve-env apt-get update \
+    && sudo --preserve-env apt-get install --no-install-recommends -y python-setuptools=${PYTHON_SETUPTOOLS_VERSION} \
     python3-setuptools=${PYTHON_SETUPTOOLS_VERSION} \
-    && apt-get clean \
-    && rm -rf /var/lib/apt/lists/* \
+    && sudo --preserve-env apt-get clean \
+    && sudo --preserve-env rm -rf /var/lib/apt/lists/* \
     && pip2 install --upgrade pynvim==${PYNVIM_VERSION} \
     && pip3 install --upgrade pynvim==${PYNVIM_VERSION}
 
 # Install NeoVim
-RUN curl --create-dirs -sL https://github.com/neovim/neovim/releases/download/${NEOVIM_VERSION}/nvim-linux64.tar.gz | tar zx --directory /opt \
-    && mv /opt/nvim-linux64 /opt/nvim \
-    && ln -s /opt/nvim/bin/nvim /usr/local/bin/nvim
+RUN curl --create-dirs -sL https://github.com/neovim/neovim/releases/download/${NEOVIM_VERSION}/nvim-linux64.tar.gz | sudo tar zx --directory /opt \
+    && sudo mv /opt/nvim-linux64 /opt/nvim \
+    && sudo chown -R user1 /opt/nvim \
+    && sudo ln -s /opt/nvim/bin/nvim /usr/local/bin/nvim
 
 # Install vim-plug
 RUN curl --create-dirs -sfLo $XDG_DATA_HOME/nvim/site/autoload/plug.vim https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
@@ -168,22 +188,22 @@ RUN git clone --depth 1 https://github.com/seebi/dircolors-solarized.git $XDG_DA
 
 # Install Tmux
 # Versions older 2.9 do not work with some tmux.conf syntax
-RUN apt-get update \
-    && apt-get install --no-install-recommends -y \
+RUN sudo --preserve-env apt-get update \
+    && sudo --preserve-env apt-get install --no-install-recommends -y \
     libevent-dev=${LIBEVENT_DEV_VERSION} \
     libncurses-dev=${LIBNCURSES_DEV_VERSION} \
     bison=${BISON_VERSION} \
     pkg-config=${PKG_CONFIG_VERSION} \
     autotools-dev=${AUTOTOOLS_DEV_VERSION} \
     automake=${AUTOMAKE_VERSION} \
-    && apt-get clean \
-    && rm -rf /var/lib/apt/lists/* \
+    && sudo --preserve-env apt-get clean \
+    && sudo --preserve-env rm -rf /var/lib/apt/lists/* \
     && mkdir -p $XDG_CACHE_HOME \
     && git clone --depth 1 --branch ${TMUX_VERSION} https://github.com/tmux/tmux.git $XDG_CACHE_HOME/tmux
 WORKDIR $XDG_CACHE_HOME/tmux
 RUN sh autogen.sh \
     && ./configure && make \
-    && make install
+    && sudo make install
 WORKDIR $HOME
 RUN rm -rf $XDG_CACHE_HOME/tmux
 
@@ -196,24 +216,24 @@ RUN git clone --depth 1 https://github.com/junegunn/fzf.git $XDG_DATA_HOME/fzf \
 
 # Install FD
 RUN curl --create-dirs -sLo $XDG_CACHE_HOME/fd_${FD_VERSION}_amd64.deb https://github.com/sharkdp/fd/releases/download/v${FD_VERSION}/fd_${FD_VERSION}_amd64.deb \
-    && dpkg -i $XDG_CACHE_HOME/fd_${FD_VERSION}_amd64.deb \
+    && sudo dpkg -i $XDG_CACHE_HOME/fd_${FD_VERSION}_amd64.deb \
     && rm $XDG_CACHE_HOME/fd_${FD_VERSION}_amd64.deb
 
 # Install Bat
 # Force overwrites when installing the .deb package because Bat tries to install its completions into the built-in Fish completions folder (which is managed by the Fish package)
 # See: https://github.com/sharkdp/bat/issues/651
 RUN curl --create-dirs -sLo $XDG_CACHE_HOME/bat_${BAT_VERSION}_amd64.deb https://github.com/sharkdp/bat/releases/download/v${BAT_VERSION}/bat_${BAT_VERSION}_amd64.deb \
-    && dpkg -i --force-overwrite $XDG_CACHE_HOME/bat_${BAT_VERSION}_amd64.deb \
+    && sudo dpkg -i --force-overwrite $XDG_CACHE_HOME/bat_${BAT_VERSION}_amd64.deb \
     && rm $XDG_CACHE_HOME/bat_${BAT_VERSION}_amd64.deb
 
 # Install Delta
 RUN curl --create-dirs -sLo $XDG_CACHE_HOME/git-delta_${DELTA_VERSION}_amd64.deb https://github.com/dandavison/delta/releases/download/${DELTA_VERSION}/git-delta_${DELTA_VERSION}_amd64.deb \
-    && dpkg -i $XDG_CACHE_HOME/git-delta_${DELTA_VERSION}_amd64.deb \
+    && sudo dpkg -i $XDG_CACHE_HOME/git-delta_${DELTA_VERSION}_amd64.deb \
     && rm $XDG_CACHE_HOME/git-delta_${DELTA_VERSION}_amd64.deb
 
 # Add the dotfiles into the container and set them up
 COPY . $XDG_CONFIG_HOME/dotfiles
-RUN $XDG_CONFIG_HOME/dotfiles/scripts/setup.sh 
+# RUN $XDG_CONFIG_HOME/dotfiles/scripts/setup.sh 
 
 # Set the root home directory as the working directory
 WORKDIR $HOME
