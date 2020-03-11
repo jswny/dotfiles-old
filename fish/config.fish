@@ -3,8 +3,12 @@
 #########
 
 # Properly set XDG directory variables to defaults if they don't already exist (only for this file)
-set -q XDG_CONFIG_HOME; or set -g XDG_CONFIG_HOME ~/.config
-set -q XDG_DATA_HOME; or set -g XDG_DATA_HOME ~/.local/share
+set -q XDG_CONFIG_HOME; or set -g XDG_CONFIG_HOME $HOME/.config
+set -q XDG_DATA_HOME; or set -g XDG_DATA_HOME $HOME/.local/share
+set -q XDG_CACHE_HOME; or set -g XDG_CACHE_HOME $HOME/.cache
+
+# Location of source code for packages and other tools
+set -q PACKAGE_SOURCE_HOME; or set -g PACKAGE_SOURCE_HOME $HOME/.local/src
 
 # Start the ssh-agent and add the default key if ssh-agent exists
 if type -q ssh-agent
@@ -38,7 +42,7 @@ if command -sq gls
 end
 
 # Use Solarized Dark dircolors if they exist
-set -l solarized_dark_dircolors_path $XDG_DATA_HOME/dircolors-solarized/dircolors.256dark
+set -l solarized_dark_dircolors_path $PACKAGE_SOURCE_HOME/dircolors-solarized/dircolors.256dark
 
 set -l dircolors_provider dircolors
 if command -sq gdircolors

@@ -3,8 +3,10 @@ These are my personal dotfiles which I use on a daily basis on MacOS!
 
 ![Screenshot](images/screenshot.png)
 
-## Dependencies
-These dotfiles depend on the following dependencies:
+## Tools
+- [Brew](brew.sh)
+- [iTerm2](https://www.iterm2.com/)
+- [Hyper Terminal](https://hyper.is/)
 - [Fish Shell](https://fishshell.com/)
 - [Fisher](https://github.com/jorgebucaran/fisher)
 - [NeoVim](https://neovim.io/) (latest version)
@@ -16,23 +18,20 @@ These dotfiles depend on the following dependencies:
 - [Delta](https://github.com/dandavison/delta)
 - [The Fuck](https://github.com/nvbn/thefuck)
 - [GNU Coreutils](https://formulae.brew.sh/formula/coreutils) (MacOS only)
-- [Dircolors Solarized](https://github.com/seebi/dircolors-solarized) installed into `~/.local/share/dircolors-solarized`
+- [Dircolors Solarized](https://github.com/seebi/dircolors-solarized)
 
-- Either [iTerm2](https://www.iterm2.com/), [Hyper Terminal](https://hyper.is/), or another terminal that can use the Solarized Dark colorscheme for all colors to work fully.
 
 ## Setup
-1. Install dependencies
-2. Run the setup script:
+Run the setup script:
 ```sh
-https://github.com/jswny/dotfiles.git
+git clone https://github.com/jswny/dotfiles.git
 cd dotfiles
-./scripts/setup.sh
+scripts/setup
 ```
 
-## Local Configuration
+## Custom Configuration
 ### Fish
 - To add local Fish configuration, simply create a file `local.config.fish` and place it in the same directory as `config.fish`. From there, `config.fish` will source that file if it exists (after it has already run all of its own commands).
-- You can change your `$PATH` in Fish by either modifying it in `local.config.fish`, or by setting it one time universally via `fish_user_paths` (recommended): `set -U fish_user_paths /usr/local/bin $fish_user_paths`.
 
 ## Docker
 This repository contains a `Dockerfile` which you can use to test out these dotfiles. This will build an Ubuntu-based docker image and run it for you:
@@ -40,14 +39,31 @@ This repository contains a `Dockerfile` which you can use to test out these dotf
 You can also pull [the latest version from Docker Hub](https://hub.docker.com/r/jswny/devbox) if you don't want to build it yourself.
 
 ## Philosophy
-- Minimal configuration where possible
-- Use the [XDG Base Directory Spec](https://standards.freedesktop.org/basedir-spec/basedir-spec-latest.html) where possible/reasonable
+- **Minimalism**
+  - Minimal configuration where possible
+- **Filesystem Heirarchy**
+  - Use the [XDG Base Directory Spec](https://standards.freedesktop.org/basedir-spec/basedir-spec-latest.html) where possible/reasonable
   - Accordingly, consume the existing XDG environment variable if possible or use a default set at the point of use, instead of relying on XDG variables being already set before the point of use.
   - See [this Arch Linux guide](https://wiki.archlinux.org/index.php/XDG_Base_Directory) for a good summary of which programs support XDG
-- Support MacOS and Linux
+- **Operating Systems**
+  - Support MacOS and Linux
   - Support Windows to some extent, but only through WSL. When WSL 2 is stable Windows support might be more feasable, but at the moment WSL 1 breaks Fish
-- Fail gracefully but try to warn when something is going wrong
-- Use truecolor (hex colors) when possible, fallback to 256 colors, and only then fallback to ANSI colors.
+- **Errors**
+  - Fail gracefully wherever possible but try to warn when something is going wrong if it is potentially a problem
+  - Fail silently but gracefully for anticipated errors
+- **Colors**
+  - Use Solarized dark wherever possible due to its widespread support and ease on the eyes.
+  - Use truecolor (hex colors) when possible, fallback to 256 colors, and only then fallback to ANSI colors.
+- **Packaging**
+  - Install packages with [Brew](https://brew.sh/). This provides the most up-to-date versions of packages.
+  - Install packages from source in `$PACKAGE_SOURCE_HOME` which defaults to `~/.local/src`. This doesn't include things like [Tmux Plugin Manager (TPM)](https://github.com/tmux-plugins/tpm) which install from source but manage themselves and have a dedicated installation location.
+- **Setup**
+  - Setup everything possible to setup for a command-line environment
+  - Don't setup anything which is not command-line (such as GUI programs, etc.). However, accomidating these if they exist is fine.
+- **Local Configuration**
+  - Provide local, machine-dependent configuration where necessary.
+  - Local configuration should only be used in the situation where a certain configuration is short-lived, or machine-dependent (applies to a single machine, **not** a single operating system)
+  - Local configuration should allow for these situations without the need to modify source-controlled files, so the repository can be kept clean and updated on a machine without affecting local configuration.
 
 ## Additional Files and Linking
 Most symlinks are automatically setup in the setup script. However, non-cross-platform utilities are not, and can be handled as shown below.
