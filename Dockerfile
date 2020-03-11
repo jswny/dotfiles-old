@@ -68,19 +68,19 @@ RUN useradd --create-home ${USER} \
 #     && apt-get clean \
 #     && rm -rf /var/lib/apt/lists/*
 
-RUN gosu user1:user1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)" \
-    && eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)" \
-    && brew install \
-    fish \
-    tmux \
-    neovim \
-    fzf \
-    fd \
-    bat \
-    git-delta \
-    thefuck \
-    python \
-    && chown -R user1:user1 /home/linuxbrew
+# RUN gosu user1:user1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)" \
+#     && eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)" \
+#     && brew install \
+#     fish \
+#     tmux \
+#     neovim \
+#     fzf \
+#     fd \
+#     bat \
+#     git-delta \
+#     thefuck \
+#     python \
+#     && chown -R user1:user1 /home/linuxbrew
 
 # Add dotfiles into the container and run setup
 COPY . $XDG_CONFIG_HOME/dotfiles
@@ -90,7 +90,7 @@ RUN chown -R ${USER}:${USER} $HOME \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
-# Swith to the the new user and the new working directory
+# Switch to the the new user and the new working directory
 USER ${USER}
 WORKDIR $HOME
 
