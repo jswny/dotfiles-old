@@ -68,22 +68,23 @@ RUN useradd --create-home ${USER} \
 #     && apt-get clean \
 #     && rm -rf /var/lib/apt/lists/*
 
-# RUN gosu user1:user1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)" \
-#     && eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)" \
-#     && brew install \
-#     fish \
-#     tmux \
-#     neovim \
-#     fzf \
-#     fd \
-#     bat \
-#     git-delta \
-#     thefuck \
-#     python
+RUN gosu user1:user1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)" \
+    && eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)" \
+    && brew install \
+    fish \
+    tmux \
+    neovim \
+    fzf \
+    fd \
+    bat \
+    git-delta \
+    thefuck \
+    python \
+    && chown -R user1:user1 /home/linuxbrew
 
 # Add dotfiles into the container and run setup
 COPY . $XDG_CONFIG_HOME/dotfiles
-RUN chown -R ${USER}:${USER} $HOME /home/linuxbrew \
+RUN chown -R ${USER}:${USER} $HOME \
     && gosu user1 $XDG_CONFIG_HOME/dotfiles/scripts/setup --debug \
     && echo "eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv)" >> $HOME/.bashrc \
     && apt-get clean \
