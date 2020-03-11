@@ -45,7 +45,6 @@ RUN apt-get update \
 ARG LC_ALL=en_US.UTF-8
 
 # Add a new user and add them to sudoers
-# Also allow the use of sudo with no password
 # This is required to use sudo in the commands below
 # From here, if we use sudo we need to use --preserve-env for sudo so that DEBIAN_FRONTEND=noninteractive is passed correctly to commands
 # Setup sudo to be used in this Dockerfile without a password for the new user
@@ -85,6 +84,7 @@ RUN useradd --create-home ${USER} \
 # Add dotfiles into the container and run setup
 COPY . $XDG_CONFIG_HOME/dotfiles
 RUN chown -R ${USER}:${USER} $HOME \
+    && gosu user1 mkdir -p $HOME/.cache \
     && gosu user1 $XDG_CONFIG_HOME/dotfiles/scripts/setup --debug \
     && echo "eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv)" >> $HOME/.bashrc \
     && apt-get clean \
