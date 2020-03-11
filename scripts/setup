@@ -13,10 +13,10 @@ XDG_CACHE_HOME=${XDG_CACHE_HOME:-"$HOME/.cache"}
 # Where to install source code for packages and other tools
 PACKAGE_SOURCE_HOME=${PACKAGE_SOURCE_HOME-"$HOME/.local/src"}
 
+# Default values for certain variables
+apt_update=0
 debug=0
 
-# TODO: add non-interactive mode which doesn't run sudo commands
-# TODO: check if sudo exists, or if it is needed (if running as sudo already)
 # Display command-line help info
 help() {
   cat << EOF
@@ -88,6 +88,12 @@ check_executable() {
 install_package() {
   if check_executable 'apt-get'; then
     log 'debug' "Installing package \"$1\" with apt..."
+    if [ "$apt_update" = 0 ]; then
+      log 'info' 'Updating apt...'
+      
+      sudo apt-get update
+      apt_update=1
+    fi
     sudo apt-get install -y "$1"
   else
     log 'error' "Cannot automatically install package \"$1\", please manually install and try again!"
@@ -189,6 +195,18 @@ script_path="$parent_directory"
 get_parent_directory "$script_path"
 dotfiles_path="$parent_directory"
 
+# Ensure we aren't running as root
+if [ "$EUID" = 0 ]; then 
+  log 'error' 'Please do not run as root! sudo will be used when necessary'
+  exit 1
+fi
+
+# Ensure sudo is installed
+if ! check_executable 'sudo'; then
+  log 'error' 'sudo is required to run setup. Please run again with sudo installed'
+  exit 1
+fi
+
 # Parse command-line options
 for opt in "$@"; do
   case $opt in
@@ -198,10 +216,11 @@ for opt in "$@"; do
       ;;
     --debug)
       debug=1
-      log 'debug' 'Running in debug mode...'
+      log 'debug' 'Running in debug mode'
       ;;
     --no-brew-packages)
       no_brew_packages=1
+      log 'debug' 'Brew packages will not be installed'
       ;;
     *)
       log 'error' "unknown option: \"$opt\""
@@ -225,6 +244,7 @@ detect_os
 if [ $os = 'mac' ]; then
   if ! xcode-select -p 1>/dev/null; then
     log 'info' "brew dependency XCode command line tools is not installed, installing..."
+    xcode-select --install
   else
     log 'info' "brew dependency XCode command line tools is already installed"
   fi
@@ -352,16 +372,16 @@ pip3 install --upgrade pynvim
 # Install Vim-Plug
 vim_plug_path="$XDG_DATA_HOME/nvim/site/autoload/plug.vim"
 log 'info' "Installing vim-plug to \"$vim_plug_path\""
-curl --create-dirs -sfLo $vim_plug_path https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+curl --create-dirs -sfLo "$vim_plug_path" https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 
 # Install Vim-Plug plugins
 # Log this to a file since the output is not meant to be readable outside of NeoVim
 vim_plug_install_log_path="$XDG_CACHE_HOME/vim_plug_install.log"
 log 'info' "Installing vim-plug plugins and logging to \"$vim_plug_install_log_path\"..."
 
-nvim --headless '+PlugInstall --sync' +qa &> $vim_plug_install_log_path
+nvim --headless '+PlugInstall --sync' +qa &> "$vim_plug_install_log_path"
 
 # Setup dircolors-solarized
 dircolors_solarized_path="$PACKAGE_SOURCE_HOME/dircolors-solarized"
-log 'info' "Installing dircolors-solarized to $PACKAGE_SOURCE_HOME/dircolors-solarized"
-git clone --depth 1 https://github.com/seebi/dircolors-solarized.git "$PACKAGE_SOURCE_HOME/dircolors-solarized"
+log 'info' "Installing dircolors-solarized to \"$dircolors_solarized_path\""
+git clone --depth 1 https://github.com/seebi/dircolors-solarized.git "$dircolors_solarized_path"

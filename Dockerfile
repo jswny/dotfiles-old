@@ -7,6 +7,12 @@ ARG XDG_CONFIG_HOME=/home/${USER}/.config
 ARG PACKAGE_SOURCE_HOME=/home/${USER}/.local/src
 ARG HOME=/home/${USER}
 
+# Pinned versions
+ARG LOCALES_VERSION='2.30-0ubuntu2.1'
+ARG MAN_DB_VERSION='2.8.7-3'
+ARG SUDO_VERSION='1.8.27-1ubuntu4.1'
+ARG GOSU_VERSION='1.10-1'
+
 # Set environment variables (these will persist at runtime)
 ENV TERM xterm-256color
 
@@ -23,8 +29,10 @@ RUN rm /etc/dpkg/dpkg.cfg.d/excludes
 
 # Generate the correct locale and reconfigure the locales so they are picked up correctly
 RUN apt-get update \
-    && apt-get install --no-install-recommends -y locales \
-    man-db \
+    && apt-get install --no-install-recommends -y locales=${LOCALES_VERSION} \
+    man-db=${MAN_DB_VERSION} \
+    sudo=${SUDO_VERSION} \
+    gosu=${GOSU_VERSION} \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/* \
     && locale-gen --purge en_US.UTF-8 \
@@ -42,51 +50,48 @@ ARG LC_ALL=en_US.UTF-8
 # From here, if we use sudo we need to use --preserve-env for sudo so that DEBIAN_FRONTEND=noninteractive is passed correctly to commands
 # Setup sudo to be used in this Dockerfile without a password for the new user
 # Allow chsh to be run without needing a password
-RUN apt-get update \
-    && apt-get install --no-install-recommends -y \
-    sudo \
-    && apt-get clean \
-    && rm -rf /var/lib/apt/lists/* \
-    && useradd --create-home ${USER} \
+# These are both needed to allow the setup script to run without input
+RUN useradd --create-home ${USER} \
     && usermod -aG sudo ${USER} \
     && echo "${USER} ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers \
-    && sudo sed s/required/sufficient/g -i /etc/pam.d/chsh
+    && sed s/required/sufficient/g -i /etc/pam.d/chsh
 
-# Install Brew dependencies
-RUN apt-get update \
-    && apt-get install -y \
-    libc6 \
-    gcc \
-    make \
-    curl \
-    file \
-    git \
+# Uncomment these for fast development caching of long-running steps
+# RUN apt-get update \
+#     && apt-get install -y \
+#     libc6 \
+#     gcc \
+#     make \
+#     curl \
+#     file \
+#     git \
+#     && apt-get clean \
+#     && rm -rf /var/lib/apt/lists/*
+
+# RUN gosu user1:user1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)" \
+#     && eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)" \
+#     && brew install \
+#     fish \
+#     tmux \
+#     neovim \
+#     fzf \
+#     fd \
+#     bat \
+#     git-delta \
+#     thefuck \
+#     python
+
+# Add dotfiles into the container and run setup
+COPY . $XDG_CONFIG_HOME/dotfiles
+RUN chown -R ${USER}:${USER} $HOME /home/linuxbrew \
+    && gosu user1 $XDG_CONFIG_HOME/dotfiles/scripts/setup --debug \
+    && echo "eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv)" >> $HOME/.bashrc \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
 # Swith to the the new user and the new working directory
 USER ${USER}
 WORKDIR $HOME
-
-# Add dotfiles into the container and run setup
-# TODO: clean this up and setup as one layer
-RUN /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
-
-RUN eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)" \
-    && brew install \
-    fish \
-    tmux \
-    neovim \
-    fzf \
-    fd \
-    bat \
-    git-delta \
-    thefuck \
-    python
-RUN echo "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)" >> $HOME/.bashrc
-COPY . $XDG_CONFIG_HOME/dotfiles
-RUN sudo chown -R ${USER}:${USER} $HOME/.config $HOME/.cache
-RUN $XDG_CONFIG_HOME/dotfiles/scripts/setup --debug
 
 # Run a Fish prompt by default
 # Override this as needed
