@@ -135,10 +135,13 @@ ensure_exists_and_symlink() {
     log 'error' "Attempted to symlink \"$1\" to \"$2\" but source does not exist!"
     exit 1
   fi
-  
-  ensure_parent_dir_exists "$2"
-  log 'info' "Symlinking \"$1\" -> \"$2\"..."
-  ln -s "$1" "$2"
+
+  if [ -e "$2" ]; then
+    log 'error' "Attempted to symlink \"$1\" to \"$2\" but target already exists! Skipping..."
+  else
+    ensure_parent_dir_exists "$2"
+    log 'info' "Symlinking \"$1\" -> \"$2\"..." ln -s "$1" "$2"
+  fi
 }
 
 # Creates a file if it doesn't exist
@@ -300,11 +303,15 @@ else
   log 'info' "Skipping brew packages installation because --no-brew-packages was specified..."
 fi
 
-# Change default shell to Fish
-fish_path="$(command -v "fish")"
-log 'info' "Changing shell to fish at \"$fish_path\"..."
-ensure_line_exists "^$fish_path$" '/etc/shells' "$fish_path"
-sudo chsh -s "$fish_path" "$(whoami)"
+# Change default shell to Fish if it isn't already
+if [ -z "${SHELL:-}" ] || [ "$SHELL" != *'fish'* ]; then
+  fish_path="$(command -v "fish")"
+  log 'info' "Changing shell to fish at \"$fish_path\"..."
+  ensure_line_exists "^$fish_path$" '/etc/shells' "$fish_path"
+  sudo chsh -s "$fish_path" "$(whoami)"
+else
+  log 'info' "\$SHELL value \"$SHELL\" already contains \"fish\", skipping default shell change..."
+fi
 
 # Symlink Fish files
 log 'info' 'Symlinking fish files...'
