@@ -304,7 +304,7 @@ else
 fi
 
 # Change default shell to Fish if it isn't already
-if [ -z "${SHELL:-}" ] || [ "$SHELL" != *'fish'* ]; then
+if [ -z "${SHELL:-}" ] || [[ "$SHELL" != *'fish'* ]]; then
   fish_path="$(command -v "fish")"
   log 'info' "Changing shell to fish at \"$fish_path\"..."
   ensure_line_exists "^$fish_path$" '/etc/shells' "$fish_path"
