@@ -290,7 +290,7 @@ fi
 if find_brew_executable; then
   log 'info' "Sourcing brew from \"$local_brew_executable\"..."
   # Make sure $SHELL is set to bash so that this doesn't try to run commands for the user shell instead
-  eval $(SHELL=bash bash -c "$local_brew_executable shellenv")
+  eval "$(SHELL=bash bash -c "$local_brew_executable shellenv")"
 else
   log 'error' "Could not find local brew executable to provide shell sourcing of brew"
   exit 1
@@ -320,8 +320,6 @@ log 'info' 'Symlinking fish files...'
 ensure_exists_and_symlink "$dotfiles_path/fish/config.fish" "$XDG_CONFIG_HOME/fish/config.fish"
 fishfile_path="$XDG_CONFIG_HOME/fish/fishfile"
 ensure_exists_and_symlink "$dotfiles_path/fish/fishfile" "$fishfile_path"
-
-ls -l -a $HOME/.config/fish
 
 # Add Brew source to local fish configuration if the line doesn't already exist in the file
 # This will create the file if it doesn't already exist
