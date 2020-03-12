@@ -137,10 +137,11 @@ ensure_exists_and_symlink() {
   fi
 
   if [ -e "$2" ]; then
-    log 'error' "Attempted to symlink \"$1\" to \"$2\" but target already exists! Skipping..."
+    log 'info' "Attempted to symlink \"$1\" to \"$2\" but target already exists! Skipping..."
   else
     ensure_parent_dir_exists "$2"
     log 'info' "Symlinking \"$1\" -> \"$2\"..." ln -s "$1" "$2"
+    ln -s "$1" "$2"
   fi
 }
 
@@ -288,7 +289,8 @@ fi
 
 if find_brew_executable; then
   log 'info' "Sourcing brew from \"$local_brew_executable\"..."
-  eval "$("$local_brew_executable" shellenv)"
+  # Make sure $SHELL is set to bash so that this doesn't try to run commands for the user shell instead
+  eval $(SHELL=bash bash -c "$local_brew_executable shellenv")
 else
   log 'error' "Could not find local brew executable to provide shell sourcing of brew"
   exit 1
@@ -319,6 +321,8 @@ ensure_exists_and_symlink "$dotfiles_path/fish/config.fish" "$XDG_CONFIG_HOME/fi
 fishfile_path="$XDG_CONFIG_HOME/fish/fishfile"
 ensure_exists_and_symlink "$dotfiles_path/fish/fishfile" "$fishfile_path"
 
+ls -l -a $HOME/.config/fish
+
 # Add Brew source to local fish configuration if the line doesn't already exist in the file
 # This will create the file if it doesn't already exist
 ensure_line_exists '^eval \\$?\\(.*brew shellenv\\)$' "$XDG_CONFIG_HOME/fish/local.config.fish" "eval ($local_brew_executable shellenv)"
@@ -332,7 +336,7 @@ fish --command 'fisher'
 
 # Symlink Tmux files
 log 'info' 'Symlinking tmux files...'
-
+ 
 # If the Tmux version is < v3.1, also symlink to the regular Tmux config file location $HOME/.tmux.conf
 # As of Tmux 3.1 using XDG for the config file is supported: https://github.com/tmux/tmux/commit/15d7e564ddab575dd3ac803989cc99ac13b57198
 executable_warning_prefix="Could not find"
