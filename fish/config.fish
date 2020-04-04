@@ -113,7 +113,7 @@ set -g theme_display_date no
 
 # Set Bat options
 # The theme will also apply to Delta
-set -gx BAT_THEME ansi-dark
+set -gx BAT_THEME "Solarized (dark)"
 
 # Use Bat to colorize manpages
 set -gx MANPAGER "sh -c 'col -bx | bat -l man -p'"
