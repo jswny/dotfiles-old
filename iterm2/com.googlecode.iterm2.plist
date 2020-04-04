@@ -282,7 +282,7 @@
 	<key>HotKeyTogglesWindow</key>
 	<false/>
 	<key>Hotkey</key>
-	<true/>
+	<false/>
 	<key>HotkeyChar</key>
 	<integer>46</integer>
 	<key>HotkeyCode</key>
@@ -2043,6 +2043,10 @@
 		<string>3.3.2</string>
 		<string>3.3.6</string>
 	</array>
+	<key>NoSyncBFPRecents</key>
+	<array>
+		<string>Meslo LG M DZ for Powerline</string>
+	</array>
 	<key>NoSyncCommandHistoryHasEverBeenUsed</key>
 	<true/>
 	<key>NoSyncConfirmBeta</key>
@@ -2067,7 +2071,7 @@
 	<key>NoSyncInstallationId</key>
 	<string>4859CFBD-7569-442E-BE55-C34B7CB89273</string>
 	<key>NoSyncLaunchExperienceControllerRunCount</key>
-	<integer>7</integer>
+	<integer>19</integer>
 	<key>NoSyncNeverRemindPrefsChangesLostForFile</key>
 	<true/>
 	<key>NoSyncNeverRemindPrefsChangesLostForFile_selection</key>
@@ -2880,7 +2884,7 @@
 	<key>SUHasLaunchedBefore</key>
 	<true/>
 	<key>SULastCheckTime</key>
-	<date>2019-11-06T02:06:20Z</date>
+	<date>2020-03-21T07:17:37Z</date>
 	<key>SUUpdateRelaunchingMarker</key>
 	<false/>
 	<key>SavePasteHistory</key>

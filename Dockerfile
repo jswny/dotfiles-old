@@ -84,7 +84,6 @@ RUN useradd --create-home ${USER} \
 # Add dotfiles into the container and run setup
 COPY . $XDG_CONFIG_HOME/dotfiles
 RUN chown -R ${USER}:${USER} $HOME \
-    && gosu user1 mkdir -p $HOME/.cache \
     && gosu user1 $XDG_CONFIG_HOME/dotfiles/scripts/setup --debug \
     && echo "eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv)" >> $HOME/.bashrc \
     && apt-get clean \
