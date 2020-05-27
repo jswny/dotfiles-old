@@ -25,3 +25,8 @@ script:
 deploy:
   - provider: script
     script: echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin && docker push "$DOCKER_IMAGE_NAME"
+
+notifications:
+  slack:
+    secure: "CVAmctdVgxVMU8g6y3vz+AwuIYW8H9vgNDr0ZkifT8V1LZ1kblixqBpT6lKtyEHySysP8RUyabDov6eAM9YTBI5xVtYylhv1ffzX7m/Qna9Hz2BypkOlhrQk57y4X+/o0tbYz+0iPw4N3iOOGHaFUuuG/T8Kw8hn7OVNTsgg12vMqS1bKUDSmHwN66+yw/cSPIBXYxQlaDxjk83I2JP4CXV73K/1RTz7BUaYSqID3wa8OYY2XQSEjfFV7y+D65rplA66elALaw1URpDUV4UJyIzQV7+l6SOqvdfODiPrTAHxWeV06x0hPEsNskeyHo7oOvnGIEHV/9cKUyLstFqBz0C/jl5M0MABVZGLPoqxM4/BDgBpuNFzs81Ts+lkwsp46RsOQc8eJoc33mQsMU5ODvjCTK7EFhf7zKj3C1hx0e/IKRrYwGrEFnbS/2w+upeIp1jIEXalPkZQIrq2FUjpx5cP3VvGEqhqHrAt97gQIktKbzWhZqOco38AsrLUfWn5mIjrx1qHzMWb7qPO9wgpDepxNiZuSfPOkXa3UeNg6f/c658QD9YIzazfjIGMMZYbiyfQu8FNYhigOwG5AIZBg+bcUkQBJlUzlKOWgKhqxH/9DGTJOMafBJFu485fh7qbPJOAwOUqcOHvVpetDAwTCZbgQYZcq7L7djyGj4EtABk="
+  email: false
