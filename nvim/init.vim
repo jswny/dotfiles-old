@@ -41,7 +41,6 @@ else
   let g:xdg_data_home = '~/.local/share'
 endif
 
-
 " Specify a directory for plugins
 " - For Neovim: ~/.local/share/nvim/plugged
 " - Avoid using standard Vim directory names like 'plugin'
@@ -316,7 +315,6 @@ function VerifyTypeScriptTSXConfigExists()
     call EchoWarning("You are opening a TSX file but no tsconfig.json could be found. TSX language server support requires a tsconfig.json file which specifies that TSX should be enabled.")
   endif
 endfunction()
-
 
 augroup LSPVerifyTSXConfig
   autocmd!
