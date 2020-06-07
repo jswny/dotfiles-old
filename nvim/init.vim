@@ -10,7 +10,7 @@
 " - Neovim Python3 provider (pip3 install pynvim)
 " - Neovim installed from HEAD
 " For LanguageClient_Neovim, the following available in $PATH:
-" - ElixirLS (https://github.com/JakeBecker/elixir-ls) or (https://github.com/elixir-lsp/elixir-ls)
+" - ElixirLS with `language_server.sh` as `elixir-ls` (https://github.com/elixir-lsp/elixir-ls)
 " - PyLS (ideally with all add-ons) available in (https://github.com/palantir/python-language-server)
 " - Sourcegraph JavaScript/TypeScript Language Server (https://github.com/sourcegraph/javascript-typescript-langserver)
 " - VSCode JSON Language server (https://github.com/vscode-langservers/vscode-json-languageserver)
@@ -269,7 +269,7 @@ let g:LanguageClient_rootMarkers = {
 
 " Setup individual Language Servers from $PATH
 let g:LanguageClient_serverCommands = {
-\   'elixir': ['elixir-ls.sh'],
+\   'elixir': ['elixir-ls'],
 \   'python': ['pyls'],
 \   'typescript': ['javascript-typescript-stdio'],
 \   'typescript.tsx': ['javascript-typescript-stdio'],
