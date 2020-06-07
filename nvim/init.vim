@@ -176,7 +176,7 @@ augroup END
 """"""""""""""""""
 
 " Add a space for all comments
-let NERDSpaceDelims=1
+let g:NERDSpaceDelims=1
 
 """"""""""""""""
 " Vim Closetag "
@@ -211,8 +211,8 @@ let g:lightline = {
 
 " Show the filename and the modified state in a single Lightline component
 function! LightlineFilename()
-  let filename = expand('%:t') !=# '' ? expand('%:t') : '[No Name]'
-  let modified = &modified ? ' +' : ''
+  let l:filename = expand('%:t') !=# '' ? expand('%:t') : '[No Name]'
+  let l:modified = &modified ? ' +' : ''
   return filename . modified
 endfunction
 
@@ -220,10 +220,10 @@ endfunction
 " This function gets its results from quickfix
 " `type` is a string that is either `'W'` (warning) or `'E'` (error)
 function! s:LCNVCountType(type)
-  let current_buf_number = bufnr('%')
-  let qflist = getqflist()
-  let current_buf_diagnostics = filter(qflist, {index, dict -> dict['bufnr'] == current_buf_number && dict['type'] == a:type})
-  let count = len(current_buf_diagnostics)
+  let l:current_buf_number = bufnr('%')
+  let l:qflist = getqflist()
+  let l:current_buf_diagnostics = filter(qflist, {index, dict -> dict['bufnr'] == current_buf_number && dict['type'] == a:type})
+  let l:count = len(current_buf_diagnostics)
   return count > 0 && g:LanguageClient_loaded ? a:type . ': ' . count : ''
 endfunction
 
@@ -344,7 +344,7 @@ augroup END
 """"""""""""
 
 " Tell Vim Test to use Dispatch Vim as the testing strategy
-let test#strategy = "dispatch"
+let g:test#strategy = "dispatch"
 
 """"""""""""
 " Vim JSON "
