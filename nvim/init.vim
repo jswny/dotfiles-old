@@ -62,7 +62,7 @@ nnoremap <leader>l :Lines<cr>
 " Specify a directory for plugins
 " - For Neovim: $HOME/.local/share/nvim/plugged
 " - Avoid using standard Vim directory names like 'plugin'
-call plug#begin(xdg_data_home.'/nvim/plugged')
+call plug#begin(g:xdg_data_home.'/nvim/plugged')
 
 " Editing
 Plug 'tpope/vim-endwise'
@@ -73,7 +73,7 @@ Plug 'alvan/vim-closetag'
 " Utilities
 Plug 'tpope/vim-fugitive'
 Plug 'airblade/vim-gitgutter'
-Plug xdg_data_home.'/fzf'
+Plug g:xdg_data_home.'/fzf'
 Plug 'junegunn/fzf.vim'
 Plug 'tpope/vim-dispatch'
 Plug 'janko-m/vim-test'
@@ -213,18 +213,18 @@ let g:lightline = {
 function! LightlineFilename()
   let l:filename = expand('%:t') !=# '' ? expand('%:t') : '[No Name]'
   let l:modified = &modified ? ' +' : ''
-  return filename . modified
+  return l:filename . l:modified
 endfunction
 
-" Define a function which returns a string with the count of a specific type of LanguageClient-Neovim diagnostic
+" Returns a string with the count of a specific type of LanguageClient-Neovim diagnostic
 " This function gets its results from quickfix
 " `type` is a string that is either `'W'` (warning) or `'E'` (error)
 function! s:LCNVCountType(type)
   let l:current_buf_number = bufnr('%')
   let l:qflist = getqflist()
-  let l:current_buf_diagnostics = filter(qflist, {index, dict -> dict['bufnr'] == current_buf_number && dict['type'] == a:type})
-  let l:count = len(current_buf_diagnostics)
-  return count > 0 && g:LanguageClient_loaded ? a:type . ': ' . count : ''
+  let l:current_buf_diagnostics = filter(l:qflist, {index, dict -> dict['bufnr'] == l:current_buf_number && dict['type'] == a:type})
+  let l:count = len(l:current_buf_diagnostics)
+  return l:count > 0 && g:LanguageClient_loaded ? a:type . ': ' . l:count : ''
 endfunction
 
 " Define a function for the LanguageClient-Neovim warning count
@@ -272,7 +272,7 @@ let g:float_preview#docked = 1
 " LanguageClient-Neovim "
 """""""""""""""""""""""""
 
-let g:LanguageClient_loggingFile = expand(xdg_cache_home.'/nvim/LanguageClient.log')
+let g:LanguageClient_loggingFile = expand(g:xdg_cache_home.'/nvim/LanguageClient.log')
 
 " Enable debugging
 let g:LanguageClient_loggingLevel = 'DEBUG'
@@ -297,7 +297,7 @@ let g:LanguageClient_serverCommands = {
 let g:LanguageClient_diagnosticsSignsMax = 0
 
 " Set the location for LCNV to load settings from
-let g:LanguageClient_settingsPath = xdg_config_home.'/nvim/lcnv-settings.json'
+let g:LanguageClient_settingsPath = g:xdg_config_home.'/nvim/lcnv-settings.json'
 
 " Use the LanguageClient-Neovim key bindings in appropriate file buffers only to avoid breaking normal functionality
 function s:SetLCNVKeyBindings()
@@ -327,8 +327,8 @@ endfunction
 
 " Check if a tsconfig.json file can be found by recursively searching up parent directories (until the root directory). Print a warning if one is not found
 function VerifyTypeScriptTSXConfigExists()
-  let currentDirectoryPath = getcwd()
-  if empty(findfile(glob("tsconfig.json"), currentDirectoryPath.';'))
+  let l:currentDirectoryPath = getcwd()
+  if empty(findfile(glob("tsconfig.json"), l:currentDirectoryPath.';'))
     call EchoWarning("You are opening a TSX file but no tsconfig.json could be found. TSX language server support requires a tsconfig.json file which specifies that TSX should be enabled.")
   endif
 endfunction()
