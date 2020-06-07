@@ -21,6 +21,27 @@
 " Set the script encoding (for multibyte characters) (http://rbtnn.hateblo.jp/entry/2014/12/28/010913)
 scriptencoding utf-8
 
+"""""""""""""""""""""""""
+" Environment Variables "
+"""""""""""""""""""""""""
+if !empty($XDG_CONFIG_HOME)
+  let g:xdg_config_home = $XDG_CONFIG_HOME
+else
+  let g:xdg_config_home = '$HOME/.config'
+endif
+
+if !empty($XDG_DATA_HOME)
+  let g:xdg_data_home = $XDG_DATA_HOME
+else
+  let g:xdg_data_home = '$HOME/.local/share'
+endif
+
+if !empty($XDG_CACHE_HOME)
+  let g:xdg_cache_home = $XDG_CACHE_HOME
+else
+  let g:xdg_cache_home = '$HOME/.cache'
+endif
+
 """"""""""""""""
 " Key Bindings "
 """"""""""""""""
@@ -38,14 +59,8 @@ nnoremap <leader>l :Lines<cr>
 " Plugins "
 """""""""""
 
-if !empty($XDG_DATA_HOME)
-  let g:xdg_data_home = $XDG_DATA_HOME
-else
-  let g:xdg_data_home = '~/.local/share'
-endif
-
 " Specify a directory for plugins
-" - For Neovim: ~/.local/share/nvim/plugged
+" - For Neovim: $HOME/.local/share/nvim/plugged
 " - Avoid using standard Vim directory names like 'plugin'
 call plug#begin(xdg_data_home.'/nvim/plugged')
 
@@ -257,7 +272,7 @@ let g:float_preview#docked = 1
 " LanguageClient-Neovim "
 """""""""""""""""""""""""
 
-let g:LanguageClient_loggingFile = expand('~/.cache/nvim/LanguageClient.log')
+let g:LanguageClient_loggingFile = expand(xdg_cache_home.'/nvim/LanguageClient.log')
 
 " Enable debugging
 let g:LanguageClient_loggingLevel = 'DEBUG'
@@ -282,7 +297,7 @@ let g:LanguageClient_serverCommands = {
 let g:LanguageClient_diagnosticsSignsMax = 0
 
 " Set the location for LCNV to load settings from
-let g:LanguageClient_settingsPath = '~/.config/nvim/lcnv-settings.json'
+let g:LanguageClient_settingsPath = xdg_config_home.'/nvim/lcnv-settings.json'
 
 " Use the LanguageClient-Neovim key bindings in appropriate file buffers only to avoid breaking normal functionality
 function s:SetLCNVKeyBindings()
