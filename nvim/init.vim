@@ -18,6 +18,9 @@
 " For the FZF plugin:
 " - FZF installed (https://github.com/junegunn/fzf) in the path specified in the plugin definition below
 
+" Set the script encoding (for multibyte characters) (http://rbtnn.hateblo.jp/entry/2014/12/28/010913)
+scriptencoding utf-8
+
 """"""""""""""""
 " Key Bindings "
 """"""""""""""""
@@ -136,11 +139,10 @@ set pumheight=10
 """"""""""""""
 
 " Automatically quit Vim if quickfix is the last open window
-autocmd BufEnter * call MyLastWindow()
-function! MyLastWindow()
-  " if the window is quickfix go on
+autocmd BufEnter * call QuitIfQuickfixLastWindow()
+function! QuitIfQuickfixLastWindow()
   if &buftype=="quickfix"
-    " if this window is last on screen quit without warning
+    " If this window is last on screen quit without warning
     if winbufnr(2) == -1
       quit!
     endif
@@ -184,16 +186,16 @@ let g:lightline = {
 \                [ 'lcnverrors', 'lcnvwarnings', 'filetype' ], ],
 \   },
 \   'component_function': {
-\     'filename': 'Lightline_filename',
+\     'filename': 'LightlineFilename',
 \     'gitbranch': 'fugitive#head',
-\     'lcnvwarnings': 'LCNV_warning_count',
-\     'lcnverrors': 'LCNV_error_count',
+\     'lcnvwarnings': 'LCNVWarningCount',
+\     'lcnverrors': 'LCNVErrorCount',
 \     'venv': 'virtualenv#statusline',
 \   },
 \ }
 
-" Define a function to show the filename and the modified state in a single component
-function! Lightline_filename()
+" Show the filename and the modified state in a single Lightline component
+function! LightlineFilename()
   let filename = expand('%:t') !=# '' ? expand('%:t') : '[No Name]'
   let modified = &modified ? ' +' : ''
   return filename . modified
@@ -202,7 +204,7 @@ endfunction
 " Define a function which returns a string with the count of a specific type of LanguageClient-Neovim diagnostic
 " This function gets its results from quickfix
 " `type` is a string that is either `'W'` (warning) or `'E'` (error)
-function! s:LCNV_count_type(type)
+function! s:LCNVCountType(type)
   let current_buf_number = bufnr('%')
   let qflist = getqflist()
   let current_buf_diagnostics = filter(qflist, {index, dict -> dict['bufnr'] == current_buf_number && dict['type'] == a:type})
@@ -211,13 +213,13 @@ function! s:LCNV_count_type(type)
 endfunction
 
 " Define a function for the LanguageClient-Neovim warning count
-function! LCNV_warning_count()
-  return s:LCNV_count_type('W')
+function! LCNVWarningCount()
+  return s:LCNVCountType('W')
 endfunction
 
 " Define a function for the LanguageClient-Neovim error count
-function! LCNV_error_count()
-  return s:LCNV_count_type('E')
+function! LCNVErrorCount()
+  return s:LCNVCountType('E')
 endfunction
 
 """"""""""""
