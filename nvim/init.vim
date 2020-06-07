@@ -154,7 +154,11 @@ set pumheight=10
 """"""""""""""
 
 " Automatically quit Vim if quickfix is the last open window
-autocmd BufEnter * call QuitIfQuickfixLastWindow()
+augroup quit_on_quickfix
+  autocmd!
+  autocmd BufEnter * call QuitIfQuickfixLastWindow()
+augroup END
+
 function! QuitIfQuickfixLastWindow()
   if &buftype=="quickfix"
     " If this window is last on screen quit without warning
