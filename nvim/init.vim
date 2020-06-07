@@ -219,7 +219,7 @@ endfunction
 " Returns a string with the count of a specific type of LanguageClient-Neovim diagnostic
 " This function gets its results from quickfix
 " `type` is a string that is either `'W'` (warning) or `'E'` (error)
-function! s:LCNVCountType(type)
+function! s:LCNVCountType(a:type)
   let l:current_buf_number = bufnr('%')
   let l:qflist = getqflist()
   let l:current_buf_diagnostics = filter(l:qflist, {index, dict -> dict['bufnr'] == l:current_buf_number && dict['type'] == a:type})
@@ -319,7 +319,7 @@ augroup LSP
 augroup END
 
 " Echo an arbitrary warning message
-function! EchoWarning(msg)
+function! EchoWarning(a:msg)
   echohl WarningMsg
   echo a:msg
   echohl None
