@@ -160,7 +160,7 @@ augroup quit_on_quickfix
 augroup END
 
 function! QuitIfQuickfixLastWindow()
-  if &buftype=="quickfix"
+  if &buftype =~? 'quickfix'
     " If this window is last on screen quit without warning
     if winbufnr(2) == -1
       quit!
@@ -250,10 +250,16 @@ let g:deoplete#enable_at_startup = 1
 
 " Automatically close the Deoplete preview window after completion
 " (https://github.com/Shougo/deoplete.nvim/issues/115)
-autocmd InsertLeave,CompleteDone * if pumvisible() == 0 | pclose | endif
+augroup close_deoplete_after_completion
+  autocmd!
+  autocmd InsertLeave,CompleteDone * if pumvisible() == 0 | pclose | endif
+augroup END
 
 " Disable Deoplete for markdown files
-autocmd bufread,bufnewfile *.md call deoplete#disable()
+augroup disable_deoplete_markdown
+  autocmd!
+  autocmd bufread,bufnewfile *.md call deoplete#disable()
+augroup END
 
 """""""""""
 " Echodoc "
@@ -332,8 +338,8 @@ endfunction
 " Check if a tsconfig.json file can be found by recursively searching up parent directories (until the root directory). Print a warning if one is not found
 function VerifyTypeScriptTSXConfigExists()
   let l:currentDirectoryPath = getcwd()
-  if empty(findfile(glob("tsconfig.json"), l:currentDirectoryPath.';'))
-    call EchoWarning("You are opening a TSX file but no tsconfig.json could be found. TSX language server support requires a tsconfig.json file which specifies that TSX should be enabled.")
+  if empty(findfile(glob('tsconfig.json'), l:currentDirectoryPath.';'))
+    call EchoWarning('You are opening a TSX file but no tsconfig.json could be found. TSX language server support requires a tsconfig.json file which specifies that TSX should be enabled.')
   endif
 endfunction()
 
@@ -348,7 +354,7 @@ augroup END
 """"""""""""
 
 " Tell Vim Test to use Dispatch Vim as the testing strategy
-let g:test#strategy = "dispatch"
+let g:test#strategy = 'dispatch'
 
 """"""""""""
 " Vim JSON "
