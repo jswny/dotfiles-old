@@ -170,7 +170,7 @@ endfunction
 
 " Automatically update folds on file open and after leaving insert mode
 " in order to fix folding in Elixir files
-augroup ElixirFixFolds
+augroup elixir_fix_folds
   autocmd!
   autocmd FileType elixir normal! zXzR
   autocmd FileType elixir autocmd InsertLeave * normal! zXzR
@@ -317,7 +317,7 @@ function s:SetLCNVKeyBindings()
   nnoremap <leader>lm :call LanguageClient_contextMenu()<CR>
 endfunction()
 
-augroup LSP
+augroup lcnv_bindings
   autocmd!
   autocmd FileType elixir,python,typescript,typescript.tsx,json,rust call s:SetLCNVKeyBindings()
 augroup END
@@ -337,7 +337,7 @@ function VerifyTypeScriptTSXConfigExists()
   endif
 endfunction()
 
-augroup LSPVerifyTSXConfig
+augroup lsp_verify_tsx_config
   autocmd!
   " The unsilent part needed in order to echo messages with a FileType autocmd (https://gitter.im/neovim/neovim?at=5db6863be886fb5aa20b6808)
   autocmd FileType typescript.tsx unsilent call VerifyTypeScriptTSXConfigExists()
