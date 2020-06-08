@@ -29,7 +29,7 @@ cd dotfiles
 scripts/setup
 ```
 
-## Custom Configuration
+## Local Configuration
 ### Fish
 - To add local Fish configuration, simply create a file `local.config.fish` and place it in the same directory as `config.fish`. From there, `config.fish` will source that file if it exists (after it has already run all of its own commands).
 
