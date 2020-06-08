@@ -14,11 +14,18 @@ env:
     - DIVE: "${HOME}/dive"
     - CI: "true"
 
+before_install:
+  - sudo apt-get update
+  - sudo apt-get install python3 python3-pip python3-setuptools
+
 install:
   - curl -sLo ${HADOLINT} "https://github.com/hadolint/hadolint/releases/download/v${HADOLINT_VERSION}/hadolint-$(uname -s)-$(uname -m)" && chmod 700 ${HADOLINT}
   - curl -sL "https://github.com/wagoodman/dive/releases/download/v${DIVE_VERSION}/dive_${DIVE_VERSION}_linux_amd64.tar.gz" | tar zx --directory ${HOME} && chmod 700 ${DIVE}
+  - pip3 install vim-vint
+
 script:
   - shellcheck scripts/*
+  - vint nvim/*.vim
   - ${HADOLINT} Dockerfile
   - docker build -t jswny/dotfiles . && ${DIVE} jswny/dotfiles
 

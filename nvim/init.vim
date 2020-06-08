@@ -10,13 +10,37 @@
 " - Neovim Python3 provider (pip3 install pynvim)
 " - Neovim installed from HEAD
 " For LanguageClient_Neovim, the following available in $PATH:
-" - ElixirLS (https://github.com/JakeBecker/elixir-ls) or (https://github.com/elixir-lsp/elixir-ls)
+" - ElixirLS with `language_server.sh` as `elixir-ls` (https://github.com/elixir-lsp/elixir-ls)
 " - PyLS (ideally with all add-ons) available in (https://github.com/palantir/python-language-server)
 " - Sourcegraph JavaScript/TypeScript Language Server (https://github.com/sourcegraph/javascript-typescript-langserver)
 " - VSCode JSON Language server (https://github.com/vscode-langservers/vscode-json-languageserver)
 " - RLS (https://github.com/rust-lang/rls)
 " For the FZF plugin:
 " - FZF installed (https://github.com/junegunn/fzf) in the path specified in the plugin definition below
+
+" Set the script encoding (for multibyte characters) (http://rbtnn.hateblo.jp/entry/2014/12/28/010913)
+scriptencoding utf-8
+
+"""""""""""""""""""""""""
+" Environment Variables "
+"""""""""""""""""""""""""
+if !empty($XDG_CONFIG_HOME)
+  let g:xdg_config_home = $XDG_CONFIG_HOME
+else
+  let g:xdg_config_home = '$HOME/.config'
+endif
+
+if !empty($XDG_DATA_HOME)
+  let g:xdg_data_home = $XDG_DATA_HOME
+else
+  let g:xdg_data_home = '$HOME/.local/share'
+endif
+
+if !empty($XDG_CACHE_HOME)
+  let g:xdg_cache_home = $XDG_CACHE_HOME
+else
+  let g:xdg_cache_home = '$HOME/.cache'
+endif
 
 """"""""""""""""
 " Key Bindings "
@@ -35,17 +59,10 @@ nnoremap <leader>l :Lines<cr>
 " Plugins "
 """""""""""
 
-if !empty($XDG_DATA_HOME)
-  let g:xdg_data_home = $XDG_DATA_HOME
-else
-  let g:xdg_data_home = '~/.local/share'
-endif
-
-
 " Specify a directory for plugins
-" - For Neovim: ~/.local/share/nvim/plugged
+" - For Neovim: $HOME/.local/share/nvim/plugged
 " - Avoid using standard Vim directory names like 'plugin'
-call plug#begin(xdg_data_home.'/nvim/plugged')
+call plug#begin(g:xdg_data_home . '/nvim/plugged')
 
 " Editing
 Plug 'tpope/vim-endwise'
@@ -56,7 +73,7 @@ Plug 'alvan/vim-closetag'
 " Utilities
 Plug 'tpope/vim-fugitive'
 Plug 'airblade/vim-gitgutter'
-Plug xdg_data_home.'/fzf'
+Plug g:xdg_data_home . '/fzf'
 Plug 'junegunn/fzf.vim'
 Plug 'tpope/vim-dispatch'
 Plug 'janko-m/vim-test'
@@ -137,11 +154,14 @@ set pumheight=10
 """"""""""""""
 
 " Automatically quit Vim if quickfix is the last open window
-autocmd BufEnter * call MyLastWindow()
-function! MyLastWindow()
-  " if the window is quickfix go on
-  if &buftype=="quickfix"
-    " if this window is last on screen quit without warning
+augroup quit_on_quickfix
+  autocmd!
+  autocmd BufEnter * call s:QuitIfQuickfixLastWindow()
+augroup END
+
+function! s:QuitIfQuickfixLastWindow()
+  if &buftype =~? 'quickfix'
+    " If this window is last on screen quit without warning
     if winbufnr(2) == -1
       quit!
     endif
@@ -150,7 +170,7 @@ endfunction
 
 " Automatically update folds on file open and after leaving insert mode
 " in order to fix folding in Elixir files
-augroup ElixirFixFolds
+augroup elixir_fix_folds
   autocmd!
   autocmd FileType elixir normal! zXzR
   autocmd FileType elixir autocmd InsertLeave * normal! zXzR
@@ -160,7 +180,7 @@ augroup END
 """"""""""""""""""
 
 " Add a space for all comments
-let NERDSpaceDelims=1
+let g:NERDSpaceDelims=1
 
 """"""""""""""""
 " Vim Closetag "
@@ -185,40 +205,40 @@ let g:lightline = {
 \                [ 'lcnverrors', 'lcnvwarnings', 'filetype' ], ],
 \   },
 \   'component_function': {
-\     'filename': 'Lightline_filename',
+\     'filename': 'LightlineFilename',
 \     'gitbranch': 'fugitive#head',
-\     'lcnvwarnings': 'LCNV_warning_count',
-\     'lcnverrors': 'LCNV_error_count',
+\     'lcnvwarnings': 'LCNVWarningCount',
+\     'lcnverrors': 'LCNVErrorCount',
 \     'venv': 'virtualenv#statusline',
 \   },
 \ }
 
-" Define a function to show the filename and the modified state in a single component
-function! Lightline_filename()
-  let filename = expand('%:t') !=# '' ? expand('%:t') : '[No Name]'
-  let modified = &modified ? ' +' : ''
-  return filename . modified
+" Show the filename and the modified state in a single Lightline component
+function! g:LightlineFilename()
+  let l:filename = expand('%:t') !=# '' ? expand('%:t') : '[No Name]'
+  let l:modified = &modified ? ' +' : ''
+  return l:filename . l:modified
 endfunction
 
-" Define a function which returns a string with the count of a specific type of LanguageClient-Neovim diagnostic
+" Returns a string with the count of a specific type of LanguageClient-Neovim diagnostic
 " This function gets its results from quickfix
 " `type` is a string that is either `'W'` (warning) or `'E'` (error)
-function! s:LCNV_count_type(type)
-  let current_buf_number = bufnr('%')
-  let qflist = getqflist()
-  let current_buf_diagnostics = filter(qflist, {index, dict -> dict['bufnr'] == current_buf_number && dict['type'] == a:type})
-  let count = len(current_buf_diagnostics)
-  return count > 0 && g:LanguageClient_loaded ? a:type . ': ' . count : ''
+function! s:LCNVCountType(type)
+  let l:current_buf_number = bufnr('%')
+  let l:qflist = getqflist()
+  let l:current_buf_diagnostics = filter(l:qflist, {index, dict -> dict['bufnr'] == l:current_buf_number && dict['type'] == a:type})
+  let l:count = len(l:current_buf_diagnostics)
+  return l:count > 0 && g:LanguageClient_loaded ? a:type . ': ' . l:count : ''
 endfunction
 
-" Define a function for the LanguageClient-Neovim warning count
-function! LCNV_warning_count()
-  return s:LCNV_count_type('W')
+" LanguageClient-Neovim warning count
+function! g:LCNVWarningCount()
+  return s:LCNVCountType('W')
 endfunction
 
-" Define a function for the LanguageClient-Neovim error count
-function! LCNV_error_count()
-  return s:LCNV_count_type('E')
+" LanguageClient-Neovim error count
+function! g:LCNVErrorCount()
+  return s:LCNVCountType('E')
 endfunction
 
 """"""""""""
@@ -230,10 +250,16 @@ let g:deoplete#enable_at_startup = 1
 
 " Automatically close the Deoplete preview window after completion
 " (https://github.com/Shougo/deoplete.nvim/issues/115)
-autocmd InsertLeave,CompleteDone * if pumvisible() == 0 | pclose | endif
+augroup close_deoplete_after_completion
+  autocmd!
+  autocmd InsertLeave,CompleteDone * if pumvisible() == 0 | pclose | endif
+augroup END
 
 " Disable Deoplete for markdown files
-autocmd bufread,bufnewfile *.md call deoplete#disable()
+augroup disable_deoplete_markdown
+  autocmd!
+  autocmd bufread,bufnewfile *.md call deoplete#disable()
+augroup END
 
 """""""""""
 " Echodoc "
@@ -256,7 +282,7 @@ let g:float_preview#docked = 1
 " LanguageClient-Neovim "
 """""""""""""""""""""""""
 
-let g:LanguageClient_loggingFile = expand('~/.cache/nvim/LanguageClient.log')
+let g:LanguageClient_loggingFile = expand(g:xdg_cache_home . '/nvim/LanguageClient.log')
 
 " Enable debugging
 let g:LanguageClient_loggingLevel = 'DEBUG'
@@ -268,7 +294,7 @@ let g:LanguageClient_rootMarkers = {
 
 " Setup individual Language Servers from $PATH
 let g:LanguageClient_serverCommands = {
-\   'elixir': ['elixir-ls.sh'],
+\   'elixir': ['elixir-ls'],
 \   'python': ['pyls'],
 \   'typescript': ['javascript-typescript-stdio'],
 \   'typescript.tsx': ['javascript-typescript-stdio'],
@@ -281,7 +307,7 @@ let g:LanguageClient_serverCommands = {
 let g:LanguageClient_diagnosticsSignsMax = 0
 
 " Set the location for LCNV to load settings from
-let g:LanguageClient_settingsPath = '~/.config/nvim/lcnv-settings.json'
+let g:LanguageClient_settingsPath = g:xdg_config_home . '/nvim/lcnv-settings.json'
 
 " Use the LanguageClient-Neovim key bindings in appropriate file buffers only to avoid breaking normal functionality
 function s:SetLCNVKeyBindings()
@@ -297,31 +323,30 @@ function s:SetLCNVKeyBindings()
   nnoremap <leader>lm :call LanguageClient_contextMenu()<CR>
 endfunction()
 
-augroup LSP
+augroup lcnv_bindings
   autocmd!
   autocmd FileType elixir,python,typescript,typescript.tsx,json,rust call s:SetLCNVKeyBindings()
 augroup END
 
 " Echo an arbitrary warning message
-function! EchoWarning(msg)
+function! s:EchoWarning(msg)
   echohl WarningMsg
   echo a:msg
   echohl None
 endfunction
 
 " Check if a tsconfig.json file can be found by recursively searching up parent directories (until the root directory). Print a warning if one is not found
-function VerifyTypeScriptTSXConfigExists()
-  let currentDirectoryPath = getcwd()
-  if empty(findfile(glob("tsconfig.json"), currentDirectoryPath.';'))
-    call EchoWarning("You are opening a TSX file but no tsconfig.json could be found. TSX language server support requires a tsconfig.json file which specifies that TSX should be enabled.")
+function s:VerifyTypeScriptTSXConfigExists()
+  let l:currentDirectoryPath = getcwd()
+  if empty(findfile(glob('tsconfig.json'), l:currentDirectoryPath . ';'))
+    call s:EchoWarning('You are opening a TSX file but no tsconfig.json could be found. TSX language server support requires a tsconfig.json file which specifies that TSX should be enabled.')
   endif
 endfunction()
 
-
-augroup LSPVerifyTSXConfig
+augroup lsp_verify_tsx_config
   autocmd!
   " The unsilent part needed in order to echo messages with a FileType autocmd (https://gitter.im/neovim/neovim?at=5db6863be886fb5aa20b6808)
-  autocmd FileType typescript.tsx unsilent call VerifyTypeScriptTSXConfigExists()
+  autocmd FileType typescript.tsx unsilent call s:VerifyTypeScriptTSXConfigExists()
 augroup END
 
 """"""""""""
@@ -329,7 +354,7 @@ augroup END
 """"""""""""
 
 " Tell Vim Test to use Dispatch Vim as the testing strategy
-let test#strategy = "dispatch"
+let g:test#strategy = 'dispatch'
 
 """"""""""""
 " Vim JSON "
