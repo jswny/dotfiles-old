@@ -62,7 +62,7 @@ nnoremap <leader>l :Lines<cr>
 " Specify a directory for plugins
 " - For Neovim: $HOME/.local/share/nvim/plugged
 " - Avoid using standard Vim directory names like 'plugin'
-call plug#begin(g:xdg_data_home.'/nvim/plugged')
+call plug#begin(g:xdg_data_home . '/nvim/plugged')
 
 " Editing
 Plug 'tpope/vim-endwise'
@@ -73,7 +73,7 @@ Plug 'alvan/vim-closetag'
 " Utilities
 Plug 'tpope/vim-fugitive'
 Plug 'airblade/vim-gitgutter'
-Plug g:xdg_data_home.'/fzf'
+Plug g:xdg_data_home . '/fzf'
 Plug 'junegunn/fzf.vim'
 Plug 'tpope/vim-dispatch'
 Plug 'janko-m/vim-test'
@@ -282,7 +282,7 @@ let g:float_preview#docked = 1
 " LanguageClient-Neovim "
 """""""""""""""""""""""""
 
-let g:LanguageClient_loggingFile = expand(g:xdg_cache_home.'/nvim/LanguageClient.log')
+let g:LanguageClient_loggingFile = expand(g:xdg_cache_home . '/nvim/LanguageClient.log')
 
 " Enable debugging
 let g:LanguageClient_loggingLevel = 'DEBUG'
@@ -307,7 +307,7 @@ let g:LanguageClient_serverCommands = {
 let g:LanguageClient_diagnosticsSignsMax = 0
 
 " Set the location for LCNV to load settings from
-let g:LanguageClient_settingsPath = g:xdg_config_home.'/nvim/lcnv-settings.json'
+let g:LanguageClient_settingsPath = g:xdg_config_home . '/nvim/lcnv-settings.json'
 
 " Use the LanguageClient-Neovim key bindings in appropriate file buffers only to avoid breaking normal functionality
 function s:SetLCNVKeyBindings()
@@ -338,7 +338,7 @@ endfunction
 " Check if a tsconfig.json file can be found by recursively searching up parent directories (until the root directory). Print a warning if one is not found
 function s:VerifyTypeScriptTSXConfigExists()
   let l:currentDirectoryPath = getcwd()
-  if empty(findfile(glob('tsconfig.json'), l:currentDirectoryPath.';'))
+  if empty(findfile(glob('tsconfig.json'), l:currentDirectoryPath . ';'))
     call s:EchoWarning('You are opening a TSX file but no tsconfig.json could be found. TSX language server support requires a tsconfig.json file which specifies that TSX should be enabled.')
   endif
 endfunction()
