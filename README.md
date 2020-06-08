@@ -33,6 +33,9 @@ scripts/setup
 ### Fish
 - To add local Fish configuration, simply create a file `local.config.fish` and place it in the same directory as `config.fish`. From there, `config.fish` will source that file if it exists (after it has already run all of its own commands).
 
+### Tmux
+- To add local Tmux configuration, simply create a file `local.tmux.conf` and place it in the same directory as `tmux.conf`. From there, `tmux.conf` will source that file if it exists (after it has already run all of its own commands). You can use the custom variables generated in `tmux.conf` in `local.tmux.conf` to easily cusomize Tmux.
+
 ## Docker
 This repository contains a `Dockerfile` which you can use to test out these dotfiles. This will build an Ubuntu-based docker image and run it for you:
 `docker build -t jswny/dotfiles . && docker run -it jswny/dotfiles`
