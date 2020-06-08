@@ -214,7 +214,7 @@ let g:lightline = {
 \ }
 
 " Show the filename and the modified state in a single Lightline component
-function! LightlineFilename()
+function! g:LightlineFilename()
   let l:filename = expand('%:t') !=# '' ? expand('%:t') : '[No Name]'
   let l:modified = &modified ? ' +' : ''
   return l:filename . l:modified
@@ -232,12 +232,12 @@ function! s:LCNVCountType(type)
 endfunction
 
 " LanguageClient-Neovim warning count
-function! LCNVWarningCount()
+function! g:LCNVWarningCount()
   return s:LCNVCountType('W')
 endfunction
 
 " LanguageClient-Neovim error count
-function! LCNVErrorCount()
+function! g:LCNVErrorCount()
   return s:LCNVCountType('E')
 endfunction
 
@@ -329,7 +329,7 @@ augroup lcnv_bindings
 augroup END
 
 " Echo an arbitrary warning message
-function! EchoWarning(msg)
+function! s:EchoWarning(msg)
   echohl WarningMsg
   echo a:msg
   echohl None
@@ -339,7 +339,7 @@ endfunction
 function s:VerifyTypeScriptTSXConfigExists()
   let l:currentDirectoryPath = getcwd()
   if empty(findfile(glob('tsconfig.json'), l:currentDirectoryPath.';'))
-    call EchoWarning('You are opening a TSX file but no tsconfig.json could be found. TSX language server support requires a tsconfig.json file which specifies that TSX should be enabled.')
+    call s:EchoWarning('You are opening a TSX file but no tsconfig.json could be found. TSX language server support requires a tsconfig.json file which specifies that TSX should be enabled.')
   endif
 endfunction()
 
