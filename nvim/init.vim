@@ -156,10 +156,10 @@ set pumheight=10
 " Automatically quit Vim if quickfix is the last open window
 augroup quit_on_quickfix
   autocmd!
-  autocmd BufEnter * call QuitIfQuickfixLastWindow()
+  autocmd BufEnter * call s:QuitIfQuickfixLastWindow()
 augroup END
 
-function! QuitIfQuickfixLastWindow()
+function! s:QuitIfQuickfixLastWindow()
   if &buftype =~? 'quickfix'
     " If this window is last on screen quit without warning
     if winbufnr(2) == -1
@@ -231,12 +231,12 @@ function! s:LCNVCountType(type)
   return l:count > 0 && g:LanguageClient_loaded ? a:type . ': ' . l:count : ''
 endfunction
 
-" Define a function for the LanguageClient-Neovim warning count
+" LanguageClient-Neovim warning count
 function! LCNVWarningCount()
   return s:LCNVCountType('W')
 endfunction
 
-" Define a function for the LanguageClient-Neovim error count
+" LanguageClient-Neovim error count
 function! LCNVErrorCount()
   return s:LCNVCountType('E')
 endfunction
@@ -336,7 +336,7 @@ function! EchoWarning(msg)
 endfunction
 
 " Check if a tsconfig.json file can be found by recursively searching up parent directories (until the root directory). Print a warning if one is not found
-function VerifyTypeScriptTSXConfigExists()
+function s:VerifyTypeScriptTSXConfigExists()
   let l:currentDirectoryPath = getcwd()
   if empty(findfile(glob('tsconfig.json'), l:currentDirectoryPath.';'))
     call EchoWarning('You are opening a TSX file but no tsconfig.json could be found. TSX language server support requires a tsconfig.json file which specifies that TSX should be enabled.')
@@ -346,7 +346,7 @@ endfunction()
 augroup lsp_verify_tsx_config
   autocmd!
   " The unsilent part needed in order to echo messages with a FileType autocmd (https://gitter.im/neovim/neovim?at=5db6863be886fb5aa20b6808)
-  autocmd FileType typescript.tsx unsilent call VerifyTypeScriptTSXConfigExists()
+  autocmd FileType typescript.tsx unsilent call s:VerifyTypeScriptTSXConfigExists()
 augroup END
 
 """"""""""""
