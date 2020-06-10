@@ -1,9 +1,5 @@
 name: Shellcheck
-on:
-  push:
-    branches:
-      - master
-      - develop
+on: [push]
 
 jobs:
   shellcheck:
