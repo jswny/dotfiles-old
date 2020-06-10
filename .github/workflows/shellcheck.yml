@@ -7,7 +7,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Install Shellcheck 
+      - name: Install Shellcheck
         run: sudo apt-get install shellcheck
-      - name: Run Shellcheck on scripts/*
+      - name: Run Shellcheck
         run: shellcheck scripts/*
