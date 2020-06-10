@@ -1,13 +1,11 @@
-name: Shellcheck
+name: ShellCheck
 on: [push]
 
 jobs:
   shellcheck:
-    name: Shellcheck
+    name: ShellCheck
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Install Shellcheck
-        run: sudo apt-get install shellcheck
-      - name: Run Shellcheck
-        run: shellcheck scripts/*
+      - name: Run ShellCheck
+        uses: ludeeus/action-shellcheck@master
