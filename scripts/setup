@@ -317,8 +317,9 @@ fi
 
 # Symlink Fish files
 log 'info' 'Symlinking fish files...'
-ensure_exists_and_symlink "$dotfiles_path/fish/config.fish" "$XDG_CONFIG_HOME/fish/config.fish"
-fishfile_path="$XDG_CONFIG_HOME/fish/fishfile"
+fish_config_path="$XDG_CONFIG_HOME/fish"
+ensure_exists_and_symlink "$dotfiles_path/fish/config.fish" "$fish_config_path/config.fish"
+fishfile_path="$fish_config_path/fishfile"
 ensure_exists_and_symlink "$dotfiles_path/fish/fishfile" "$fishfile_path"
 
 # Add Brew source to local fish configuration if the line doesn't already exist in the file
@@ -394,3 +395,27 @@ nvim --headless '+PlugInstall --sync' +qa &> "$vim_plug_install_log_path"
 dircolors_solarized_path="$PACKAGE_SOURCE_HOME/dircolors-solarized"
 log 'info' "Installing dircolors-solarized to \"$dircolors_solarized_path\""
 git clone --depth 1 https://github.com/seebi/dircolors-solarized.git "$dircolors_solarized_path"
+
+# Setup Rebar and Hex
+if ! check_executable 'mix'; then
+  log 'error' 'Cannot install Rebar and Hex because mix executable is missing!'
+  exit 1
+fi
+
+log 'info' 'Installing Rebar via Mix...'
+mix local.rebar --force
+
+log 'info' 'Installing Hex via Mix...'
+mix local.hex --force
+
+# Setup Elixir LS
+elixir_ls_path="$PACKAGE_SOURCE_HOME/elixir-ls"
+log 'info' "Installing Elixir LS to \"$elixir_ls_path\"..."
+git clone --depth 1 https://github.com/elixir-lsp/elixir-ls.git "$elixir_ls_path"
+cd "$elixir_ls_path"
+mix deps.get
+mix deps.compile
+mix elixir_ls.release
+ln -s "$elixir_ls_path/release/language_server.sh" "$elixir_ls_path/release/elixir-ls"
+# shellcheck disable=SC2016
+echo set -g fish_user_paths "$elixir_ls_path/release" '$fish_user_paths' >> "$fish_config_path/local.config.fish"
