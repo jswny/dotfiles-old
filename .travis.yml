@@ -8,6 +8,7 @@ services:
 env:
   global:
     - DOCKER_IMAGE_NAME: "jswny/dotfiles"
+    - DOCKER_IMAGE_TAG: $([ "$TRAVIS_BRANCH" = "master" ] && echo "stable" || echo "latest")
     - HADOLINT_VERSION: "1.17.5"
     - DIVE_VERSION: "0.9.2"
     - HADOLINT: "${HOME}/hadolint"
@@ -27,14 +28,15 @@ script:
   - shellcheck scripts/*
   - vint nvim/*.vim
   - ${HADOLINT} Dockerfile
-  - if [ "$TRAVIS_BRANCH" = "master" ]; then DOCKER_IMAGE_TAG="stable"; else DOCKER_IMAGE_TAG="latest"; fi
+  - echo "Docker image tag ${DOCKER_IMAGE_TAG}"
   - docker build -t jswny/dotfiles . && ${DIVE} jswny/dotfiles
 
 deploy:
   - provider: script
     script: echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin && docker push "$DOCKER_IMAGE_NAME:$DOCKER_IMAGE_TAG"
     on:
-      branch: master
+      all_branches: true
+      condition: $TRAVIS_BRANCH =~ ^(develop|master)$
 
 branches:
   only:
