@@ -79,6 +79,8 @@ RUN useradd --create-home ${USER} \
 #     git-delta \
 #     thefuck \
 #     python \
+#     erlang \
+#     elixir \
 #     && chown -R user1:user1 /home/linuxbrew
 
 # Add dotfiles into the container and run setup
