@@ -1,0 +1,16 @@
+name: Shellcheck
+on:
+  push:
+    branches:
+      - master
+      - develop
+
+jobs:
+  shellcheck:
+    name: Shellcheck
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install Shellcheck 
+        run: apt-get install shellcheck
+      - name: Run Shellcheck on scripts/*
+        run: shellcheck scripts/*
