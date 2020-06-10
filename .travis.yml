@@ -27,11 +27,12 @@ script:
   - shellcheck scripts/*
   - vint nvim/*.vim
   - ${HADOLINT} Dockerfile
+  - if [ "$TRAVIS_BRANCH" = "master" ]; then DOCKER_IMAGE_TAG="stable"; else DOCKER_IMAGE_TAG="latest"; fi
   - docker build -t jswny/dotfiles . && ${DIVE} jswny/dotfiles
 
 deploy:
   - provider: script
-    script: echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin && docker push "$DOCKER_IMAGE_NAME"
+    script: echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin && docker push "$DOCKER_IMAGE_NAME:$DOCKER_IMAGE_TAG"
     on:
       branch: master
 
