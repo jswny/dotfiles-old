@@ -394,3 +394,15 @@ nvim --headless '+PlugInstall --sync' +qa &> "$vim_plug_install_log_path"
 dircolors_solarized_path="$PACKAGE_SOURCE_HOME/dircolors-solarized"
 log 'info' "Installing dircolors-solarized to \"$dircolors_solarized_path\""
 git clone --depth 1 https://github.com/seebi/dircolors-solarized.git "$dircolors_solarized_path"
+
+# Setup Rebar and Hex
+if ! check_executable 'mix'; then
+  log 'error' 'Cannot install Rebar and Hex because mix executable is missing!'
+  exit 1
+fi
+
+log 'info' 'Installing Rebar via Mix...'
+mix local.rebar --force
+
+log 'info' 'Installing Hex via Mix...'
+mix local.hex --force
