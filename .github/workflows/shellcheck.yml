@@ -7,6 +7,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Install Shellcheck 
-        run: apt-get install shellcheck
+        run: sudo apt-get install shellcheck
       - name: Run Shellcheck on scripts/*
         run: shellcheck scripts/*
