@@ -12,6 +12,6 @@ jobs:
         with:
           python-version: '3.8'
       - name: Install Vint
-        run: pip install vint
+        run: pip install vim-vint
       - name: Run Vint
         run: vint nvim/*.vim
