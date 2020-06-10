@@ -26,7 +26,7 @@ Run the setup script:
 ```sh
 git clone https://github.com/jswny/dotfiles.git
 cd dotfiles
-scripts/setup
+scripts/setup.sh
 ```
 
 ## Local Configuration
