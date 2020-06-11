@@ -1,4 +1,4 @@
-name: Test and Deploy
+name: Deploy
 on:
   push:
     branches:
@@ -6,8 +6,8 @@ on:
       - develop
 
 jobs:
-  docker_build:
-    name: Docker Build
+  docker_push:
+    name: Push to Docker Hub
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
