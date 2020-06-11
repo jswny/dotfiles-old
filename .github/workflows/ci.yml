@@ -37,6 +37,7 @@ jobs:
         with:
           repository: ${{ github.repository }}
           push: false
+      - run: docker images
   docker_build_push:
     name: Docker Build and Push
     runs-on: ubuntu-latest
