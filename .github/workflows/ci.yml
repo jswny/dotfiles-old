@@ -1,4 +1,4 @@
-name: Lint and Test
+name: CI
 on: [push]
 
 jobs:
@@ -30,9 +30,23 @@ jobs:
   docker_build:
     name: Docker Build
     runs-on: ubuntu-latest
+    if: ${{ github.ref != 'refs/heads/master' || github.ref != 'refs/heads/develop' }}
     steps:
       - uses: actions/checkout@v2
       - uses: docker/build-push-action@v1
         with:
           repository: ${{ github.repository }}
           push: false
+  docker_build_push:
+    name: Docker Build and Push
+    runs-on: ubuntu-latest
+    if: ${{ github.ref == 'refs/heads/master' || github.ref == 'refs/heads/develop' }}
+    steps:
+      - uses: actions/checkout@v2
+      - uses: docker/build-push-action@v1
+        with:
+          repository: ${{ github.repository }}
+          tag_with_ref: true
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
