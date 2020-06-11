@@ -13,5 +13,5 @@ jobs:
       - uses: actions/checkout@v2
       - uses: docker/build-push-action@v1
         with:
-          repository: jswny/dotfiles
+          repository: ${{ github.repository }}
           push: false
