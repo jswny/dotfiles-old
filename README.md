@@ -1,4 +1,4 @@
-# Dotfiles ![Lint and Test](https://github.com/jswny/dotfiles/workflows/Lint%20and%20Test/badge.svg) [![Docker Pulls](https://img.shields.io/docker/pulls/jswny/dotfiles)](https://hub.docker.com/r/jswny/dotfiles)
+# Dotfiles ![CI](https://github.com/jswny/dotfiles/workflows/CI/badge.svg) [![Docker Pulls](https://img.shields.io/docker/pulls/jswny/dotfiles)](https://hub.docker.com/r/jswny/dotfiles)
 These are my personal dotfiles which I use on a daily basis on MacOS!
 
 ![Screenshot](images/screenshot.png)
