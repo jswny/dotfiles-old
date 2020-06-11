@@ -1,4 +1,4 @@
-# Dotfiles [![Build Status](https://travis-ci.com/jswny/dotfiles.svg?branch=master)](https://travis-ci.com/jswny/dotfiles) [![Docker Pulls](https://img.shields.io/docker/pulls/jswny/dotfiles)](https://hub.docker.com/r/jswny/dotfiles)
+# Dotfiles ![Lint](https://github.com/jswny/dotfiles/workflows/Lint/badge.svg) ![Test](https://github.com/jswny/dotfiles/workflows/Test/badge.svg) [![Docker Pulls](https://img.shields.io/docker/pulls/jswny/dotfiles)](https://hub.docker.com/r/jswny/dotfiles)
 These are my personal dotfiles which I use on a daily basis on MacOS!
 
 ![Screenshot](images/screenshot.png)
@@ -26,7 +26,7 @@ Run the setup script:
 ```sh
 git clone https://github.com/jswny/dotfiles.git
 cd dotfiles
-scripts/setup
+scripts/setup.sh
 ```
 
 ## Local Configuration
