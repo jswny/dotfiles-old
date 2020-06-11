@@ -1,6 +1,9 @@
 name: Lint
 on: [push]
 
+env:
+  DOCKER_IMAGE_TAG: $([ "$TRAVIS_BRANCH" = "master" ] && echo "stable" || echo "latest")
+
 jobs:
   shellcheck:
     name: ShellCheck
@@ -36,5 +39,5 @@ jobs:
       - uses: docker/build-push-action@v1
         with:
           repository: jswny/dotfiles
-          tags: $([ "$TRAVIS_BRANCH" = "master" ] && echo "stable" || echo "latest")
+          tags: $DOCKER_IMAGE_TAG
           push: false
