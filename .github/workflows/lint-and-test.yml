@@ -1,4 +1,4 @@
-name: Lint
+name: Lint and Test
 on: [push]
 
 jobs:
@@ -29,7 +29,7 @@ jobs:
       - uses: actions/checkout@v2
       - uses: brpaz/hadolint-action@master
   docker_build:
-    name: Docker build
+    name: Docker Build
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
