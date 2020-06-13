@@ -57,7 +57,7 @@ get_parent_directory() {
 # - 'warn'
 # - 'error': echos to STDERR
 log() {
-  local prefix_spacer="-----"
+  local prefix_spacer='-----'
   local prefix="$prefix_spacer [$script_name]"
   if [ "$1" = 'debug' ]; then
     if [ "$debug" = 1 ]; then
