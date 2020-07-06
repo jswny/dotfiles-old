@@ -9,6 +9,12 @@ jobs:
       - uses: actions/checkout@v2
       - name: Run ShellCheck
         uses: ludeeus/action-shellcheck@0.3.0
+  shell-lint:
+    name: Shell lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - run: scripts/lint.sh scripts/*.sh
   vint:
     name: Vint
     runs-on: ubuntu-latest
