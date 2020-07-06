@@ -10,6 +10,12 @@ XDG_CONFIG_HOME=${XDG_CONFIG_HOME:-"$HOME/.config"}
 XDG_DATA_HOME=${XDG_DATA_HOME:-"$HOME/.local/share"}
 XDG_CACHE_HOME=${XDG_CACHE_HOME:-"$HOME/.cache"}
 
+# Ensure environment variables are set for Brew
+# It will error out trying to append to these if they aren't already set
+PATH="${PATH:-}"
+MANPATH="${MANPATH:-}"
+INFOPATH="${INFOPATH:-}"
+
 # Where to install source code for packages and other tools
 PACKAGE_SOURCE_HOME=${PACKAGE_SOURCE_HOME-"$HOME/.local/src"}
 
