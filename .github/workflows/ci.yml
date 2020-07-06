@@ -8,7 +8,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Run ShellCheck
-        uses: ludeeus/action-shellcheck@v0.3.0
+        uses: ludeeus/action-shellcheck@0.3.0
   vint:
     name: Vint
     runs-on: ubuntu-latest
