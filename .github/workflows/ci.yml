@@ -9,8 +9,10 @@ jobs:
       - uses: actions/checkout@v2
       - name: Run ShellCheck
         uses: ludeeus/action-shellcheck@0.3.0
+        with:
+          check_together: 'yes'
   shell-lint:
-    name: Shell lint
+    name: Shell Lint
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
