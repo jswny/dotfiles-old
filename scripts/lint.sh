@@ -24,7 +24,9 @@ EOF
 }
 
 grep_wrapper() {
-  grep --color=always -n -E "${1}" < "${2}"
+  log 'debug' "thing: ${1}, ${2}"
+  grep --color=always -n -E "${1}" < "${2}" || true
+  log 'debug' 'here'
 }
 
 check_lint_result() {
@@ -46,6 +48,7 @@ lint_file() {
   # Variables without brackets
   log 'info' 'Checking for variables without brackets...'
   grep_wrapper '\$([A-z]|[0-9])+' "${target}"
+  log 'debug' 'here'
 
   check_lint_result
 
