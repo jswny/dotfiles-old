@@ -1,12 +1,11 @@
 #!/usr/bin/env bash
 # shellcheck disable=SC2016
+# Runs custom linting rules on a specified input
 
 script_name="$(basename "$0")"
 
 # shellcheck source=scripts/common.sh
 source "$(dirname "${0}")"/common.sh
-
-# Runs custom linting rules on a specified input
 
 set -euo pipefail
 

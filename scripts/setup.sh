@@ -1,6 +1,11 @@
 #!/usr/bin/env bash
-
 # Script to setup everything needed for this dotfiles setup
+
+# Name of the script only
+script_name="$(basename "$0")"
+
+# shellcheck source=scripts/common.sh
+source "$(dirname "${0}")"/common.sh
 
 # Exit on any error, undefined variable, or pipe failure 
 set -euo pipefail
@@ -175,9 +180,6 @@ ensure_line_exists() {
 symlink_tmux_conf_non_xdg() {
   ensure_exists_and_symlink "$dotfiles_path/tmux/tmux.conf" "$HOME/.tmux.conf"
 }
-
-# Basic setup
-script_name="$(basename "$0")"
 
 get_parent_directory "$0"
 script_path="$parent_directory"
