@@ -29,17 +29,11 @@ grep_wrapper() {
 
 check_lint_result() {
   if [ "${?}" = 0 ]; then
-    log 'error' 'Lint failed!'
-  else
-    log 'info' 'Lint succeeded!'
-  fi
-  
-  if [ "${any_lint_failed_current_file}" = '1' ] || [ "${?}" = 0 ]; then
+    log 'debug' 'Lint failed!'
     any_lint_failed_current_file=1
-  fi
-
-  if [ "${any_lint_failed}" = '1' ] || [ "${?}" = 0 ]; then
     any_lint_failed=1
+  else
+    log 'debug' 'Lint succeeded!'
   fi
 }
 
@@ -51,12 +45,11 @@ lint_file() {
 
   # Variables without brackets
   log 'info' 'Checking for variables without brackets...'
-  # grep --color=always -n -E '\$([A-z]|[0-9])+' < "${target}"
   grep_wrapper '\$([A-z]|[0-9])+' "${target}"
 
   check_lint_result
 
-  if [ "${any_lint_failed_current_file}" = 0 ]; then
+  if [ "${any_lint_failed_current_file}" = 1 ]; then
     log 'error' "Linting failed for file \"${target}\"!"
   else
     log 'info' "Linting succeeded for file \"${target}\"!"
@@ -97,8 +90,10 @@ for opt in "${files_to_lint[@]}"; do
   lint_file "${opt}"
 done
 
-if [ "${any_lint_failed}" = 0 ]; then
+if [ "${any_lint_failed}" = 1 ]; then
   log 'error' 'Linting failed!'
 else
   log 'info' 'Linting succeeded!'
 fi
+
+exit "${any_lint_failed}"
