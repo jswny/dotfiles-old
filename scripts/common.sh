@@ -4,6 +4,10 @@
 
 set -euo pipefail
 
+# Default variable values
+debug=0
+script_name="$(basename "$0")"
+
 # Log a message at different levels
 # Valid levels (first argument) are:
 # - 'debug': only shown when $debug is 1
