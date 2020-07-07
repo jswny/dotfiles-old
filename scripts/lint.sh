@@ -23,6 +23,10 @@ usage: ${0} [OPTIONS] file(s)
 EOF
 }
 
+grep_wrapper() {
+  grep --color=always -n -E "${1}" < "${2}"
+}
+
 check_lint_result() {
   if [ "${?}" = 0 ]; then
     log 'error' 'Lint failed!'
@@ -47,7 +51,8 @@ lint_file() {
 
   # Variables without brackets
   log 'info' 'Checking for variables without brackets...'
-  grep --color=always -n -E '\$([A-z]|[0-9])+' < "${target}"
+  # grep --color=always -n -E '\$([A-z]|[0-9])+' < "${target}"
+  grep_wrapper '\$([A-z]|[0-9])+' "${target}"
 
   check_lint_result
 
