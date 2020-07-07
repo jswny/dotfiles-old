@@ -46,7 +46,7 @@ lint_file() {
 
   # Variables without brackets
   log 'info' 'Checking for variables without brackets...'
-  grep --color=always -E '\$([A-z]|[0-9])+' < "${target}"
+  grep --color=always -n -E '\$([A-z]|[0-9])+' < "${target}"
 
   check_lint_result
 
@@ -56,8 +56,6 @@ lint_file() {
     log 'info' "Linting succeeded for file \"${target}\"!"
   fi
 }
-
-echo args: $@
 
 # Parse command-line options
 for opt in "$@"; do
@@ -79,7 +77,6 @@ for opt in "$@"; do
 
       if check_file_exists "${opt}"; then
         files_to_lint+=("${opt}")
-        echo $files_to_lint
         log 'debug' "Added \"${opt}\" to the list of files to lint"
       else
         log 'error' "The path \"${opt}\" is not a valid file!"
@@ -89,8 +86,8 @@ for opt in "$@"; do
   esac
 done
 
-log 'debug' "Files to lint: \"${files_to_lint}\""
-for opt in "${files_to_lint}"; do
+log 'debug' "Files to lint: \"${files_to_lint[*]}\""
+for opt in "${files_to_lint[@]}"; do
   lint_file "${opt}"
 done
 
