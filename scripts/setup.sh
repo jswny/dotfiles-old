@@ -40,9 +40,9 @@ EOF
 
 # Detect the OS currently running this script
 detect_os() {
-  if [[ "$OSTYPE" == "linux-gnu" ]]; then
+  if [[ "$OSTYPE" == 'linux-gnu' ]]; then
     os='linux'
-  elif [[ "$OSTYPE" == "darwin"* ]]; then
+  elif [[ "$OSTYPE" == 'darwin'* ]]; then
     os='mac'
   else
     unsupported_os
@@ -167,10 +167,10 @@ ensure_line_exists() {
 
     # Write the thing directly if it is writable, otherwise use sudo tee
     if [ -w "$2" ]; then
-      log 'debug' "Writing line normally..."
+      log 'debug' 'Writing line normally...'
       echo "$3" >> "$2"
     else
-      log 'debug' "Writing line with sudo..."
+      log 'debug' 'Writing line with sudo...'
       echo "$3" | sudo tee -a "$2"
     fi
   fi
@@ -234,10 +234,10 @@ detect_os
 # Mac: https://docs.brew.sh/Installation
 if [ $os = 'mac' ]; then
   if ! xcode-select -p 1>/dev/null; then
-    log 'info' "brew dependency XCode command line tools is not installed, installing..."
+    log 'info' 'brew dependency XCode command line tools is not installed, installing...'
     xcode-select --install
   else
-    log 'info' "brew dependency XCode command line tools is already installed"
+    log 'info' 'brew dependency XCode command line tools is already installed'
   fi
 elif [ $os = 'linux' ]; then
   brew_dependencies=(
@@ -279,7 +279,7 @@ if find_brew_executable; then
   # Make sure $SHELL is set to bash so that this doesn't try to run commands for the user shell instead
   eval "$(SHELL=bash bash -c "$local_brew_executable shellenv")"
 else
-  log 'error' "Could not find local brew executable to provide shell sourcing of brew"
+  log 'error' 'Could not find local brew executable to provide shell sourcing of brew'
   exit 1
 fi
 
@@ -289,7 +289,7 @@ if [ ! "$no_brew_packages" = 1 ]; then
   log 'info' "Installing brew bundle from \"$brewfile_path\""
   brew bundle --no-lock --file "$brewfile_path"
 else
-  log 'info' "Skipping brew packages installation because --no-brew-packages was specified..."
+  log 'info' 'Skipping brew packages installation because --no-brew-packages was specified...'
 fi
 
 # Change default shell to Fish if it isn't already
@@ -325,7 +325,7 @@ log 'info' 'Symlinking tmux files...'
  
 # If the Tmux version is < v3.1, also symlink to the regular Tmux config file location $HOME/.tmux.conf
 # As of Tmux 3.1 using XDG for the config file is supported: https://github.com/tmux/tmux/commit/15d7e564ddab575dd3ac803989cc99ac13b57198
-executable_warning_prefix="Could not find"
+executable_warning_prefix='Could not find'
 executable_warning_postfix="executable to check tmux version to check if the installed tmux version supports the XDG configuration location \"$XDG_CONFIG_HOME/tmux/tmux.conf\". Symlinking tmux configuration to normal location \"$HOME/.tmux.conf\" to be safe..."
 required_tmux_version='3.1'
 if check_executable 'sed'; then
@@ -354,7 +354,7 @@ log 'info' "Installing tpm to \"$tpm_path\"..."
 git clone --depth 1 https://github.com/tmux-plugins/tpm "$tpm_path"
 
 # Install TPM plugins
-log 'info' "Installing TPM plugins..."
+log 'info' 'Installing TPM plugins...'
 "$tpm_path"/bin/install_plugins
 
 # Symlink NeoVim files
