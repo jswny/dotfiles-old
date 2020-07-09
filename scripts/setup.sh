@@ -61,8 +61,6 @@ get_parent_directory() {
   log 'debug' "Parent directory for \"$1\" is \"$parent_directory\""
 }
 
-# TODO: use common function
-
 # Check if an executable is valid
 check_executable() {
   if [ -x "$(command -v "$1")" ]; then
@@ -294,7 +292,7 @@ fi
 
 # Change default shell to Fish if it isn't already
 if [ -z "${SHELL:-}" ] || [[ "$SHELL" != *'fish'* ]]; then
-  fish_path="$(command -v "fish")"
+  fish_path="$(command -v 'fish')"
   log 'info' "Changing shell to fish at \"$fish_path\"..."
   ensure_line_exists "^$fish_path$" '/etc/shells' "$fish_path"
   sudo chsh -s "$fish_path" "$(whoami)"
