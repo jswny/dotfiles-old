@@ -25,6 +25,7 @@ EOF
 
 grep_wrapper() {
   set +e
+  # shellcheck disable=SC2059
   ! grep --color=always -n -E "${1}" < "${2}"
   local return_value="${?}"
   log 'debug' "Got exit code \"${return_value}\" from grep"
