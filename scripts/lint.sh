@@ -3,7 +3,7 @@
 # shellcheck disable=SC2181
 # Runs custom linting rules on a specified input
 
-script_name="$(basename "$0")"
+script_name="$(basename "${0}")"
 
 # shellcheck source=scripts/common.sh
 source "$(dirname "${0}")"/common.sh
@@ -24,17 +24,23 @@ EOF
 }
 
 grep_wrapper() {
-  grep --color=always -n -E "${1}" < "${2}" || true
+  set +e
+  ! grep --color=always -n -E "${1}" < "${2}"
+  local return_value="${?}"
+  log 'debug' "Got exit code \"${return_value}\" from grep"
+  return "${return_value}"
 }
 
 check_lint_result() {
-  if [ "${?}" = 0 ]; then
+  local return_value="${?}"
+  if [ "${return_value}" = 1 ]; then
     log 'debug' 'Lint failed!'
     any_lint_failed_current_file=1
     any_lint_failed=1
   else
     log 'debug' 'Lint succeeded!'
   fi
+  set -e
 }
 
 lint_file() {
@@ -58,7 +64,7 @@ lint_file() {
 
 # Parse command-line options
 for opt in "$@"; do
-  case $opt in
+  case "${opt}" in
     --help)
       help
       exit 0
@@ -69,7 +75,7 @@ for opt in "$@"; do
       ;;
     *)
       if [[ "${opt}" == --* ]]; then
-        log 'error' "unknown option: \"$opt\""
+        log 'error' "unknown option: \"${opt}\""
         help
         exit 1
       fi
