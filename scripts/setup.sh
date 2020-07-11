@@ -212,7 +212,7 @@ for opt in "${@}"; do
       log 'debug' 'Brew packages will not be installed'
       ;;
     *)
-      log 'error' "unknown option: \"$opt\""
+      log 'error' "unknown option: \"${opt}\""
       help
       exit 1
       ;;
@@ -230,14 +230,14 @@ detect_os
 # See the following for minimum requirements to install Brew:
 # Linux: https://docs.brew.sh/Homebrew-on-Linux
 # Mac: https://docs.brew.sh/Installation
-if [ $os = 'mac' ]; then
+if [ "${os}" = 'mac' ]; then
   if ! xcode-select -p 1>/dev/null; then
     log 'info' 'brew dependency XCode command line tools is not installed, installing...'
     xcode-select --install
   else
     log 'info' 'brew dependency XCode command line tools is already installed'
   fi
-elif [ $os = 'linux' ]; then
+elif [ "${os}" = 'linux' ]; then
   brew_dependencies=(
     gcc
     ldd # for glibc
@@ -247,17 +247,17 @@ elif [ $os = 'linux' ]; then
     git
   )
 
-  for dep in "${brew_dependencies[@]}"; do if [ "$dep" = 'ldd' ]; then
+  for dep in "${brew_dependencies[@]}"; do if [ "${dep}" = 'ldd' ]; then
       dep_package='libc6'
     else
-      dep_package="$dep"
+      dep_package="${dep}"
     fi
 
-    if ! check_executable "$dep"; then
-      log 'info' "brew dependency \"$dep_package\" is not installed, installing..."
-      install_package "$dep_package"
+    if ! check_executable "${dep}"; then
+      log 'info' "brew dependency \"${dep_package}\" is not installed, installing..."
+      install_package "${dep_package}"
     else
-      log 'info' "brew dependency \"$dep_package\" is already installed"
+      log 'info' "brew dependency \"${dep_package}\" is already installed"
     fi
   done
 else
@@ -266,56 +266,56 @@ fi
 
 # Install Brew (if it isn't already installed) and source it
 if find_brew_executable; then
-  log 'info' "brew is already installed at \"$local_brew_executable\", skipping..."
+  log 'info' "brew is already installed at \"${local_brew_executable}\", skipping..."
 else
   log 'info' 'Installing brew...'
   /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
 fi
 
 if find_brew_executable; then
-  log 'info' "Sourcing brew from \"$local_brew_executable\"..."
+  log 'info' "Sourcing brew from \"${local_brew_executable}\"..."
   # Make sure $SHELL is set to bash so that this doesn't try to run commands for the user shell instead
-  eval "$(SHELL=bash bash -c "$local_brew_executable shellenv")"
+  eval "$(SHELL=bash bash -c "${local_brew_executable} shellenv")"
 else
   log 'error' 'Could not find local brew executable to provide shell sourcing of brew'
   exit 1
 fi
 
 # Install Brew packages from Brewfile
-if [ ! "$no_brew_packages" = 1 ]; then
-  brewfile_path="$dotfiles_path/brew/Brewfile"
-  log 'info' "Installing brew bundle from \"$brewfile_path\""
-  brew bundle --no-lock --file "$brewfile_path"
+if [ ! "${no_brew_packages}" = 1 ]; then
+  brewfile_path="${dotfiles_path}/brew/Brewfile"
+  log 'info' "Installing brew bundle from \"${brewfile_path}\""
+  brew bundle --no-lock --file "${brewfile_path}"
 else
   log 'info' 'Skipping brew packages installation because --no-brew-packages was specified...'
 fi
 
 # Change default shell to Fish if it isn't already
-if [ -z "${SHELL:-}" ] || [[ "$SHELL" != *'fish'* ]]; then
+if [ -z "${SHELL:-}" ] || [[ "${SHELL}" != *'fish'* ]]; then
   fish_path="$(command -v 'fish')"
-  log 'info' "Changing shell to fish at \"$fish_path\"..."
-  ensure_line_exists "^$fish_path$" '/etc/shells' "$fish_path"
-  sudo chsh -s "$fish_path" "$(whoami)"
+  log 'info' "Changing shell to fish at \"${fish_path}\"..."
+  ensure_line_exists "^${fish_path}$" '/etc/shells' "${fish_path}"
+  sudo chsh -s "${fish_path}" "$(whoami)"
 else
-  log 'info' "\$SHELL value \"$SHELL\" already contains \"fish\", skipping default shell change..."
+  log 'info' "\$SHELL value \"${SHELL}\" already contains \"fish\", skipping default shell change..."
 fi
 
 # Symlink Fish files
 log 'info' 'Symlinking fish files...'
-fish_config_path="$XDG_CONFIG_HOME/fish"
-ensure_exists_and_symlink "$dotfiles_path/fish/config.fish" "$fish_config_path/config.fish"
-fishfile_path="$fish_config_path/fishfile"
-ensure_exists_and_symlink "$dotfiles_path/fish/fishfile" "$fishfile_path"
+fish_config_path="${XDG_CONFIG_HOME}/fish"
+ensure_exists_and_symlink "${dotfiles_path}/fish/config.fish" "${fish_config_path}/config.fish"
+fishfile_path="${fish_config_path}/fishfile"
+ensure_exists_and_symlink "${dotfiles_path}/fish/fishfile" "${fishfile_path}"
 
 # Add Brew source to local fish configuration if the line doesn't already exist in the file
 # This will create the file if it doesn't already exist
-ensure_line_exists '^eval \\$?\\(.*brew shellenv\\)$' "$XDG_CONFIG_HOME/fish/local.config.fish" "eval ($local_brew_executable shellenv)"
+ensure_line_exists '^eval \\$?\\(.*brew shellenv\\)$' "${XDG_CONFIG_HOME}/fish/local.config.fish" "eval (${local_brew_executable} shellenv)"
 
 # Setup Fisher and install plugins
-fisher_path="$XDG_CONFIG_HOME/fish/functions/fisher.fish"
-log 'info' "Installing fisher to \"$fisher_path\"..."
-curl https://git.io/fisher --create-dirs -sLo "$fisher_path"
-log 'info' "Installing fisher plugins from \"$fishfile_path\"..."
+fisher_path="${XDG_CONFIG_HOME}/fish/functions/fisher.fish"
+log 'info' "Installing fisher to \"${fisher_path}\"..."
+curl https://git.io/fisher --create-dirs -sLo "${fisher_path}"
+log 'info' "Installing fisher plugins from \"${fishfile_path}\"..."
 fish --command 'fisher'
 
 # Symlink Tmux files
@@ -324,62 +324,62 @@ log 'info' 'Symlinking tmux files...'
 # If the Tmux version is < v3.1, also symlink to the regular Tmux config file location $HOME/.tmux.conf
 # As of Tmux 3.1 using XDG for the config file is supported: https://github.com/tmux/tmux/commit/15d7e564ddab575dd3ac803989cc99ac13b57198
 executable_warning_prefix='Could not find'
-executable_warning_postfix="executable to check tmux version to check if the installed tmux version supports the XDG configuration location \"$XDG_CONFIG_HOME/tmux/tmux.conf\". Symlinking tmux configuration to normal location \"$HOME/.tmux.conf\" to be safe..."
+executable_warning_postfix="executable to check tmux version to check if the installed tmux version supports the XDG configuration location \"${XDG_CONFIG_HOME}/tmux/tmux.conf\". Symlinking tmux configuration to normal location \"${HOME}/.tmux.conf\" to be safe..."
 required_tmux_version='3.1'
 if check_executable 'sed'; then
   tmux_version=$(tmux -V | sed -nE 's/^tmux ([0-9]+\.[0-9]+).*/\1/p')
-  log 'debug' "Detected tmux version \"$tmux_version\""
+  log 'debug' "Detected tmux version \"${tmux_version}\""
   
   if check_executable 'awk'; then
-    if (( $(echo "$tmux_version $required_tmux_version" | awk '{print (${1} < ${2})}') )); then
-      log 'info' "Detected tmux version \"$tmux_version\" < $required_tmux_version which does not support the XDG configuration location \"$XDG_CONFIG_HOME/tmux/tmux.conf\". Symlinking to normal location \"$HOME/.tmux.conf\"..."
+    if (( $(echo "${tmux_version} ${required_tmux_version}" | awk '{print (${1} < ${2})}') )); then
+      log 'info' "Detected tmux version \"${tmux_version}\" < ${required_tmux_version} which does not support the XDG configuration location \"${XDG_CONFIG_HOME}/tmux/tmux.conf\". Symlinking to normal location \"${HOME}/.tmux.conf\"..."
       symlink_tmux_conf_non_xdg
     else
-      ensure_exists_and_symlink "$dotfiles_path/tmux/tmux.conf" "$XDG_CONFIG_HOME/tmux/tmux.conf"
+      ensure_exists_and_symlink "${dotfiles_path}/tmux/tmux.conf" "${XDG_CONFIG_HOME}/tmux/tmux.conf"
     fi
   else
-    log 'warn' "$executable_warning_prefix \"awk\" $executable_warning_postfix"
+    log 'warn' "${executable_warning_prefix} \"awk\" ${executable_warning_postfix}"
     symlink_tmux_conf_non_xdg
   fi
 else
-  log 'warn' "$executable_warning_prefix \"sed\" $executable_warning_postfix"
+  log 'warn' "${executable_warning_prefix} \"sed\" ${executable_warning_postfix}"
   symlink_tmux_conf_non_xdg
 fi
 
 # Install TPM
-tpm_path="$XDG_DATA_HOME/tmux/plugins/tpm"
-log 'info' "Installing tpm to \"$tpm_path\"..."
-git clone --depth 1 https://github.com/tmux-plugins/tpm "$tpm_path"
+tpm_path="${XDG_DATA_HOME}/tmux/plugins/tpm"
+log 'info' "Installing tpm to \"${tpm_path}\"..."
+git clone --depth 1 https://github.com/tmux-plugins/tpm "${tpm_path}"
 
 # Install TPM plugins
 log 'info' 'Installing TPM plugins...'
-"$tpm_path"/bin/install_plugins
+"${tpm_path}/bin/install_plugins"
 
 # Symlink NeoVim files
 log 'info' 'Symlinking NeoVim files...'
-ensure_exists_and_symlink "$dotfiles_path/nvim/init.vim" "$XDG_CONFIG_HOME/nvim/init.vim"
-ensure_exists_and_symlink "$dotfiles_path/nvim/lcnv-settings.json" "$XDG_CONFIG_HOME/nvim/lcnv-settings.json"
+ensure_exists_and_symlink "${dotfiles_path}/nvim/init.vim" "${XDG_CONFIG_HOME}/nvim/init.vim"
+ensure_exists_and_symlink "${dotfiles_path}/nvim/lcnv-settings.json" "${XDG_CONFIG_HOME}/nvim/lcnv-settings.json"
 
 # Install NeoVim Python provider
 log 'info' 'Installing NeoVim python provider...'
 pip3 install --upgrade pynvim
 
 # Install Vim-Plug
-vim_plug_path="$XDG_DATA_HOME/nvim/site/autoload/plug.vim"
-log 'info' "Installing vim-plug to \"$vim_plug_path\""
-curl --create-dirs -sfLo "$vim_plug_path" https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+vim_plug_path="${XDG_DATA_HOME}/nvim/site/autoload/plug.vim"
+log 'info' "Installing vim-plug to \"${vim_plug_path}\""
+curl --create-dirs -sfLo "${vim_plug_path}" https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 
 # Install Vim-Plug plugins
 # Log this to a file since the output is not meant to be readable outside of NeoVim
-vim_plug_install_log_path="$XDG_CACHE_HOME/vim_plug_install.log"
-log 'info' "Installing vim-plug plugins and logging to \"$vim_plug_install_log_path\"..."
+vim_plug_install_log_path="${XDG_CACHE_HOME}/vim_plug_install.log"
+log 'info' "Installing vim-plug plugins and logging to \"${vim_plug_install_log_path}\"..."
 
-nvim --headless '+PlugInstall --sync' +qa &> "$vim_plug_install_log_path"
+nvim --headless '+PlugInstall --sync' +qa &> "${vim_plug_install_log_path}"
 
 # Setup dircolors-solarized
-dircolors_solarized_path="$PACKAGE_SOURCE_HOME/dircolors-solarized"
-log 'info' "Installing dircolors-solarized to \"$dircolors_solarized_path\""
-git clone --depth 1 https://github.com/seebi/dircolors-solarized.git "$dircolors_solarized_path"
+dircolors_solarized_path="${PACKAGE_SOURCE_HOME}/dircolors-solarized"
+log 'info' "Installing dircolors-solarized to \"${dircolors_solarized_path}\""
+git clone --depth 1 https://github.com/seebi/dircolors-solarized.git "${dircolors_solarized_path}"
 
 # Setup Rebar and Hex
 if ! check_executable 'mix'; then
@@ -394,13 +394,13 @@ log 'info' 'Installing Hex via Mix...'
 mix local.hex --force
 
 # Setup Elixir LS
-elixir_ls_path="$PACKAGE_SOURCE_HOME/elixir-ls"
-log 'info' "Installing Elixir LS to \"$elixir_ls_path\"..."
-git clone --depth 1 https://github.com/elixir-lsp/elixir-ls.git "$elixir_ls_path"
-cd "$elixir_ls_path"
+elixir_ls_path="${PACKAGE_SOURCE_HOME}/elixir-ls"
+log 'info' "Installing Elixir LS to \"${elixir_ls_path}\"..."
+git clone --depth 1 https://github.com/elixir-lsp/elixir-ls.git "${elixir_ls_path}"
+cd "${elixir_ls_path}"
 mix deps.get
 mix deps.compile
 mix elixir_ls.release
-ln -s "$elixir_ls_path/release/language_server.sh" "$elixir_ls_path/release/elixir-ls"
+ln -s "${elixir_ls_path}/release/language_server.sh" "${elixir_ls_path}/release/elixir-ls"
 # shellcheck disable=SC2016
-echo set -g fish_user_paths "$elixir_ls_path/release" '$fish_user_paths' >> "$fish_config_path/local.config.fish"
+echo set -g fish_user_paths "${elixir_ls_path}/release" '{$fish_user_paths}' >> "${fish_config_path}/local.config.fish"
