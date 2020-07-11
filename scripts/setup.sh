@@ -2,7 +2,7 @@
 # Script to setup everything needed for this dotfiles setup
 
 # Name of the script only
-script_name="$(basename "$0")"
+script_name="$(basename "${0}")"
 
 # shellcheck source=scripts/common.sh
 source "$(dirname "${0}")"/common.sh
@@ -11,9 +11,9 @@ source "$(dirname "${0}")"/common.sh
 set -euo pipefail
 
 # Setup default environment variables
-XDG_CONFIG_HOME=${XDG_CONFIG_HOME:-"$HOME/.config"}
-XDG_DATA_HOME=${XDG_DATA_HOME:-"$HOME/.local/share"}
-XDG_CACHE_HOME=${XDG_CACHE_HOME:-"$HOME/.cache"}
+XDG_CONFIG_HOME=${XDG_CONFIG_HOME:-"${HOME}/.config"}
+XDG_DATA_HOME=${XDG_DATA_HOME:-"${HOME}/.local/share"}
+XDG_CACHE_HOME=${XDG_CACHE_HOME:-"${HOME}/.cache"}
 
 # Ensure environment variables are set for Brew
 # It will error out trying to append to these if they aren't already set
@@ -22,7 +22,7 @@ MANPATH="${MANPATH:-}"
 INFOPATH="${INFOPATH:-}"
 
 # Where to install source code for packages and other tools
-PACKAGE_SOURCE_HOME=${PACKAGE_SOURCE_HOME-"$HOME/.local/src"}
+PACKAGE_SOURCE_HOME=${PACKAGE_SOURCE_HOME-"${HOME}/.local/src"}
 
 # Default values for certain variables
 apt_update=0
@@ -31,7 +31,7 @@ debug=0
 # Display command-line help info
 help() {
   cat << EOF
-usage: $0 [OPTIONS]
+usage: ${0} [OPTIONS]
   --help                Show this message
   --debug               Display extra debug info
   --no-brew-packages    Don't install brew packages from Brewfile
@@ -40,50 +40,50 @@ EOF
 
 # Detect the OS currently running this script
 detect_os() {
-  if [[ "$OSTYPE" == 'linux-gnu' ]]; then
+  if [[ "${OSTYPE}" == 'linux-gnu' ]]; then
     os='linux'
-  elif [[ "$OSTYPE" == 'darwin'* ]]; then
+  elif [[ "${OSTYPE}" == 'darwin'* ]]; then
     os='mac'
   else
     unsupported_os
   fi
-  log 'debug' "Detected OS \"$os\""
+  log 'debug' "Detected OS \"${os}\""
 }
 
 unsupported_os() {
-  log 'error' "Unsupported operating system \"$OSTYPE\"!"
+  log 'error' "Unsupported operating system \"${OSTYPE}\"!"
   exit 1
 }
 
 get_parent_directory() {
   # Using dirname will allow us to get the parent directory even if it doesn't exist
-  parent_directory="$(dirname "$1")"
-  log 'debug' "Parent directory for \"$1\" is \"$parent_directory\""
+  parent_directory="$(dirname "${1}")"
+  log 'debug' "Parent directory for \"${1}\" is \"${parent_directory}\""
 }
 
 # Check if an executable is valid
 check_executable() {
-  if [ -x "$(command -v "$1")" ]; then
-    # log 'debug' "Executable $1 found"
+  if [ -x "$(command -v "${1}")" ]; then
+    log 'debug' "Executable ${1} found"
     return 0
   fi
-  log 'debug' "Executable \"$1\" does not exist"
+  log 'debug' "Executable \"${1}\" does not exist"
   return 1
 }
 
 # Install a package using a supported package manager
 install_package() {
   if check_executable 'apt-get'; then
-    log 'debug' "Installing package \"$1\" with apt..."
-    if [ "$apt_update" = 0 ]; then
+    log 'debug' "Installing package \"${1}\" with apt..."
+    if [ "${apt_update}" = 0 ]; then
       log 'info' 'Updating apt...'
       
       sudo apt-get update
       apt_update=1
     fi
-    sudo apt-get install -y "$1"
+    sudo apt-get install -y "${1}"
   else
-    log 'error' "Cannot automatically install package \"$1\", please manually install and try again!"
+    log 'error' "Cannot automatically install package \"${1}\", please manually install and try again!"
     exit 1
   fi
 }
@@ -92,14 +92,14 @@ install_package() {
 find_brew_executable() {
   local local_brew_executable_paths=(
     '/home/linuxbrew/.linuxbrew/bin/brew'
-    "$HOME/.linuxbrew/bin/brew"
+    "${HOME}/.linuxbrew/bin/brew"
   )
 
   for path in "${local_brew_executable_paths[@]}"; do
-    log 'debug' "Checking \"$path\" for brew executable..."
-    if check_executable "$path"; then
-      log 'info' "Found brew executable at \"$path\""
-      local_brew_executable="$path"
+    log 'debug' "Checking \"${path}\" for brew executable..."
+    if check_executable "${path}"; then
+      log 'info' "Found brew executable at \"${path}\""
+      local_brew_executable="${path}"
       return 0
     fi
   done
@@ -108,41 +108,41 @@ find_brew_executable() {
 
 # Creates the parent directory if it doesn't exist for a path
 ensure_parent_dir_exists() {
-  get_parent_directory "$1"
-  if [ ! -d "$parent_directory" ]; then
-    log 'debug' "Parent directory \"$parent_directory\" for target \"$1\" does not exist, creating..."
-    mkdir -p "$parent_directory"
+  get_parent_directory "${1}"
+  if [ ! -d "${parent_directory}" ]; then
+    log 'debug' "Parent directory \"${parent_directory}\" for target \"${1}\" does not exist, creating..."
+    mkdir -p "${parent_directory}"
   fi
 }
 
 # Ensure both sides of a symlink exist and symlink
 # Creates necessary directories if they don't exist for the target
 ensure_exists_and_symlink() {
-  if [ ! -e "$1" ]; then
-    log 'error' "Attempted to symlink \"$1\" to \"$2\" but source does not exist!"
+  if [ ! -e "${1}" ]; then
+    log 'error' "Attempted to symlink \"${1}\" to \"${2}\" but source does not exist!"
     exit 1
   fi
 
-  if [ -e "$2" ]; then
-    log 'info' "Attempted to symlink \"$1\" to \"$2\" but target already exists! Skipping..."
+  if [ -e "${2}" ]; then
+    log 'info' "Attempted to symlink \"${1}\" to \"${2}\" but target already exists! Skipping..."
   else
-    ensure_parent_dir_exists "$2"
-    log 'info' "Symlinking \"$1\" -> \"$2\"..." ln -s "$1" "$2"
-    ln -s "$1" "$2"
+    ensure_parent_dir_exists "${2}"
+    log 'info' "Symlinking \"${1}\" -> \"${2}\"..." ln -s "${1}" "${2}"
+    ln -s "${1}" "${2}"
   fi
 }
 
 # Creates a file if it doesn't exist
 # TODO: use common function
 ensure_file_exists() {
-  if [ ! -f "$1" ]; then
-    if [ -e "$1" ]; then
-      log 'error' "Item at path \"$1\" already exists, but it is not a file!"
+  if [ ! -f "${1}" ]; then
+    if [ -e "${1}" ]; then
+      log 'error' "Item at path \"${1}\" already exists, but it is not a file!"
       exit 1
     else
-      log 'info' "File \"$1\" does not exist, creating..."
-      ensure_parent_dir_exists "$1"
-      touch "$1"
+      log 'info' "File \"${1}\" does not exist, creating..."
+      ensure_parent_dir_exists "${1}"
+      touch "${1}"
     fi
   fi
 }
@@ -150,42 +150,42 @@ ensure_file_exists() {
 # Checks if a line exists in a file using a regex and Grep and appends something to the file if not
 # Defaults to appending the line anyway if Grep cannot be found
 ensure_line_exists() {
-  ensure_file_exists "$2"
+  ensure_file_exists "${2}"
 
   check_executable 'grep'
-  grep_present=$?
-  if [ "$grep_present" = 0 ] && grep -E "$1" "$2"; then
-    log 'info' "Line \"$1\" already exists in file \"$2\", skipping..."
+  grep_present="${?}"
+  if [ "${grep_present}" = 0 ] && grep -E "${1}" "${2}"; then
+    log 'info' "Line \"${1}\" already exists in file \"${2}\", skipping..."
   else
-    if [ ! "$grep_present" = 0 ]; then
-      log 'warn' "Could not find grep executable to check if line \"$1\" already exists in file \"$2\". Adding line \"$3\" be safe..."
+    if [ ! "${grep_present}" = 0 ]; then
+      log 'warn' "Could not find grep executable to check if line \"${1}\" already exists in file \"${2}\". Adding line \"${3}\" be safe..."
     else
-      log 'info' "Adding line \"$3\" to file \"$2\"..."
+      log 'info' "Adding line \"${3}\" to file \"${2}\"..."
     fi
 
     # Write the thing directly if it is writable, otherwise use sudo tee
-    if [ -w "$2" ]; then
+    if [ -w "${2}" ]; then
       log 'debug' 'Writing line normally...'
-      echo "$3" >> "$2"
+      echo "${3}" >> "${2}"
     else
       log 'debug' 'Writing line with sudo...'
-      echo "$3" | sudo tee -a "$2"
+      echo "${3}" | sudo tee -a "${2}"
     fi
   fi
 }
 
 # Symlinks a Tmux configuration file the regular (non-xdg) configuration location ($HOME/.tmux.conf)
 symlink_tmux_conf_non_xdg() {
-  ensure_exists_and_symlink "$dotfiles_path/tmux/tmux.conf" "$HOME/.tmux.conf"
+  ensure_exists_and_symlink "${dotfiles_path}/tmux/tmux.conf" "${HOME}/.tmux.conf"
 }
 
-get_parent_directory "$0"
-script_path="$parent_directory"
-get_parent_directory "$script_path"
-dotfiles_path="$parent_directory"
+get_parent_directory "${0}"
+script_path="${parent_directory}"
+get_parent_directory "${script_path}"
+dotfiles_path="${parent_directory}"
 
 # Ensure we aren't running as root
-if [ "$EUID" = 0 ]; then 
+if [ "${EUID}" = 0 ]; then 
   log 'error' 'Please do not run as root! sudo will be used when necessary'
   exit 1
 fi
@@ -197,8 +197,8 @@ if ! check_executable 'sudo'; then
 fi
 
 # Parse command-line options
-for opt in "$@"; do
-  case $opt in
+for opt in "${@}"; do
+  case ${opt} in
     --help)
       help
       exit 0
@@ -331,7 +331,7 @@ if check_executable 'sed'; then
   log 'debug' "Detected tmux version \"$tmux_version\""
   
   if check_executable 'awk'; then
-    if (( $(echo "$tmux_version $required_tmux_version" | awk '{print ($1 < $2)}') )); then
+    if (( $(echo "$tmux_version $required_tmux_version" | awk '{print (${1} < ${2})}') )); then
       log 'info' "Detected tmux version \"$tmux_version\" < $required_tmux_version which does not support the XDG configuration location \"$XDG_CONFIG_HOME/tmux/tmux.conf\". Symlinking to normal location \"$HOME/.tmux.conf\"..."
       symlink_tmux_conf_non_xdg
     else

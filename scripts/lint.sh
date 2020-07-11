@@ -52,7 +52,7 @@ lint_file() {
 
   # Variables without brackets
   log 'info' 'Checking for variables without brackets...'
-  grep_wrapper '\$([A-z]|[0-9]|\?)+' "${target}"
+  grep_wrapper '\$([A-z]|[0-9]|\?|@)+' "${target}"
 
   check_lint_result
 
@@ -64,7 +64,7 @@ lint_file() {
 }
 
 # Parse command-line options
-for opt in "$@"; do
+for opt in "${@}"; do
   case "${opt}" in
     --help)
       help
