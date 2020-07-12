@@ -24,37 +24,46 @@ EOF
 }
 
 grep_wrapper() {
-  set +e
+  # set +e
   # shellcheck disable=SC2059
-  ! grep --color=always -n -E "${1}" < "${2}"
-  local return_value="${?}"
-  log 'debug' "Got exit code \"${return_value}\" from grep"
-  return "${return_value}"
+  lines=$(echo "${2}" | grep --color=always -n -E "${1}")
+  # local return_value="${?}"
+  # log 'debug' "Got exit code \"${return_value}\" from grep"
+  # return "${return_value}"
+  echo "${lines}"
+}
+
+grep_filter() {
+  lines=$(echo "${2}" | grep --color=always -E -v "${1}")
+  echo "${lines}"
 }
 
 check_lint_result() {
-  local return_value="${?}"
-  if [ "${return_value}" = 1 ]; then
+  # local return_value="${?}"
+  # if [ "${return_value}" = 1 ]; then
+  if [ "${1}" = '' ]; then
+    log 'debug' 'Lint succeeded!'
+  else
     log 'debug' 'Lint failed!'
     any_lint_failed_current_file=1
     any_lint_failed=1
-  else
-    log 'debug' 'Lint succeeded!'
+    echo "${1}"
   fi
-  set -e
 }
 
 lint_file() {
   local target="${1}"
+  local target_content=$(cat "${1}")
   any_lint_failed_current_file=0
 
   log 'info' "Linting file \"${target}\"..."
 
   # Variables without brackets
   log 'info' 'Checking for variables without brackets...'
-  grep_wrapper '\$([A-z]|[0-9]|\?|@)+' "${target}"
+  variables_without_brackets=$(grep_wrapper '\$([A-z]|[0-9]|\?|@)+' "${target_content}")
+  variables_without_brackets=$(grep_filter '^[0-9]*: *#.*$' "${variables_without_brackets}")
 
-  check_lint_result
+  check_lint_result "${variables_without_brackets}"
 
   if [ "${any_lint_failed_current_file}" = 1 ]; then
     log 'error' "Linting failed for file \"${target}\"!"
