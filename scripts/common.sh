@@ -64,6 +64,8 @@ check_file_exists() {
       log 'info' "File \"${1}\" does not exist!"
     fi
     return 1
+  else
+    log 'info' "File \"${1}\" already exists!"
   fi
   return 0
 }

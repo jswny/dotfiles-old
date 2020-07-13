@@ -133,17 +133,11 @@ ensure_exists_and_symlink() {
 }
 
 # Creates a file if it doesn't exist
-# TODO: use common function
 ensure_file_exists() {
-  if [ ! -f "${1}" ]; then
-    if [ -e "${1}" ]; then
-      log 'error' "Item at path \"${1}\" already exists, but it is not a file!"
-      exit 1
-    else
-      log 'info' "File \"${1}\" does not exist, creating..."
-      ensure_parent_dir_exists "${1}"
-      touch "${1}"
-    fi
+  if ! check_file_exists "${1}"; then
+    log 'info' "Creating file \"${1}\"..."
+    ensure_parent_dir_exists "${1}"
+    touch "${1}"
   fi
 }
 
@@ -331,7 +325,7 @@ if check_executable 'sed'; then
   log 'debug' "Detected tmux version \"${tmux_version}\""
   
   if check_executable 'awk'; then
-    if (( $(echo "${tmux_version} ${required_tmux_version}" | awk '{print (${1} < ${2})}') )); then
+    if (( $(echo "${tmux_version} ${required_tmux_version}" | awk '{print ($1 < $2)}') )); then
       log 'info' "Detected tmux version \"${tmux_version}\" < ${required_tmux_version} which does not support the XDG configuration location \"${XDG_CONFIG_HOME}/tmux/tmux.conf\". Symlinking to normal location \"${HOME}/.tmux.conf\"..."
       symlink_tmux_conf_non_xdg
     else
