@@ -3,7 +3,7 @@
 # shellcheck disable=SC2181
 # Runs custom linting rules on a specified input
 
-script_name="$(basename "$0")"
+script_name="$(basename "${0}")"
 
 # shellcheck source=scripts/common.sh
 source "$(dirname "${0}")"/common.sh
@@ -23,31 +23,43 @@ usage: ${0} [OPTIONS] file(s)
 EOF
 }
 
-grep_wrapper() {
-  grep --color=always -n -E "${1}" < "${2}"
-}
-
 check_lint_result() {
-  if [ "${?}" = 0 ]; then
+  if [ "${1}" = '' ]; then
+    log 'debug' 'Lint succeeded!'
+  else
     log 'debug' 'Lint failed!'
     any_lint_failed_current_file=1
     any_lint_failed=1
-  else
-    log 'debug' 'Lint succeeded!'
+    echo "${1}"
   fi
 }
 
 lint_file() {
   local target="${1}"
+  local target_content
+  target_content=$(cat "${1}")
   any_lint_failed_current_file=0
 
   log 'info' "Linting file \"${target}\"..."
 
   # Variables without brackets
   log 'info' 'Checking for variables without brackets...'
-  grep_wrapper '\$([A-z]|[0-9])+' "${target}"
+  set +e
+  variables_without_brackets=$(
+    echo "${target_content}" |
+    # Escaped "$" characters
+    grep -E -n -v '.*\\\$.+' |
+    # Fish-style variables in the format "{$var}"
+    grep -E -v '^[0-9]*: *.*{\$([A-z]|[0-9]|\?|@)+}' |
+    # Comments
+    grep -E -v '^[0-9]*: *#.*$' |
+    # Awk expressions
+    grep -E -v '^[0-9]*: *.*awk.*' |
+    grep --color=always -E '\$([A-z]|[0-9]|\?|@)+'
+  )
+  set -e
 
-  check_lint_result
+  check_lint_result "${variables_without_brackets}"
 
   if [ "${any_lint_failed_current_file}" = 1 ]; then
     log 'error' "Linting failed for file \"${target}\"!"
@@ -57,8 +69,8 @@ lint_file() {
 }
 
 # Parse command-line options
-for opt in "$@"; do
-  case $opt in
+for opt in "${@}"; do
+  case "${opt}" in
     --help)
       help
       exit 0
@@ -69,7 +81,7 @@ for opt in "$@"; do
       ;;
     *)
       if [[ "${opt}" == --* ]]; then
-        log 'error' "unknown option: \"$opt\""
+        log 'error' "unknown option: \"${opt}\""
         help
         exit 1
       fi
