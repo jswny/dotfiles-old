@@ -47,9 +47,9 @@ lint_file() {
   set +e
   variables_without_brackets=$(
     echo "${target_content}" |
-    grep --color=always -n -E -v '.*\\\$.+' |
-    grep --color=always -E -v '^[0-9]*: *.*{\$([A-z]|[0-9]|\?|@)+}' |
-    grep --color=always -E -v '^[0-9]*: *#.*$' |
+    grep -E -n -v '.*\\\$.+' |
+    grep -E -v '^[0-9]*: *.*{\$([A-z]|[0-9]|\?|@)+}' |
+    grep -E -v '^[0-9]*: *#.*$' |
     grep --color=always -E '\$([A-z]|[0-9]|\?|@)+'
   )
   set -e
