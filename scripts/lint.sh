@@ -47,9 +47,14 @@ lint_file() {
   set +e
   variables_without_brackets=$(
     echo "${target_content}" |
+    # Escaped "$" characters
     grep -E -n -v '.*\\\$.+' |
+    # Fish-style variables in the format "{$var}"
     grep -E -v '^[0-9]*: *.*{\$([A-z]|[0-9]|\?|@)+}' |
+    # Comments
     grep -E -v '^[0-9]*: *#.*$' |
+    # Awk expressions
+    grep -E -v '^[0-9]*: *.*awk.*' |
     grep --color=always -E '\$([A-z]|[0-9]|\?|@)+'
   )
   set -e
