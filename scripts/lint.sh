@@ -36,7 +36,8 @@ check_lint_result() {
 
 lint_file() {
   local target="${1}"
-  local target_content=$(cat "${1}")
+  local target_content
+  target_content=$(cat "${1}")
   any_lint_failed_current_file=0
 
   log 'info' "Linting file \"${target}\"..."
