@@ -44,7 +44,7 @@ lint_file() {
   # Variables without brackets
   log 'info' 'Checking for variables without brackets...'
   set +e
-  variables_without_brackets=$(echo "${target_content}" | grep --color=always -n -E -v '.*\\\$.+' | grep --color=always -E -v '^[0-9]*: *#.*$' | grep --color=always -E '\$([A-z]|[0-9]|\?|@)+')
+  variables_without_brackets=$(echo "${target_content}" | grep --color=always -n -E -v '.*\\\$.+' | grep --color=always -E -v '^[0-9]*: *.*{\$([A-z]|[0-9]|\?|@)+}' | grep --color=always -E -v '^[0-9]*: *#.*$' | grep --color=always -E '\$([A-z]|[0-9]|\?|@)+')
   set -e
 
   check_lint_result "${variables_without_brackets}"
