@@ -23,24 +23,7 @@ usage: ${0} [OPTIONS] file(s)
 EOF
 }
 
-grep_wrapper() {
-  # set +e
-  # shellcheck disable=SC2059
-  lines=$(echo "${2}" | grep --color=always -n -E "${1}")
-  # local return_value="${?}"
-  # log 'debug' "Got exit code \"${return_value}\" from grep"
-  # return "${return_value}"
-  echo "${lines}"
-}
-
-grep_filter() {
-  lines=$(echo "${2}" | grep --color=always -E -v "${1}")
-  echo "${lines}"
-}
-
 check_lint_result() {
-  # local return_value="${?}"
-  # if [ "${return_value}" = 1 ]; then
   if [ "${1}" = '' ]; then
     log 'debug' 'Lint succeeded!'
   else
@@ -60,8 +43,9 @@ lint_file() {
 
   # Variables without brackets
   log 'info' 'Checking for variables without brackets...'
-  variables_without_brackets=$(grep_wrapper '\$([A-z]|[0-9]|\?|@)+' "${target_content}")
-  variables_without_brackets=$(grep_filter '^[0-9]*: *#.*$' "${variables_without_brackets}")
+  set +e
+  variables_without_brackets=$(echo "${target_content}" | grep --color=always -n -E -v '.*\\\$.+' | grep --color=always -E -v '^[0-9]*: *#.*$' | grep --color=always -E '\$([A-z]|[0-9]|\?|@)+')
+  set -e
 
   check_lint_result "${variables_without_brackets}"
 
