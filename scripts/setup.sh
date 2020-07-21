@@ -92,7 +92,7 @@ install_package() {
 find_brew_executable() {
   local local_brew_executable_paths=(
     '/home/linuxbrew/.linuxbrew/bin/brew' # Linux
-    "${HOME}/.linuxbrew/bin/brew",        # Linux
+    "${HOME}/.linuxbrew/bin/brew"         # Linux
     '/usr/local/bin/brew'                 # MacOS
   )
 
@@ -222,6 +222,7 @@ no_brew_packages=${no_brew_packages:-0}
 detect_os
 
 log 'debug' "Current argument path: ${0}"
+log 'debug' "Script path: ${script_path}"
 log 'debug' "Dotfiles path: ${dotfiles_path}"
 
 # Verify Brew dependencies are installed
