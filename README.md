@@ -72,7 +72,3 @@ You can also pull [the latest version from Docker Hub](https://hub.docker.com/r/
 Most symlinks are automatically setup in the setup script. However, non-cross-platform utilities are not, and can be handled as shown below.
 - `hyper/hyper.js` -- Hyper Terminal configuration
   - `ln -s $PWD/hyper/hyper.js ~/.config/hyper/hyper.js`
-- `iterm2/com.googlecode.iterm2.plist` -- iTerm2 general configuration
-  - Configure iTerm2 to use this file for preferences directly (symlinks don't work)
-- `iterm2/profiles.json` -- iTerm2 [Dynamic Profiles](https://www.iterm2.com/documentation-dynamic-profiles.html) configuration
-  - `ln -s $PWD/iterm2 ~/Library/Application\ Support/iTerm2/DynamicProfiles/profiles.json`
