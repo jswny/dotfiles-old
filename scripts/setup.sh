@@ -221,6 +221,9 @@ no_brew_packages=${no_brew_packages:-0}
 # Detect the OS and make sure it is a supported one
 detect_os
 
+log 'debug' "Current argument path: ${0}"
+log 'debug' "Dotfiles path: ${dotfiles_path}"
+
 # Verify Brew dependencies are installed
 # See the following for minimum requirements to install Brew:
 # Linux: https://docs.brew.sh/Homebrew-on-Linux

@@ -56,32 +56,32 @@ RUN useradd --create-home ${USER} \
     && sed s/required/sufficient/g -i /etc/pam.d/chsh
 
 # Uncomment these for fast development caching of long-running steps
-# RUN apt-get update \
-#     && apt-get install -y \
-#     libc6 \
-#     gcc \
-#     make \
-#     curl \
-#     file \
-#     git \
-#     && apt-get clean \
-#     && rm -rf /var/lib/apt/lists/*
+RUN apt-get update \
+    && apt-get install -y \
+    libc6 \
+    gcc \
+    make \
+    curl \
+    file \
+    git \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
 
-# RUN gosu user1:user1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)" \
-#     && eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)" \
-#     && brew install \
-#     fish \
-#     tmux \
-#     neovim \
-#     fzf \
-#     fd \
-#     bat \
-#     git-delta \
-#     thefuck \
-#     python \
-#     erlang \
-#     elixir \
-#     && chown -R user1:user1 /home/linuxbrew
+RUN gosu user1:user1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)" \
+    && eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)" \
+    && brew install \
+    fish \
+    tmux \
+    neovim \
+    fzf \
+    fd \
+    bat \
+    git-delta \
+    thefuck \
+    python \
+    erlang \
+    elixir \
+    && chown -R user1:user1 /home/linuxbrew
 
 # Add dotfiles into the container and run setup
 COPY . $XDG_CONFIG_HOME/dotfiles
