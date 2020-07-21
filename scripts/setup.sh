@@ -146,6 +146,35 @@ ensure_file_exists() {
   fi
 }
 
+# Checks if a directory exists
+# Args:
+#   1. string: The path to check
+# Returns:
+#   1. 0 if the directory doesn't exist, or 1 otherwise
+check_directory_exists() {
+  if [ ! -d "${1}" ]; then
+    log 'debug' "Directory \"${1}\" does not exist!"
+    return 0
+  else
+    log 'debug' "Directory \"${1}\" already exists!"
+    return 1
+  fi
+}
+
+# Clones a URL if the target directory doesn't exist
+# Args:
+#  1. string: The target path
+#  2. string: The URL to clone
+#  3. string: The name of the entity being cloned
+check_directory_exists_and_clone() {
+  if check_directory_exists "${1}"; then
+    log 'debug' "Cloning ${3} from \"${2}\" to \"${1}\"..."
+    git clone --depth 1 "${2}" "${1}"
+  else
+    log 'debug' "Skipping ${3} clone from \"${2}\"..."
+  fi
+}
+
 # Checks if a line exists in a file using a regex and Grep and appends something to the file if not
 # Defaults to appending the line anyway if Grep cannot be found
 ensure_line_exists() {
@@ -351,8 +380,8 @@ fi
 
 # Install TPM
 tpm_path="${XDG_DATA_HOME}/tmux/plugins/tpm"
-log 'info' "Installing tpm to \"${tpm_path}\"..."
-git clone --depth 1 https://github.com/tmux-plugins/tpm "${tpm_path}"
+log 'info' "Installing TPM to \"${tpm_path}\"..."
+check_directory_exists_and_clone "${tpm_path}" 'https://github.com/tmux-plugins/tpm' 'tpm'
 
 # Install TPM plugins
 log 'info' 'Installing TPM plugins...'
@@ -381,8 +410,8 @@ nvim --headless '+PlugInstall --sync' +qa &> "${vim_plug_install_log_path}"
 
 # Setup dircolors-solarized
 dircolors_solarized_path="${PACKAGE_SOURCE_HOME}/dircolors-solarized"
-log 'info' "Installing dircolors-solarized to \"${dircolors_solarized_path}\""
-git clone --depth 1 https://github.com/seebi/dircolors-solarized.git "${dircolors_solarized_path}"
+log 'info' "Installing dircolors-solarized to \"${dircolors_solarized_path}\"..."
+check_directory_exists_and_clone "${dircolors_solarized_path}" 'https://github.com/seebi/dircolors-solarized.git' 'dircolors-solarized'
 
 # Setup Rebar and Hex
 if ! check_executable 'mix'; then
@@ -399,11 +428,13 @@ mix local.hex --force
 # Setup Elixir LS
 elixir_ls_path="${PACKAGE_SOURCE_HOME}/elixir-ls"
 log 'info' "Installing Elixir LS to \"${elixir_ls_path}\"..."
-git clone --depth 1 https://github.com/elixir-lsp/elixir-ls.git "${elixir_ls_path}"
+check_directory_exists_and_clone "${elixir_ls_path}" 'https://github.com/elixir-lsp/elixir-ls.git' 'elixir-ls'
 cd "${elixir_ls_path}"
 mix deps.get
 mix deps.compile
 mix elixir_ls.release
-ln -s "${elixir_ls_path}/release/language_server.sh" "${elixir_ls_path}/release/elixir-ls"
+ensure_exists_and_symlink "${elixir_ls_path}/release/language_server.sh" "${elixir_ls_path}/release/elixir-ls"
 # shellcheck disable=SC2016
 echo set -g fish_user_paths "${elixir_ls_path}/release" '{$fish_user_paths}' >> "${fish_config_path}/local.config.fish"
+
+log 'info' 'Done!'
