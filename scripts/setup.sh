@@ -91,8 +91,9 @@ install_package() {
 # Search through valid brew installation paths to find a valid executable
 find_brew_executable() {
   local local_brew_executable_paths=(
-    '/home/linuxbrew/.linuxbrew/bin/brew'
-    "${HOME}/.linuxbrew/bin/brew"
+    '/home/linuxbrew/.linuxbrew/bin/brew' # Linux
+    "${HOME}/.linuxbrew/bin/brew",        # Linux
+    '/usr/local/bin/brew'                 # MacOS
   )
 
   for path in "${local_brew_executable_paths[@]}"; do
