@@ -58,6 +58,10 @@ unsupported_os() {
 get_parent_directory() {
   # Using dirname will allow us to get the parent directory even if it doesn't exist
   parent_directory="$(dirname "${1}")"
+  if [ "${parent_directory}" = '.' ]; then
+    log 'debug' "Parent directory of ${1} is \".\", using PWD..."
+    parent_directory="$(pwd -P)"
+  fi
   log 'debug' "Parent directory for \"${1}\" is \"${parent_directory}\""
 }
 
@@ -91,8 +95,9 @@ install_package() {
 # Search through valid brew installation paths to find a valid executable
 find_brew_executable() {
   local local_brew_executable_paths=(
-    '/home/linuxbrew/.linuxbrew/bin/brew'
-    "${HOME}/.linuxbrew/bin/brew"
+    '/home/linuxbrew/.linuxbrew/bin/brew' # Linux
+    "${HOME}/.linuxbrew/bin/brew"         # Linux
+    '/usr/local/bin/brew'                 # MacOS
   )
 
   for path in "${local_brew_executable_paths[@]}"; do
@@ -141,6 +146,35 @@ ensure_file_exists() {
   fi
 }
 
+# Checks if a directory exists
+# Args:
+#   1. string: The path to check
+# Returns:
+#   1. 0 if the directory doesn't exist, or 1 otherwise
+check_directory_exists() {
+  if [ ! -d "${1}" ]; then
+    log 'debug' "Directory \"${1}\" does not exist!"
+    return 0
+  else
+    log 'debug' "Directory \"${1}\" already exists!"
+    return 1
+  fi
+}
+
+# Clones a URL if the target directory doesn't exist
+# Args:
+#  1. string: The target path
+#  2. string: The URL to clone
+#  3. string: The name of the entity being cloned
+check_directory_exists_and_clone() {
+  if check_directory_exists "${1}"; then
+    log 'debug' "Cloning ${3} from \"${2}\" to \"${1}\"..."
+    git clone --depth 1 "${2}" "${1}"
+  else
+    log 'debug' "Skipping ${3} clone from \"${2}\"..."
+  fi
+}
+
 # Checks if a line exists in a file using a regex and Grep and appends something to the file if not
 # Defaults to appending the line anyway if Grep cannot be found
 ensure_line_exists() {
@@ -148,7 +182,7 @@ ensure_line_exists() {
 
   check_executable 'grep'
   grep_present="${?}"
-  if [ "${grep_present}" = 0 ] && grep -E "${1}" "${2}"; then
+  if [ "${grep_present}" = 0 ] && grep -E "${1}" "${2}" > /dev/null; then
     log 'info' "Line \"${1}\" already exists in file \"${2}\", skipping..."
   else
     if [ ! "${grep_present}" = 0 ]; then
@@ -219,6 +253,10 @@ no_brew_packages=${no_brew_packages:-0}
 
 # Detect the OS and make sure it is a supported one
 detect_os
+
+log 'debug' "Current argument path: ${0}"
+log 'debug' "Script path: ${script_path}"
+log 'debug' "Dotfiles path: ${dotfiles_path}"
 
 # Verify Brew dependencies are installed
 # See the following for minimum requirements to install Brew:
@@ -303,7 +341,7 @@ ensure_exists_and_symlink "${dotfiles_path}/fish/fishfile" "${fishfile_path}"
 
 # Add Brew source to local fish configuration if the line doesn't already exist in the file
 # This will create the file if it doesn't already exist
-ensure_line_exists '^eval \\$?\\(.*brew shellenv\\)$' "${XDG_CONFIG_HOME}/fish/local.config.fish" "eval (${local_brew_executable} shellenv)"
+ensure_line_exists 'eval \(.*brew shellenv\)' "${XDG_CONFIG_HOME}/fish/local.config.fish" "eval (${local_brew_executable} shellenv)"
 
 # Setup Fisher and install plugins
 fisher_path="${XDG_CONFIG_HOME}/fish/functions/fisher.fish"
@@ -342,8 +380,8 @@ fi
 
 # Install TPM
 tpm_path="${XDG_DATA_HOME}/tmux/plugins/tpm"
-log 'info' "Installing tpm to \"${tpm_path}\"..."
-git clone --depth 1 https://github.com/tmux-plugins/tpm "${tpm_path}"
+log 'info' "Installing TPM to \"${tpm_path}\"..."
+check_directory_exists_and_clone "${tpm_path}" 'https://github.com/tmux-plugins/tpm' 'tpm'
 
 # Install TPM plugins
 log 'info' 'Installing TPM plugins...'
@@ -372,8 +410,8 @@ nvim --headless '+PlugInstall --sync' +qa &> "${vim_plug_install_log_path}"
 
 # Setup dircolors-solarized
 dircolors_solarized_path="${PACKAGE_SOURCE_HOME}/dircolors-solarized"
-log 'info' "Installing dircolors-solarized to \"${dircolors_solarized_path}\""
-git clone --depth 1 https://github.com/seebi/dircolors-solarized.git "${dircolors_solarized_path}"
+log 'info' "Installing dircolors-solarized to \"${dircolors_solarized_path}\"..."
+check_directory_exists_and_clone "${dircolors_solarized_path}" 'https://github.com/seebi/dircolors-solarized.git' 'dircolors-solarized'
 
 # Setup Rebar and Hex
 if ! check_executable 'mix'; then
@@ -390,11 +428,13 @@ mix local.hex --force
 # Setup Elixir LS
 elixir_ls_path="${PACKAGE_SOURCE_HOME}/elixir-ls"
 log 'info' "Installing Elixir LS to \"${elixir_ls_path}\"..."
-git clone --depth 1 https://github.com/elixir-lsp/elixir-ls.git "${elixir_ls_path}"
+check_directory_exists_and_clone "${elixir_ls_path}" 'https://github.com/elixir-lsp/elixir-ls.git' 'elixir-ls'
 cd "${elixir_ls_path}"
 mix deps.get
 mix deps.compile
 mix elixir_ls.release
-ln -s "${elixir_ls_path}/release/language_server.sh" "${elixir_ls_path}/release/elixir-ls"
+ensure_exists_and_symlink "${elixir_ls_path}/release/language_server.sh" "${elixir_ls_path}/release/elixir-ls"
 # shellcheck disable=SC2016
 echo set -g fish_user_paths "${elixir_ls_path}/release" '{$fish_user_paths}' >> "${fish_config_path}/local.config.fish"
+
+log 'info' 'Done!'
