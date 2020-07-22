@@ -58,7 +58,7 @@ unsupported_os() {
 get_parent_directory() {
   # Using dirname will allow us to get the parent directory even if it doesn't exist
   parent_directory="$(dirname "${1}")"
-  if [ "$parent_directory" = '.' ]; then
+  if [ "${parent_directory}" = '.' ]; then
     log 'debug' "Parent directory of ${1} is \".\", using PWD..."
     parent_directory="$(pwd -P)"
   fi
