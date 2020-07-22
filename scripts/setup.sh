@@ -182,7 +182,7 @@ ensure_line_exists() {
 
   check_executable 'grep'
   grep_present="${?}"
-  if [ "${grep_present}" = 0 ] && grep -E "${1}" "${2}"; then
+  if [ "${grep_present}" = 0 ] && grep -E "${1}" "${2}" > /dev/null; then
     log 'info' "Line \"${1}\" already exists in file \"${2}\", skipping..."
   else
     if [ ! "${grep_present}" = 0 ]; then
@@ -341,7 +341,7 @@ ensure_exists_and_symlink "${dotfiles_path}/fish/fishfile" "${fishfile_path}"
 
 # Add Brew source to local fish configuration if the line doesn't already exist in the file
 # This will create the file if it doesn't already exist
-ensure_line_exists '^eval \\$?\\(.*brew shellenv\\)$' "${XDG_CONFIG_HOME}/fish/local.config.fish" "eval (${local_brew_executable} shellenv)"
+ensure_line_exists 'eval \(.*brew shellenv\)' "${XDG_CONFIG_HOME}/fish/local.config.fish" "eval (${local_brew_executable} shellenv)"
 
 # Setup Fisher and install plugins
 fisher_path="${XDG_CONFIG_HOME}/fish/functions/fisher.fish"
