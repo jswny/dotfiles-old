@@ -166,12 +166,16 @@ check_directory_exists() {
 #  1. string: The target path
 #  2. string: The URL to clone
 #  3. string: The name of the entity being cloned
+# Returns:
+#  1. 0 if the clone was executed, or 1 otherwise
 check_directory_exists_and_clone() {
   if check_directory_exists "${1}"; then
     log 'debug' "Cloning ${3} from \"${2}\" to \"${1}\"..."
     git clone --depth 1 "${2}" "${1}"
+    return 0
   else
     log 'debug' "Skipping ${3} clone from \"${2}\"..."
+    return 1
   fi
 }
 
@@ -379,13 +383,19 @@ else
 fi
 
 # Install TPM
-tpm_path="${XDG_DATA_HOME}/tmux/plugins/tpm"
-log 'info' "Installing TPM to \"${tpm_path}\"..."
-check_directory_exists_and_clone "${tpm_path}" 'https://github.com/tmux-plugins/tpm' 'tpm'
-
-# Install TPM plugins
-log 'info' 'Installing TPM plugins...'
-"${tpm_path}/bin/install_plugins"
+to_install='TPM'
+to_install_path="${XDG_DATA_HOME}/tmux/plugins/tpm"
+to_install_git_url='https://github.com/tmux-plugins/tpm.git'
+log 'info' "Trying to install ${to_install} to \"${to_install_path}\"..."
+if check_directory_exists_and_clone "${to_install_path}" "${to_install_git_url}" "${to_install}"; then
+  log 'info' "Installed ${to_install} to \"${to_install_path}\"!"
+  
+  # Install TPM plugins
+  log 'info' 'Installing TPM plugins...'
+  "${to_install_path}/bin/install_plugins"
+else
+  log 'debug' "Skipping ${to_install} installation, already installed!"
+fi
 
 # Symlink NeoVim files
 log 'info' 'Symlinking NeoVim files...'
@@ -409,9 +419,15 @@ log 'info' "Installing vim-plug plugins and logging to \"${vim_plug_install_log_
 nvim --headless '+PlugInstall --sync' +qa &> "${vim_plug_install_log_path}"
 
 # Setup dircolors-solarized
-dircolors_solarized_path="${PACKAGE_SOURCE_HOME}/dircolors-solarized"
-log 'info' "Installing dircolors-solarized to \"${dircolors_solarized_path}\"..."
-check_directory_exists_and_clone "${dircolors_solarized_path}" 'https://github.com/seebi/dircolors-solarized.git' 'dircolors-solarized'
+to_install='dircolors-solarized'
+to_install_path="${PACKAGE_SOURCE_HOME}/dircolors-solarized"
+to_install_git_url='https://github.com/seebi/dircolors-solarized.git'
+log 'info' "Trying to install ${to_install} to \"${to_install_path}\"..."
+if check_directory_exists_and_clone "${to_install_path}" "${to_install_git_url}" "${to_install}"; then
+  log 'info' "Installed ${to_install} to \"${to_install_path}\"!"
+else
+  log 'debug' "Skipping ${to_install} installation, already installed!"
+fi
 
 # Setup Rebar and Hex
 if ! check_executable 'mix'; then
@@ -426,15 +442,34 @@ log 'info' 'Installing Hex via Mix...'
 mix local.hex --force
 
 # Setup Elixir LS
-elixir_ls_path="${PACKAGE_SOURCE_HOME}/elixir-ls"
-log 'info' "Installing Elixir LS to \"${elixir_ls_path}\"..."
-check_directory_exists_and_clone "${elixir_ls_path}" 'https://github.com/elixir-lsp/elixir-ls.git' 'elixir-ls'
-cd "${elixir_ls_path}"
-mix deps.get
-mix deps.compile
-mix elixir_ls.release
-ensure_exists_and_symlink "${elixir_ls_path}/release/language_server.sh" "${elixir_ls_path}/release/elixir-ls"
-# shellcheck disable=SC2016
-echo set -g fish_user_paths "${elixir_ls_path}/release" '{$fish_user_paths}' >> "${fish_config_path}/local.config.fish"
+to_install='Elixir LS'
+to_install_path="${PACKAGE_SOURCE_HOME}/elixir-ls"
+to_install_git_url='https://github.com/elixir-lsp/elixir-ls.git'
+log 'info' "Trying to install ${to_install} to \"${to_install_path}\"..."
+if check_directory_exists_and_clone "${to_install_path}" "${to_install_git_url}" "${to_install}"; then
+  # Build and install
+  cd "${to_install_path}"
+  mix deps.get
+  mix deps.compile
+  mix elixir_ls.release
+  ensure_exists_and_symlink "${to_install_path}/release/language_server.sh" "${to_install_path}/release/elixir-ls"
+  # shellcheck disable=SC2016
+  echo set -g fish_user_paths "${to_install_path}/release" '{$fish_user_paths}' >> "${fish_config_path}/local.config.fish"
+  log 'info' "Installed ${to_install} to \"${to_install_path}\"!"
+else
+  log 'debug' "Skipping ${to_install} installation, already installed!"
+fi
+
+# Setup Powerline fonts
+to_install='Powerline fonts'
+to_install_path="${PACKAGE_SOURCE_HOME}/powerline-fonts"
+to_install_git_url='https://github.com/powerline/fonts.git'
+log 'info' "Trying to install ${to_install} to \"${to_install_path}\"..."
+if check_directory_exists_and_clone "${to_install_path}" "${to_install_git_url}" "${to_install}"; then
+  log 'info' "Installed ${to_install} to \"${to_install_path}\"!"
+  "${to_install_path}/install.sh"
+else
+  log 'debug' "Skipping ${to_install} installation, already installed!"
+fi
 
 log 'info' 'Done!'
