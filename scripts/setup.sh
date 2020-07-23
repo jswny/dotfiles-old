@@ -437,4 +437,10 @@ ensure_exists_and_symlink "${elixir_ls_path}/release/language_server.sh" "${elix
 # shellcheck disable=SC2016
 echo set -g fish_user_paths "${elixir_ls_path}/release" '{$fish_user_paths}' >> "${fish_config_path}/local.config.fish"
 
+# Setup Powerline fonts
+powerline_fonts_path="${PACKAGE_SOURCE_HOME}/powerline-fonts"
+log 'info' "Installing Powerline fonts to \"${powerline_fonts_path}\"..."
+check_directory_exists_and_clone "${powerline_fonts_path}" 'https://github.com/powerline/fonts.git' 'powerline-fonts'
+
+
 log 'info' 'Done!'
