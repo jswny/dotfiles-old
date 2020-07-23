@@ -35,6 +35,13 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - uses: brpaz/hadolint-action@master
+  macos-setup:
+    name: MacOS Setup
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Run setup
+        run: scripts/setup.sh --debug
   docker_build:
     name: Docker Build
     runs-on: ubuntu-latest
