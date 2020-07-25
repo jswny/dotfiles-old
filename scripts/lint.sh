@@ -62,13 +62,12 @@ lint_file() {
   check_lint_result "${variables_without_brackets}"
 
   # Special comments
-  # TODO: finish
-  # FIXME: fix this
   log 'info' 'Checking for special comments..'
   set +e
   variables_without_brackets=$(
     echo "${target_content}" |
-    grep --color=always -n -E '( TODO: )|( FIXME: )'
+    grep -E -n -v '\( TODO.+ \)\|\( FIXME.+ \)' |
+    grep --color=always -E '( TODO: )|( FIXME: )'
   )
   set -e
 
