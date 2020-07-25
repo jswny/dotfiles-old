@@ -229,7 +229,7 @@ if ! check_executable 'sudo'; then
 fi
 
 # Parse command-line options
-for opt in "${@}"; do
+for opt in "${@:-}"; do
   case ${opt} in
     --help)
       help
@@ -243,6 +243,7 @@ for opt in "${@}"; do
       no_brew_packages=1
       log 'debug' 'Brew packages will not be installed'
       ;;
+    "");;
     *)
       log 'error' "unknown option: \"${opt}\""
       help
@@ -394,7 +395,7 @@ if check_directory_exists_and_clone "${to_install_path}" "${to_install_git_url}"
   log 'info' 'Installing TPM plugins...'
   "${to_install_path}/bin/install_plugins"
 else
-  log 'debug' "Skipping ${to_install} installation, already installed!"
+  log 'info' "Skipping ${to_install} installation, already installed!"
 fi
 
 # Symlink NeoVim files
@@ -426,7 +427,7 @@ log 'info' "Trying to install ${to_install} to \"${to_install_path}\"..."
 if check_directory_exists_and_clone "${to_install_path}" "${to_install_git_url}" "${to_install}"; then
   log 'info' "Installed ${to_install} to \"${to_install_path}\"!"
 else
-  log 'debug' "Skipping ${to_install} installation, already installed!"
+  log 'info' "Skipping ${to_install} installation, already installed!"
 fi
 
 # Setup Rebar and Hex
@@ -457,7 +458,7 @@ if check_directory_exists_and_clone "${to_install_path}" "${to_install_git_url}"
   echo set -g fish_user_paths "${to_install_path}/release" '{$fish_user_paths}' >> "${fish_config_path}/local.config.fish"
   log 'info' "Installed ${to_install} to \"${to_install_path}\"!"
 else
-  log 'debug' "Skipping ${to_install} installation, already installed!"
+  log 'info' "Skipping ${to_install} installation, already installed!"
 fi
 
 # Setup Powerline fonts
@@ -469,7 +470,7 @@ if check_directory_exists_and_clone "${to_install_path}" "${to_install_git_url}"
   log 'info' "Installed ${to_install} to \"${to_install_path}\"!"
   "${to_install_path}/install.sh"
 else
-  log 'debug' "Skipping ${to_install} installation, already installed!"
+  log 'info' "Skipping ${to_install} installation, already installed!"
 fi
 
 log 'info' 'Done!'
