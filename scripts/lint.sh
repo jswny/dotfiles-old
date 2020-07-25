@@ -61,6 +61,19 @@ lint_file() {
 
   check_lint_result "${variables_without_brackets}"
 
+  # Special comments
+  # TODO: finish
+  # FIXME: fix this
+  log 'info' 'Checking for special comments..'
+  set +e
+  variables_without_brackets=$(
+    echo "${target_content}" |
+    grep --color=always -n -E '( TODO: )|( FIXME: )'
+  )
+  set -e
+
+  check_lint_result "${variables_without_brackets}"
+
   if [ "${any_lint_failed_current_file}" = 1 ]; then
     log 'error' "Linting failed for file \"${target}\"!"
   else
