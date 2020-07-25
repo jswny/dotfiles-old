@@ -69,7 +69,7 @@ lint_file() {
 }
 
 # Parse command-line options
-for opt in "${@}"; do
+for opt in "${@:-}"; do
   case "${opt}" in
     --help)
       help
@@ -79,9 +79,14 @@ for opt in "${@}"; do
       debug=1
       log 'debug' 'Running in debug mode'
       ;;
+    '')
+      log 'error' 'No files provided!'
+      help
+      exit 1
+      ;;
     *)
       if [[ "${opt}" == --* ]]; then
-        log 'error' "unknown option: \"${opt}\""
+        log 'error' "Unknown option: \"${opt}\""
         help
         exit 1
       fi

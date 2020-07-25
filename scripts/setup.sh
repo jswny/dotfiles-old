@@ -243,9 +243,9 @@ for opt in "${@:-}"; do
       no_brew_packages=1
       log 'debug' 'Brew packages will not be installed'
       ;;
-    "");;
+    '');;
     *)
-      log 'error' "unknown option: \"${opt}\""
+      log 'error' "Unknown option: \"${opt}\""
       help
       exit 1
       ;;
