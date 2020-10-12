@@ -69,6 +69,7 @@ abbr ga "git add ."
 abbr gc "git commit -S -m"
 abbr gp "git push"
 abbr gs "git status"
+abbr gd "git diff"
 
 #############
 # Variables #
