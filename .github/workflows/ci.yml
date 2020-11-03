@@ -47,8 +47,8 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - uses: brpaz/hadolint-action@master
-  macos-setup:
-    name: MacOS Setup
+  setup-macos:
+    name: Setup on MacOS
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v2
