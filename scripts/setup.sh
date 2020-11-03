@@ -321,8 +321,15 @@ fi
 # Install Brew packages from Brewfile
 if [ ! "${no_brew_packages}" = 1 ]; then
   brewfile_path="${dotfiles_path}/brew/Brewfile"
+
   log 'info' "Installing brew bundle from \"${brewfile_path}\""
-  brew bundle --no-lock --file "${brewfile_path}"
+
+  if [ "${debug}" = 1 ]; then
+    log 'debug' 'Installing brew bundle with debug output...'
+    brew bundle --debug --no-lock --file "${brewfile_path}"
+  else
+    brew bundle --no-lock --file "${brewfile_path}"
+  fi
 else
   log 'info' 'Skipping brew packages installation because --no-brew-packages was specified...'
 fi
