@@ -2,6 +2,12 @@ name: CI
 on: [push]
 
 jobs:
+  custom-lint:
+    name: Custom Lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - run: scripts/lint.sh --debug scripts/*.sh
   shellcheck:
     name: ShellCheck
     runs-on: ubuntu-latest
@@ -11,12 +17,6 @@ jobs:
         uses: ludeeus/action-shellcheck@0.3.0
         with:
           check_together: 'yes'
-  custom-lint:
-    name: Custom Lint
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - run: scripts/lint.sh --debug scripts/*.sh
   vint:
     name: Vint
     runs-on: ubuntu-latest
