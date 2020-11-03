@@ -38,7 +38,7 @@ jobs:
         with:
           node-version: '12'
       - name: Install JSON Lint
-        run: yarn global add jsonlint
+        run: npm install -g jsonlint
       - name: Run JSON Lint
         run: jsonlint -q -c ***/*.json
   hadolint:
