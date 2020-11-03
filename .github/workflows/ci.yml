@@ -11,8 +11,8 @@ jobs:
         uses: ludeeus/action-shellcheck@0.3.0
         with:
           check_together: 'yes'
-  lint:
-    name: Lint
+  custom-lint:
+    name: Custom Lint
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
