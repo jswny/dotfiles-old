@@ -1,4 +1,4 @@
-# Dotfiles ![CI](https://github.com/jswny/dotfiles/workflows/CI/badge.svg) [![Docker Pulls](https://img.shields.io/docker/pulls/jswny/dotfiles)](https://hub.docker.com/r/jswny/dotfiles)
+# Dotfiles ![CI](https://github.com/jswny/dotfiles/workflows/CI/badge.svg)
 These are my personal dotfiles which I use on a daily basis on MacOS!
 
 ![Screenshot](images/screenshot.png)
@@ -38,8 +38,8 @@ scripts/setup.sh
 
 ## Docker
 This repository contains a `Dockerfile` which you can use to test out these dotfiles. This will build an Ubuntu-based docker image and run it for you:
-`docker build -t jswny/dotfiles . && docker run -it jswny/dotfiles`
-You can also pull [the latest version from Docker Hub](https://hub.docker.com/r/jswny/devbox) if you don't want to build it yourself.
+`docker build -t jswny/dotfiles . && docker run -it --rm jswny/dotfiles`
+You can also pull [the image from GitHub Container Registry](https://github.com/users/jswny/packages/container/package/sad) if you don't want to build it yourself.
 
 ## Philosophy
 - **Minimalism**
