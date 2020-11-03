@@ -318,6 +318,8 @@ else
   exit 1
 fi
 
+brew install --debug erlang
+
 # Install Brew packages from Brewfile
 if [ ! "${no_brew_packages}" = 1 ]; then
   brewfile_path="${dotfiles_path}/brew/Brewfile"
