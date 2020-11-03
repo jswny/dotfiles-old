@@ -39,7 +39,7 @@ scripts/setup.sh
 ## Docker
 This repository contains a `Dockerfile` which you can use to test out these dotfiles. This will build an Ubuntu-based docker image and run it for you:
 `docker build -t jswny/dotfiles . && docker run -it --rm jswny/dotfiles`
-You can also pull [the image from GitHub Container Registry](https://github.com/users/jswny/packages/container/package/sad) if you don't want to build it yourself.
+You can also pull [the image from GitHub Container Registry](https://github.com/users/jswny/packages/container/package/dotfiles) if you don't want to build it yourself.
 
 ## Philosophy
 - **Minimalism**
