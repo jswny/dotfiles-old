@@ -59,6 +59,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+      - name: Remove Fonts
+        run: sudo rm -rf /usr/share/fonts/cmap
       - name: Run setup
         run: scripts/setup.sh --debug
   docker_build:
