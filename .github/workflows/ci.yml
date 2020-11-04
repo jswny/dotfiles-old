@@ -41,6 +41,18 @@ jobs:
         run: npm install -g jsonlint
       - name: Run JSON Lint
         run: jsonlint -q -c ***/*.json
+  yaml-lint:
+    name: YAML Lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v1
+        with:
+          python-version: '3.8'
+      - name: Install YAML Lint
+        run: pip install yamllint
+      - name: Run YAML Lint
+        run: yamllint .
   hadolint:
     name: Hadolint
     runs-on: ubuntu-latest
