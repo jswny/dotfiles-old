@@ -1,6 +1,9 @@
 name: CI
 on: [push]
 
+env:
+  PYTHON_VERSION: '3.8'
+
 jobs:
   custom-lint:
     name: Custom Lint
@@ -24,7 +27,7 @@ jobs:
       - uses: actions/checkout@v2
       - uses: actions/setup-python@v1
         with:
-          python-version: '3.8'
+          python-version: ${{ env.PYTHON_VERSION }}
       - name: Install Vint
         run: pip install vim-vint
       - name: Run Vint
@@ -48,7 +51,7 @@ jobs:
       - uses: actions/checkout@v2
       - uses: actions/setup-python@v1
         with:
-          python-version: '3.8'
+          python-version: ${{ env.PYTHON_VERSION }}
       - name: Install YAML Lint
         run: pip install yamllint
       - name: Run YAML Lint
