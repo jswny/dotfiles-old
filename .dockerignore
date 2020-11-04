@@ -1,4 +1,7 @@
+.github/
+images/
 .gitignore
-.travis.yml
+.vintrc.yaml
+.yamllint.yml
 Dockerfile
 README.md
