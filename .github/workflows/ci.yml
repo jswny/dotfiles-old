@@ -12,7 +12,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-      - run: find . -type f -name '*.sh' -exec scripts/lint.sh --debug {} \;
+      - name: Run Custom Lint
+        run: find . -type f -name '*.sh' -exec scripts/lint.sh --debug {} \;
   lint-shell:
     name: Lint Shell Scripts
     runs-on: ubuntu-latest
@@ -29,7 +30,7 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-      - name: Setup Python ${{ env.PYTHON_VERSION }}
+      - name: Setup Python
         uses: actions/setup-python@v1
         with:
           python-version: ${{ env.PYTHON_VERSION }}
@@ -43,7 +44,7 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-      - name: Setup Node ${{ env.NODE_VERISON }}
+      - name: Setup Node
         uses: actions/setup-node@v2-beta
         with:
           node-version: ${{ env.NODE_VERISON }}
@@ -57,7 +58,7 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-      - name: Setup Python ${{ env.PYTHON_VERSION }}
+      - name: Setup Python
         uses: actions/setup-python@v1
         with:
           python-version: ${{ env.PYTHON_VERSION }}
