@@ -15,6 +15,7 @@ ARG GOSU_VERSION='1.10-1'
 ARG LIBC6_VERSION='2.30-0ubuntu2.2'
 ARG GCC_VERSION='4:9.2.1-3.1ubuntu1'
 ARG MAKE_VERSION='4.2.1-1.2'
+ARG CA_CERTIFICATES_VERSION='20190110ubuntu0.19.10.1'
 ARG CURL_VERSION='7.65.3-1ubuntu3.1'
 ARG FILE_VERSION='1:5.37-5ubuntu0.1'
 ARG GIT_VERSION='1:2.20.1-2ubuntu1.19.10.3'
@@ -67,6 +68,7 @@ RUN apt-get update \
     libc6=${LIBC6_VERSION} \
     gcc=${GCC_VERSION} \
     make=${MAKE_VERSION} \
+    ca-certificates=${CA_CERTIFICATES_VERSION} \
     curl=${CURL_VERSION} \
     file=${FILE_VERSION} \
     git=${GIT_VERSION} \
