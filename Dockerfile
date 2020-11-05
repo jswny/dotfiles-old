@@ -12,6 +12,13 @@ ARG LOCALES_VERSION='2.30-0ubuntu2.2'
 ARG MAN_DB_VERSION='2.8.7-3'
 ARG SUDO_VERSION='1.8.27-1ubuntu4.1'
 ARG GOSU_VERSION='1.10-1'
+ARG LIBC6_VERSION='2.30-0ubuntu2.2'
+ARG GCC_VERSION='4:9.2.1-3.1ubuntu1'
+ARG MAKE_VERSION='4.2.1-1.2'
+ARG CA_CERTIFICATES_VERSION='20190110ubuntu0.19.10.1'
+ARG CURL_VERSION='7.65.3-1ubuntu3.1'
+ARG FILE_VERSION='1:5.37-5ubuntu0.1'
+ARG GIT_VERSION='1:2.20.1-2ubuntu1.19.10.3'
 
 # Set environment variables (these will persist at runtime)
 ENV TERM xterm-256color
@@ -55,33 +62,38 @@ RUN useradd --create-home ${USER} \
     && echo "${USER} ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers \
     && sed s/required/sufficient/g -i /etc/pam.d/chsh
 
-# Uncomment these for fast development caching of long-running steps
-# RUN apt-get update \
-#     && apt-get install -y \
-#     libc6 \
-#     gcc \
-#     make \
-#     curl \
-#     file \
-#     git \
-#     && apt-get clean \
-#     && rm -rf /var/lib/apt/lists/*
+# Install dependencies for setup
+RUN apt-get update \
+    && apt-get install --no-install-recommends -y \
+    libc6=${LIBC6_VERSION} \
+    gcc=${GCC_VERSION} \
+    make=${MAKE_VERSION} \
+    ca-certificates=${CA_CERTIFICATES_VERSION} \
+    curl=${CURL_VERSION} \
+    file=${FILE_VERSION} \
+    git=${GIT_VERSION} \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
 
-# RUN gosu user1:user1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)" \
-#     && eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)" \
-#     && brew install \
-#     fish \
-#     tmux \
-#     neovim \
-#     fzf \
-#     fd \
-#     bat \
-#     git-delta \
-#     thefuck \
-#     python \
-#     erlang \
-#     elixir \
-#     && chown -R user1:user1 /home/linuxbrew
+# Install Brew and add paths
+RUN gosu user1:user1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
+
+# Install Brew packages
+RUN eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)" && \
+    brew install \
+    fish \
+    coreutils \
+    tmux \
+    neovim \
+    fzf \
+    fd \
+    bat \
+    git-delta \
+    thefuck \
+    shellcheck \
+    python \
+    erlang \
+    elixir
 
 # Add dotfiles into the container and run setup
 COPY . $XDG_CONFIG_HOME/dotfiles
