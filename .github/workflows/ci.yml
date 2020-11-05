@@ -47,7 +47,7 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v2-beta
         with:
-          node-version: ${{ env.NODE_VERISON }}
+          node-version: ${{ env.NODE_VERSION }}
       - name: Install JSON Lint
         run: npm install -g jsonlint
       - name: Run JSON Lint
