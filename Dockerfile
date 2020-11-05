@@ -95,9 +95,6 @@ RUN eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)" && \
     erlang \
     elixir
 
-# Ensure correct ownership of Brew directories
-RUN chown -R user1:user1 /home/linuxbrew
-
 # Add dotfiles into the container and run setup
 COPY . $XDG_CONFIG_HOME/dotfiles
 RUN chown -R ${USER}:${USER} $HOME \
