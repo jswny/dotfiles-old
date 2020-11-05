@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - run: scripts/lint.sh --debug scripts/*.sh
+      - run: find . -type f -name '*.sh' -exec scripts/lint.sh --debug {} \;
   shellcheck:
     name: ShellCheck
     runs-on: ubuntu-latest
