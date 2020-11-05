@@ -95,7 +95,7 @@ jobs:
   docker:
     name: Docker Build and Push
     runs-on: ubuntu-latest
-    needs: [lint-custom, lint-shell, lint-vim, lint-json, lint-docker]
+    needs: [lint-custom, lint-shell, lint-docker, setup-linux]
     steps:
       - name: Checkout
         uses: actions/checkout@v2
