@@ -3,77 +3,91 @@ on: [push]
 
 env:
   PYTHON_VERSION: '3.8'
+  NODE_VERSION: '12'
 
 jobs:
-  custom-lint:
-    name: Custom Lint
+  lint-custom:
+    name: Lint Custom
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - run: scripts/lint.sh --debug scripts/*.sh
-  shellcheck:
-    name: ShellCheck
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Run Custom Lint
+        run: find . -type f -name '*.sh' -exec scripts/lint.sh --debug {} \;
+  lint-shell:
+    name: Lint Shell Scripts
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - name: Checkout
+        uses: actions/checkout@v2
       - name: Run ShellCheck
         uses: ludeeus/action-shellcheck@0.3.0
         with:
           check_together: 'yes'
-  vint:
-    name: Vint
+  lint-vim:
+    name: Lint Vim Scripts
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-python@v1
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Setup Python
+        uses: actions/setup-python@v1
         with:
           python-version: ${{ env.PYTHON_VERSION }}
       - name: Install Vint
         run: pip install vim-vint
       - name: Run Vint
         run: vint nvim/*.vim
-  json-lint:
-    name: JSON Lint
+  lint-json:
+    name: Lint JSON Files
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v2-beta
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Setup Node
+        uses: actions/setup-node@v2-beta
         with:
-          node-version: '12'
+          node-version: ${{ env.NODE_VERSION }}
       - name: Install JSON Lint
         run: npm install -g jsonlint
       - name: Run JSON Lint
-        run: jsonlint -q -c ***/*.json
-  yaml-lint:
-    name: YAML Lint
+        run: find . -type f -name '*.json' -exec jsonlint -q -c {} \;
+  lint-yaml:
+    name: Lint YAML Files
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-python@v1
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Setup Python
+        uses: actions/setup-python@v1
         with:
           python-version: ${{ env.PYTHON_VERSION }}
       - name: Install YAML Lint
         run: pip install yamllint
       - name: Run YAML Lint
         run: yamllint .
-  hadolint:
-    name: Hadolint
+  lint-docker:
+    name: Lint Dockerfiles
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - uses: brpaz/hadolint-action@master
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Run Hadolint
+        uses: brpaz/hadolint-action@master
   setup-macos:
     name: Setup on MacOS
     runs-on: macos-latest
     steps:
-      - uses: actions/checkout@v2
+      - name: Checkout
+        uses: actions/checkout@v2
       - name: Run setup
         run: scripts/setup.sh --debug
   setup-linux:
     name: Setup on Linux
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - name: Checkout
+        uses: actions/checkout@v2
       - name: Remove Fonts
         run: sudo rm -rf /usr/share/fonts/cmap
       - name: Run setup
@@ -81,9 +95,10 @@ jobs:
   docker:
     name: Docker Build and Push
     runs-on: ubuntu-latest
-    needs: [custom-lint, shellcheck, vint, json-lint, hadolint]
+    needs: [lint-custom, lint-shell, lint-vim, lint-json, lint-docker]
     steps:
-      - uses: actions/checkout@v2
+      - name: Checkout
+        uses: actions/checkout@v2
       - name: Repo Metadata
         id: repo
         uses: actions/github-script@v3
