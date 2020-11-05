@@ -3,6 +3,7 @@ on: [push]
 
 env:
   PYTHON_VERSION: '3.8'
+  NODE_VERSION: '12'
 
 jobs:
   lint-custom:
@@ -28,7 +29,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-      - uses: actions/setup-python@v1
+      - name: Setup Python ${{ env.PYTHON_VERSION }}
+        uses: actions/setup-python@v1
         with:
           python-version: ${{ env.PYTHON_VERSION }}
       - name: Install Vint
@@ -41,9 +43,10 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-      - uses: actions/setup-node@v2-beta
+      - name: Setup Node ${{ env.NODE_VERISON }}
+        uses: actions/setup-node@v2-beta
         with:
-          node-version: '12'
+          node-version: ${{ env.NODE_VERISON }}
       - name: Install JSON Lint
         run: npm install -g jsonlint
       - name: Run JSON Lint
@@ -54,7 +57,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-      - uses: actions/setup-python@v1
+      - name: Setup Python ${{ env.PYTHON_VERSION }}
+        uses: actions/setup-python@v1
         with:
           python-version: ${{ env.PYTHON_VERSION }}
       - name: Install YAML Lint
@@ -67,7 +71,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-      - uses: brpaz/hadolint-action@master
+      - name: Run Hadolint
+        uses: brpaz/hadolint-action@master
   setup-macos:
     name: Setup on MacOS
     runs-on: macos-latest
