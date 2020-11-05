@@ -67,10 +67,12 @@ RUN apt-get update \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
-# Install Homebrew and packages
-RUN gosu user1:user1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)" \
-    && eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)" \
-    && brew install \
+# Install Brew and add paths
+RUN gosu user1:user1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
+
+# Install Brew packages
+RUN eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)" && \
+    brew install \
     fish \
     coreutils \
     tmux \
@@ -83,8 +85,10 @@ RUN gosu user1:user1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.co
     shellcheck \
     python \
     erlang \
-    elixir \
-    && chown -R user1:user1 /home/linuxbrew
+    elixir
+
+# Ensure correct ownership of Brew directories
+RUN chown -R user1:user1 /home/linuxbrew
 
 # Add dotfiles into the container and run setup
 COPY . $XDG_CONFIG_HOME/dotfiles
