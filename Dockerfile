@@ -72,6 +72,7 @@ RUN gosu user1:user1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.co
     && eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)" \
     && brew install \
     fish \
+    coreutils \
     tmux \
     neovim \
     fzf \
@@ -79,6 +80,7 @@ RUN gosu user1:user1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.co
     bat \
     git-delta \
     thefuck \
+    shellcheck \
     python \
     erlang \
     elixir \
