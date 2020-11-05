@@ -43,7 +43,7 @@ jobs:
       - name: Install JSON Lint
         run: npm install -g jsonlint
       - name: Run JSON Lint
-        run: jsonlint -q -c ***/*.json
+        run: find . -type f -name '*.json' -exec jsonlint -q -c {} \;
   yaml-lint:
     name: YAML Lint
     runs-on: ubuntu-latest
