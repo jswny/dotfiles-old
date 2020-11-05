@@ -5,14 +5,14 @@ env:
   PYTHON_VERSION: '3.8'
 
 jobs:
-  custom-lint:
-    name: Custom Lint
+  lint-custom:
+    name: Lint Custom
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
       - run: find . -type f -name '*.sh' -exec scripts/lint.sh --debug {} \;
-  shellcheck:
-    name: ShellCheck
+  lint-shell:
+    name: Lint Shell Scripts
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -20,8 +20,8 @@ jobs:
         uses: ludeeus/action-shellcheck@0.3.0
         with:
           check_together: 'yes'
-  vint:
-    name: Vint
+  lint-vim:
+    name: Lint Vim Scripts
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -32,8 +32,8 @@ jobs:
         run: pip install vim-vint
       - name: Run Vint
         run: vint nvim/*.vim
-  json-lint:
-    name: JSON Lint
+  lint-json:
+    name: Lint JSON Files
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -44,8 +44,8 @@ jobs:
         run: npm install -g jsonlint
       - name: Run JSON Lint
         run: find . -type f -name '*.json' -exec jsonlint -q -c {} \;
-  yaml-lint:
-    name: YAML Lint
+  lint-yaml:
+    name: Lint YAML Files
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -56,8 +56,8 @@ jobs:
         run: pip install yamllint
       - name: Run YAML Lint
         run: yamllint .
-  hadolint:
-    name: Hadolint
+  lint-docker:
+    name: Lint Dockerfiles
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
