@@ -9,13 +9,15 @@ jobs:
     name: Lint Custom
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - name: Checkout
+        uses: actions/checkout@v2
       - run: find . -type f -name '*.sh' -exec scripts/lint.sh --debug {} \;
   lint-shell:
     name: Lint Shell Scripts
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - name: Checkout
+        uses: actions/checkout@v2
       - name: Run ShellCheck
         uses: ludeeus/action-shellcheck@0.3.0
         with:
@@ -24,7 +26,8 @@ jobs:
     name: Lint Vim Scripts
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - name: Checkout
+        uses: actions/checkout@v2
       - uses: actions/setup-python@v1
         with:
           python-version: ${{ env.PYTHON_VERSION }}
@@ -36,7 +39,8 @@ jobs:
     name: Lint JSON Files
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - name: Checkout
+        uses: actions/checkout@v2
       - uses: actions/setup-node@v2-beta
         with:
           node-version: '12'
@@ -48,7 +52,8 @@ jobs:
     name: Lint YAML Files
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - name: Checkout
+        uses: actions/checkout@v2
       - uses: actions/setup-python@v1
         with:
           python-version: ${{ env.PYTHON_VERSION }}
@@ -60,20 +65,23 @@ jobs:
     name: Lint Dockerfiles
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - name: Checkout
+        uses: actions/checkout@v2
       - uses: brpaz/hadolint-action@master
   setup-macos:
     name: Setup on MacOS
     runs-on: macos-latest
     steps:
-      - uses: actions/checkout@v2
+      - name: Checkout
+        uses: actions/checkout@v2
       - name: Run setup
         run: scripts/setup.sh --debug
   setup-linux:
     name: Setup on Linux
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - name: Checkout
+        uses: actions/checkout@v2
       - name: Remove Fonts
         run: sudo rm -rf /usr/share/fonts/cmap
       - name: Run setup
@@ -83,7 +91,8 @@ jobs:
     runs-on: ubuntu-latest
     needs: [custom-lint, shellcheck, vint, json-lint, hadolint]
     steps:
-      - uses: actions/checkout@v2
+      - name: Checkout
+        uses: actions/checkout@v2
       - name: Repo Metadata
         id: repo
         uses: actions/github-script@v3
