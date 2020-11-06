@@ -90,6 +90,15 @@ jobs:
         uses: actions/checkout@v2
       - name: Remove Fonts
         run: sudo rm -rf /usr/share/fonts/cmap
+      - name: Cache Brew Cache
+      uses: actions/cache@v2
+        env:
+          cache-name: brew-cache
+        with:
+          path: ${{ env.HOME }}/.cache/Homebrew
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/Brewfile') }}
+          restore-keys: |
+            ${{ runner.os }}-build-${{ env.cache-name }}-
       - name: Run setup
         run: scripts/setup.sh --debug
   docker:
