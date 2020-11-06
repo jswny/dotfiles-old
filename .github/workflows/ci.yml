@@ -91,7 +91,7 @@ jobs:
       - name: Remove Fonts
         run: sudo rm -rf /usr/share/fonts/cmap
       - name: Cache Brew Cache
-      uses: actions/cache@v2
+        uses: actions/cache@v2
         env:
           cache-name: brew-cache
         with:
