@@ -97,12 +97,12 @@ jobs:
       - name: Cache Brew Cache
         uses: actions/cache@v2
         env:
-          cache-name: brew-cache
+          base-key: ${{ runner.os }}-build-${{ env.cache-name }}
         with:
           path: ${{ steps.prep.outputs.home }}/.cache/Homebrew
-          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/Brewfile') }}
+          key: ${{ env.base-key }}-${{ hashFiles('**/Brewfile') }}
           restore-keys: |
-            ${{ runner.os }}-build-${{ env.cache-name }}-
+            ${{ env.base-key }}-
       - name: Run setup
         run: scripts/setup.sh --debug
   docker:
