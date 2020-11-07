@@ -148,12 +148,13 @@ jobs:
       - name: Cache Image Layers
         uses: actions/cache@v2
         env:
-          cache-name: buildx
+          base-key: ${{ runner.os }}-build-${{ env.cache-name }}
+          cache-path: /tmp/.buildx-cache
         with:
-          path: /tmp/.buildx-cache
-          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ github.sha }}
+          path: ${{ env.cache-path }}
+          key: ${{ env.base-key }}-${{ github.sha }}
           restore-keys: |
-            ${{ runner.os }}-build-${{ env.cache-name }}-
+            ${{ env.base-key }}-
       - name: Setup QEMU
         uses: docker/setup-qemu-action@v1
       - name: Setup Docker Buildx
