@@ -142,9 +142,11 @@ jobs:
           echo ::set-output name=tags::${TAGS}
       - name: Cache Image Layers
         uses: actions/cache@v2
+        env:
+          cache-name: brew-cache
         with:
           path: /tmp/.buildx-cache
-          key: ${{ runner.os }}-buildx-${{ github.sha }}
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ github.sha }}
           restore-keys: |
             ${{ runner.os }}-buildx-
       - name: Setup QEMU
