@@ -105,7 +105,6 @@ jobs:
             ${{ runner.os }}-build-${{ env.cache-name }}-
       - name: Run setup
         run: scripts/setup.sh --debug
-      - run: ls -l ${{ steps.prep.outputs.home }}/.cache/Homebrew
   docker:
     name: Docker Build and Push
     runs-on: ubuntu-latest
