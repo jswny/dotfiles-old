@@ -97,9 +97,10 @@ jobs:
       - name: Cache Brew Cache
         uses: actions/cache@v2
         env:
-          base-key: ${{ runner.os }}-build-${{ env.cache-name }}
+          base-key: ${{ runner.os }}-build-brew-cache
+          cache-path: ${{ steps.prep.outputs.home }}/.cache/Homebrew
         with:
-          path: ${{ steps.prep.outputs.home }}/.cache/Homebrew
+          path: ${{ env.cache-path }}
           key: ${{ env.base-key }}-${{ hashFiles('**/Brewfile') }}
           restore-keys: |
             ${{ env.base-key }}-
