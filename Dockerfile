@@ -1,4 +1,4 @@
-FROM ubuntu:19.10
+FROM ubuntu:groovy
 
 # Set environment variables for the build only (these won't persist when you run the container)
 ARG DEBIAN_FRONTEND=noninteractive
