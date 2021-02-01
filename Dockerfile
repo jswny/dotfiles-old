@@ -8,17 +8,16 @@ ARG PACKAGE_SOURCE_HOME=/home/${USER}/.local/src
 ARG HOME=/home/${USER}
 
 # Pinned versions
-ARG LOCALES_VERSION='2.30-0ubuntu2.2'
-ARG MAN_DB_VERSION='2.8.7-3'
-ARG SUDO_VERSION='1.8.27-1ubuntu4.1'
-ARG GOSU_VERSION='1.10-1'
-ARG LIBC6_VERSION='2.30-0ubuntu2.2'
-ARG GCC_VERSION='4:9.2.1-3.1ubuntu1'
-ARG MAKE_VERSION='4.2.1-1.2'
-ARG CA_CERTIFICATES_VERSION='20190110ubuntu0.19.10.1'
-ARG CURL_VERSION='7.65.3-1ubuntu3.1'
-ARG FILE_VERSION='1:5.37-5ubuntu0.1'
-ARG GIT_VERSION='1:2.20.1-2ubuntu1.19.10.3'
+ARG LOCALES_VERSION='2.32-0ubuntu3'
+ARG MAN_DB_VERSION='2.9.3-2'
+ARG SUDO_VERSION='1.9.1-1ubuntu1.1'
+ARG GOSU_VERSION='1.12-1'
+ARG GCC_VERSION='4:10.2.0-1ubuntu1'
+ARG MAKE_VERSION='4.3-4ubuntu1'
+ARG CA_CERTIFICATES_VERSION='20201027ubuntu0.20.10.1'
+ARG CURL_VERSION='7.68.0-1ubuntu4.2'
+ARG FILE_VERSION='1:5.38-5'
+ARG GIT_VERSION='1:2.27.0-1ubuntu1'
 
 # Set environment variables (these will persist at runtime)
 ENV TERM xterm-256color
@@ -65,7 +64,6 @@ RUN useradd --create-home ${USER} \
 # Install dependencies for setup
 RUN apt-get update \
     && apt-get install --no-install-recommends -y \
-    libc6=${LIBC6_VERSION} \
     gcc=${GCC_VERSION} \
     make=${MAKE_VERSION} \
     ca-certificates=${CA_CERTIFICATES_VERSION} \
