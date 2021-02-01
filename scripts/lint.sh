@@ -10,11 +10,13 @@ source "$(dirname "${0}")"/common.sh
 
 set -euo pipefail
 
+# Default variable values
 debug=0
 any_lint_failed=0
 any_lint_failed_current_file=0
 files_to_lint=()
 
+# Display command-line help info
 help() {
   cat << EOF
 usage: ${0} [OPTIONS] file(s)
@@ -23,6 +25,7 @@ usage: ${0} [OPTIONS] file(s)
 EOF
 }
 
+# Check if a lint succeeded or not
 check_lint_result() {
   if [ "${1}" = '' ]; then
     log 'debug' 'Lint succeeded!'
@@ -34,6 +37,7 @@ check_lint_result() {
   fi
 }
 
+# Lint a single file
 lint_file() {
   local target="${1}"
   local target_content
