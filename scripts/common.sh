@@ -27,7 +27,7 @@ log() {
   fi
 }
 
-# Verifies that a variable is set given it's name
+# Verifies that a variable is set given its name
 verify_var_set() {
   if [ -z "${!1}" ]; then
     if [ -z "${2}" ]; then
