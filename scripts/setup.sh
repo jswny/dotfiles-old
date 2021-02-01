@@ -38,6 +38,7 @@ usage: ${0} [OPTIONS]
 EOF
 }
 
+# Detects the current OS by setting a variable
 detect_os() {
   if [[ "${OSTYPE}" == 'linux-gnu' ]]; then
     os='linux'
@@ -49,6 +50,7 @@ detect_os() {
   log 'debug' "Detected OS \"${os}\""
 }
 
+# Logs an error message which says that the current OS is not supported
 unsupported_os() {
   log 'error' "Unsupported operating system \"${OSTYPE}\"!"
   exit 1
