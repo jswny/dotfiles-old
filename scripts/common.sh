@@ -9,15 +9,6 @@ debug=0
 script_name="$(basename "${0}")"
 
 # Log a message at different levels
-# Requires ${script_name} to be set
-# Args:
-# 1. string: The logging level
-#   Valid levels (first argument) are:
-#   - 'debug': only shown when ${debug} is 1
-#   - 'info'
-#   - 'warn' (STDERR)
-#   - 'error' (STDERR)
-# 2. string: The message to log
 log() {
   local prefix_spacer='-----'
   local prefix="${prefix_spacer} [${script_name}]"
@@ -37,9 +28,6 @@ log() {
 }
 
 # Verifies that a variable is set given it's name
-# Args:
-# 1. string: Variable name
-# 2. string: Optional message to print out instead of the default
 verify_var_set() {
   if [ -z "${!1}" ]; then
     if [ -z "${2}" ]; then
@@ -51,10 +39,6 @@ verify_var_set() {
   fi
 }
 
-# Returns 0 or 1 based on whether or not the file exists
-# Prints extra debugging info based on the path given
-# Args:
-# 1. string: File path to check
 check_file_exists() {
   if [ ! -f "${1}" ]; then
     if [ -e "${1}" ]; then
