@@ -2,8 +2,8 @@ name: CI
 on: [push]
 
 env:
-  PYTHON_VERSION: '3.8'
-  NODE_VERSION: '12'
+  PYTHON_VERSION: "3.8"
+  NODE_VERSION: "12"
 
 jobs:
   lint-custom:
@@ -23,7 +23,7 @@ jobs:
       - name: Run ShellCheck
         uses: ludeeus/action-shellcheck@0.3.0
         with:
-          check_together: 'yes'
+          check_together: "yes"
   lint-vim:
     name: Lint Vim Scripts
     runs-on: ubuntu-latest
@@ -148,7 +148,7 @@ jobs:
       - name: Cache Image Layers
         uses: actions/cache@v2
         env:
-          base-key: ${{ runner.os }}-build-${{ env.cache-name }}
+          base-key: ${{ runner.os }}-build-docker-buildx
           cache-path: /tmp/.buildx-cache
         with:
           path: ${{ env.cache-path }}
