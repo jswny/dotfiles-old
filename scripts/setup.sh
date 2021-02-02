@@ -38,7 +38,7 @@ usage: ${0} [OPTIONS]
 EOF
 }
 
-# Detect the OS currently running this script
+# Detects the current OS by setting a variable
 detect_os() {
   if [[ "${OSTYPE}" == 'linux-gnu' ]]; then
     os='linux'
@@ -50,6 +50,7 @@ detect_os() {
   log 'debug' "Detected OS \"${os}\""
 }
 
+# Logs an error message which says that the current OS is not supported
 unsupported_os() {
   log 'error' "Unsupported operating system \"${OSTYPE}\"!"
   exit 1
@@ -147,10 +148,6 @@ ensure_file_exists() {
 }
 
 # Checks if a directory exists
-# Args:
-#   1. string: The path to check
-# Returns:
-#   1. 0 if the directory doesn't exist, or 1 otherwise
 check_directory_exists() {
   if [ ! -d "${1}" ]; then
     log 'debug' "Directory \"${1}\" does not exist!"
@@ -162,12 +159,6 @@ check_directory_exists() {
 }
 
 # Clones a URL if the target directory doesn't exist
-# Args:
-#  1. string: The target path
-#  2. string: The URL to clone
-#  3. string: The name of the entity being cloned
-# Returns:
-#  1. 0 if the clone was executed, or 1 otherwise
 check_directory_exists_and_clone() {
   if check_directory_exists "${1}"; then
     log 'debug' "Cloning ${3} from \"${2}\" to \"${1}\"..."
