@@ -12,7 +12,7 @@ ARG LOCALES_VERSION='2.32-0ubuntu3'
 ARG MAN_DB_VERSION='2.9.3-2'
 ARG SUDO_VERSION='1.9.1-1ubuntu1.1'
 ARG GOSU_VERSION='1.12-1'
-ARG GCC_VERSION='4:10.2.0-1ubuntu1'
+ARG BUILD_ESSENTIAL_VERSION='12.8ubuntu3'
 ARG MAKE_VERSION='4.3-4ubuntu1'
 ARG CA_CERTIFICATES_VERSION='20210119~20.10.1'
 ARG CURL_VERSION='7.68.0-1ubuntu4.2'
@@ -65,7 +65,7 @@ RUN useradd --create-home ${USER} \
 # Install dependencies for setup
 RUN apt-get update \
     && apt-get install --no-install-recommends -y \
-    gcc=${GCC_VERSION} \
+    build-essential=${BUILD_ESSENTIAL_VERSION} \
     make=${MAKE_VERSION} \
     ca-certificates=${CA_CERTIFICATES_VERSION} \
     curl=${CURL_VERSION} \

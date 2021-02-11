@@ -282,6 +282,12 @@ elif [ "${os}" = 'linux' ]; then
       dep_package="${dep}"
     fi
 
+    if [ "${dep}" = 'gcc' ]; then
+      dep_package='build-essential'
+    else
+      dep_package="${dep}"
+    fi
+
     if ! check_executable "${dep}"; then
       log 'info' "brew dependency \"${dep_package}\" is not installed, installing..."
       install_package "${dep_package}"
