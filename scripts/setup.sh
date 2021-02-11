@@ -273,6 +273,7 @@ elif [ "${os}" = 'linux' ]; then
     curl
     file
     git
+    patch
   )
 
   for dep in "${brew_dependencies[@]}"; do if [ "${dep}" = 'ldd' ]; then

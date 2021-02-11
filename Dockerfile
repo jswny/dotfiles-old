@@ -18,6 +18,7 @@ ARG CA_CERTIFICATES_VERSION='20210119~20.10.1'
 ARG CURL_VERSION='7.68.0-1ubuntu4.2'
 ARG FILE_VERSION='1:5.38-5'
 ARG GIT_VERSION='1:2.27.0-1ubuntu1'
+ARG PATCH_VERSION='2.7.6-6'
 
 # Set environment variables (these will persist at runtime)
 ENV TERM xterm-256color
@@ -70,6 +71,7 @@ RUN apt-get update \
     curl=${CURL_VERSION} \
     file=${FILE_VERSION} \
     git=${GIT_VERSION} \
+    patch=${PATCH_VERSION} \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
