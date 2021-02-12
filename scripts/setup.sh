@@ -316,6 +316,11 @@ else
   exit 1
 fi
 
+log 'info' 'Updating brew...'
+brew update
+
+log 'debug' "Brew version: $(brew --version)"
+
 # Install Brew packages from Brewfile
 if [ ! "${no_brew_packages}" = 1 ]; then
   brewfile_path="${dotfiles_path}/brew/Brewfile"
