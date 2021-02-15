@@ -80,7 +80,7 @@ RUN gosu user1:user1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.co
 
 # Install Brew packages
 RUN eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)" && \
-    brew install \
+    gosu user1:user1 brew install \
     fish \
     coreutils \
     tmux \
