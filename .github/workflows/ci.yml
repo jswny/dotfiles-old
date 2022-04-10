@@ -74,6 +74,15 @@ jobs:
         uses: actions/checkout@v2
       - name: Run Hadolint
         uses: brpaz/hadolint-action@master
+  lint-go:
+    name: Lint Go Files
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: golangci-lint
+        uses: golangci/golangci-lint-action@v2
+        with:
+          version: v1.36
   setup-macos:
     name: Setup on MacOS
     runs-on: macos-latest
